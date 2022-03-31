@@ -26,6 +26,7 @@ class Dashboard extends Component
     }
 
     public function getLeaveBalanceCount(){
+        return 0;
         $service = Yii::$app->params['ServiceName']['EmployeeLeaveBalances'];
         $filter = [
            'Global_Dimension_2_Code' => Yii::$app->user->identity->Employee[0]->Global_Dimension_2_Code
@@ -41,7 +42,7 @@ class Dashboard extends Component
     /*My Rejected Approval Requests*/
 
     public function getRejectedApprovals(){
-
+        return 0;
         $service = Yii::$app->params['ServiceName']['RequestsTo_ApprovePortal'];
         $filter = [
             'Sender_No' => Yii::$app->user->identity->{'Employee No_'},
@@ -59,7 +60,7 @@ class Dashboard extends Component
     /* My Approved Requests */
 
     public function getApprovedApprovals(){
-
+        return 0;
         $service = Yii::$app->params['ServiceName']['RequestsTo_ApprovePortal'];
         $filter = [
             'Sender_No' => Yii::$app->user->identity->{'Employee No_'},
@@ -77,7 +78,7 @@ class Dashboard extends Component
     /* Get Pending Approvals */
 
     public function getOpenApprovals(){
-
+        return 0;
         $service = Yii::$app->params['ServiceName']['RequestsTo_ApprovePortal'];
         $filter = [
             'Sender_No' => Yii::$app->user->identity->{'Employee No_'},
@@ -97,7 +98,7 @@ class Dashboard extends Component
     /*Request I have approved*/
 
     public function getSuperApproved(){
-
+        return 0;
         $service = Yii::$app->params['ServiceName']['RequestsTo_ApprovePortal'];
         $filter = [
             'Approver_No' => Yii::$app->user->identity->{'Employee No_'},
@@ -116,7 +117,7 @@ class Dashboard extends Component
     /* Requests I have Rejected */
 
     public function getSuperRejected(){
-
+        return 0;
         $service = Yii::$app->params['ServiceName']['RequestsTo_ApprovePortal'];
         $filter = [
             'Approver_No' => Yii::$app->user->identity->{'Employee No_'},
@@ -160,7 +161,7 @@ class Dashboard extends Component
     /*Get Staff on Leave*/
 
     public function getOnLeave(){
-        
+        return 0;
         $service = Yii::$app->params['ServiceName']['StaffOnLeave'];
 
         if(property_exists(Yii::$app->user->identity->Employee[0],'Department_Name'))
@@ -217,7 +218,7 @@ class Dashboard extends Component
 
 
      public function getProbations(){
-
+        return 0;
         $service = Yii::$app->params['ServiceName']['ProbationStatusList'];
         $filter = [
            
@@ -233,7 +234,7 @@ class Dashboard extends Component
     /*Get no of short term probations*/
 
     public function getShortterms(){
-
+        return 0;
         $service = Yii::$app->params['ServiceName']['ShortTermStatusList'];
         $filter = [
            
@@ -251,7 +252,7 @@ class Dashboard extends Component
 
 
      public function getLongterms(){
-
+        return 0;
         $service = Yii::$app->params['ServiceName']['LongTermAppraisal_Status'];
         $filter = [
            
@@ -267,6 +268,7 @@ class Dashboard extends Component
 
     public function getAppraisalStatus()
     {
+        return 0;
          $service = Yii::$app->params['ServiceName']['PortalFactory'];
          $data = [
             'empNo' => Yii::$app->user->identity->{'Employee No_'}
@@ -286,7 +288,7 @@ class Dashboard extends Component
     // Exists in PIP Appraisee list
 
      public function inAppraiseePIPList(){
-
+        return 0;
         $service = Yii::$app->params['ServiceName']['PIPAppraiseeList'];
         $filter = [
            'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
@@ -302,7 +304,7 @@ class Dashboard extends Component
     // Exists in pip supervisor list
 
     public function inSupervisorPIPList(){
-
+        return 0;
         $service = Yii::$app->params['ServiceName']['PIPSupervisorList'];
         $filter = [
            'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
@@ -316,7 +318,7 @@ class Dashboard extends Component
     }
 
     public function inSupervisorList(){
-
+        return 0;
         $service = Yii::$app->params['ServiceName']['SupervisorList'];
         $filter = [
            'Emp_No' => Yii::$app->user->identity->{'Employee No_'},
@@ -332,7 +334,7 @@ class Dashboard extends Component
      // Exists in pip overview list
 
      public function inOverviewPIPList(){
-
+        return 0;
         $service = Yii::$app->params['ServiceName']['PIPOverviewList'];
         $filter = [
            'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
@@ -348,7 +350,7 @@ class Dashboard extends Component
     // Exists in pip Agreement list
 
     public function inAgreementPIPList(){
-
+        return 0;
         $service = Yii::$app->params['ServiceName']['PIPAgreementList'];
         $filter = [
            'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
@@ -364,7 +366,7 @@ class Dashboard extends Component
     // Exists in pip Closed list
 
     public function inClosedPIPList(){
-
+        return 0;
         $service = Yii::$app->params['ServiceName']['PIPClosedAppraisals'];
         $filter = [
            'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
@@ -381,6 +383,7 @@ class Dashboard extends Component
 	
 	public function getHoDBalancesRecords()
 	{
+        return 0;
 		$service = Yii::$app->params['ServiceName']['HODLeaveBalances'];
         $filter = [
             'Global_Dimension_1_Code' => Yii::$app->user->identity->Employee[0]->Global_Dimension_1_Code,
@@ -396,6 +399,7 @@ class Dashboard extends Component
 	
 	public function getOnLeavehod()
 	{
+        return 0;
 		$service = Yii::$app->params['ServiceName']['StaffOnLeave'];
         $filter = [
             'Division' => Yii::$app->user->identity->Employee[0]->Global_Dimension_1_Code,
@@ -411,6 +415,7 @@ class Dashboard extends Component
 	
 	public function getProbationsSuper()
 	{
+        return 0;
 		$service = Yii::$app->params['ServiceName']['ProbationStatusList'];
         $filter = [
             'Supervisor_No' => Yii::$app->user->identity->{'Employee No_'},
@@ -424,6 +429,7 @@ class Dashboard extends Component
 	
 	public function getShorttermsSuper()
 	{
+        return 0;
 		$service = Yii::$app->params['ServiceName']['ShortTermStatusList'];
         $filter = [
             'Supervisor_No' => Yii::$app->user->identity->{'Employee No_'},
@@ -437,6 +443,7 @@ class Dashboard extends Component
 	
 	public function getLongtermsSuper()
 	{
+        return 0;
 		$service = Yii::$app->params['ServiceName']['LongTermAppraisal_Status'];
         $filter = [
             'Supervisor_No' => Yii::$app->user->identity->{'Employee No_'},

@@ -336,6 +336,8 @@ class SiteController extends Controller
             'No' => Yii::$app->user->identity->{'Employee No_'},
         ];
 
+       // Yii::$app->recruitment->printrr($filter);
+
         $employee = \Yii::$app->navhelper->getData($service,$filter);
         return $employee;
     }

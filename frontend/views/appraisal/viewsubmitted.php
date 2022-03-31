@@ -25,7 +25,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 <div class="row">
     <div class="col-md-12">
-        <div class="card-info">
+        <div class="card-ushurusecondary">
             <div class="card-header">
                 <h3>Performance Appraisal Card</h3>
             </div>
@@ -492,7 +492,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
         
         <!--KRA CARD -->
-        <div class="card-info">
+        <div class="card-ushurusecondary">
             <div class="card-header">
                 <h4 class="card-title">Employee Appraisal KRA <?php $model->EY_Appraisal_Status ?></h4>
             </div>
@@ -587,10 +587,11 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                                                             <td>
                                                                 <?= (
-                                                                    $model->Goal_Setting_Status == 'New' ||
-                                                                    $model->MY_Appraisal_Status == 'Supervisor_Level' ||
-                                                                     $model->EY_Appraisal_Status == 'Supervisor_Level' ||
-                                                                    $model->EY_Appraisal_Status == 'Agreement_Level'
+                                                                   // $model->Goal_Setting_Status == 'New' ||
+                                                                   // $model->MY_Appraisal_Status == 'Supervisor_Level' ||
+                                                                   // $model->EY_Appraisal_Status == 'Supervisor_Level' ||
+                                                                   // $model->EY_Appraisal_Status == 'Agreement_Level' || 
+                                                                   1 == 1
 
                                                             )?Html::a('<i class="fas fa-edit"></i> ',['employeeappraisalkpi/update','Appraisal_No'=> $kpi->Appraisal_No,'Employee_No' => $kpi->Employee_No,'KRA_Line_No' => $kpi->KRA_Line_No,'Line_No' => $kpi->Line_No],['class' => 'btn btn-xs btn-primary add-objective', 'title' => 'Update Objective /KPI']):'' ?>
                                                                 <?= ($model->Goal_Setting_Status == 'New')? Html::a('<i class="fa fa-trash"></i>',['employeeappraisalkpi/delete','Key' => $kpi->Key],['class'=> 'btn btn-xs btn-danger delete-objective','title' => 'Delete Objective']):'' ?>
@@ -624,7 +625,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
         <!--Employee Appraisal  Competence --->
 
-        <div class="card-info">
+        <div class="card-ushurusecondary">
             <div class="card-header">
                 <h4 class="card-title">Employee Appraisal Competences</h4>
             </div>
@@ -731,7 +732,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
  <!----Training Needs-->
-                <div class="card-info">
+                <div class="card-ushurusecondary">
 
 
                         <div class="card-header">
@@ -791,7 +792,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
 
-        <div class="card-info">
+        <div class="card-ushurusecondary">
             <div class="card-header">
                 <h4 class="card-title">Areas of Further Development</h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 

@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>-->
 
                 <div class="form-group">
-                    <?= Html::submitButton('Login', ['class' => 'btn btn-warning', 'name' => 'login-button']) ?>
+                    <?= Html::submitButton('Login', ['class' => 'btn bg-ushurusecondary', 'name' => 'login-button']) ?>
 
                    <!-- <?/*= '<p class="text-white">Click  here to '. Html::a('resend', ['/site/resend-verification-email'],['class' => '']). ' verification token .</p>' */?>
 
@@ -85,7 +85,7 @@ $random_img = $images[array_rand($images)];
 
 $style = <<<CSS
     .login-page { 
-          background: url("../../background/$random_img") no-repeat center center fixed; 
+         /* background: url("../../background/$random_img") no-repeat center center fixed; */
           -webkit-background-size: cover;
           -moz-background-size: cover;
           -o-background-size: cover;
@@ -114,7 +114,7 @@ $style = <<<CSS
         font-family: sans-serif, Verdana;
         font-size: larger;
         font-weight: 400;
-        text-shadow: 2px 2px 8px #21baff;
+        text-shadow: 2px 2px 8px #8B2323;
 
      }
 
@@ -133,11 +133,11 @@ $style = <<<CSS
     }
     
    .card {
-    background-color: rgba(0,0,0,.6);
+    background-color: rgba(66, 179, 229,.6);
    }
    
    .login-card-body {
-     background-color: rgba(0,0,0,.1);
+     background-color: rgba(66, 179, 229,.1);
    }
 
     

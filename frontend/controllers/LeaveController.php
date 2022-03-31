@@ -344,6 +344,10 @@ class LeaveController extends Controller
         $results = \Yii::$app->navhelper->getData($service,$filter);
         $result = [];
         foreach($results as $item){
+            if(empty($item->Application_No))
+            {
+                continue;
+            }
             $link = $updateLink = $deleteLink =  '';
             $Viewlink = Html::a('<i class="fas fa-eye"></i>',['view' ],[
                 'class'=>'btn btn-outline-primary btn-xs',
@@ -646,7 +650,7 @@ class LeaveController extends Controller
         //Yii::$app->recruitment->printrr(Yii::$app->user->identity->Employee[0]->Global_Dimension_3_Code);
         $service = Yii::$app->params['ServiceName']['Employees'];
         $filter = [
-            'Global_Dimension_3_Code' => Yii::$app->user->identity->Employee[0]->Global_Dimension_3_Code
+           // 'Global_Dimension_3_Code' => Yii::$app->user->identity->Employee[0]->Global_Dimension_3_Code
         ];
         $employees = \Yii::$app->navhelper->getData($service, $filter);
         $data = [];
@@ -655,10 +659,10 @@ class LeaveController extends Controller
 
             foreach($employees as  $emp){
                 $i++;
-                if(!empty($emp->Full_Name) && !empty($emp->No)){
+                if(!empty($emp->FullName) && !empty($emp->No)){
                     $data[$i] = [
                         'No' => $emp->No,
-                        'Full_Name' => $emp->Full_Name
+                        'Full_Name' => $emp->FullName
                     ];
                 }
 

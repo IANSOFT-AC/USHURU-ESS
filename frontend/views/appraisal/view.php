@@ -23,12 +23,12 @@ Yii::$app->session->set('isAppraisee', $model->isAppraisee());
 
 $absoluteUrl = \yii\helpers\Url::home(true);
 
-// Yii::$app->recruitment->printrr($card);
+//Yii::$app->recruitment->printrr($model->isSupervisor());
 ?>
 
     <div class="row">
         <div class="col-md-12">
-            <div class="card-info">
+            <div class="card-ushurusecondary">
                 <div class="card-header">
                     <h3>Performance Appraisal Card </h3>
                 </div>
@@ -195,7 +195,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                      <!-- Line Mgr Actions on complete goals -->
 
-                     <?php if($model->Goal_Setting_Status == 'Supervisor_Level' && $model->isSupervisor() && $model->isSupervisor()): ?>
+                     <?php if($model->Goal_Setting_Status == 'Supervisor_Level'  && $model->isSupervisor()): ?>
 
 
                                 <?= Html::a('<i class="fas fa-backward"></i> To Appraisee.',['backtoemp','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
@@ -227,6 +227,170 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                     <?php endif; ?>
 
+                     <!-- Mid YEar Supervisor Action -->
+
+                <?php if($model->MY_Appraisal_Status == 'Supervisor_Level'): ?>
+
+                                <?= Html::a('<i class="fas fa-times"></i> Reject MY',['rejectmy'],[
+                                            'class' => 'btn btn-app bg-warning rejectmy mx-1',
+                                            'title' => 'Reject Mid-Year Appraisal',
+                                            'rel' => $_GET['Appraisal_No'],
+                                            'rev' => $_GET['Employee_No'],
+                                            /*'data' => [
+                                            'confirm' => 'Are you sure you want to Reject this Mid-Year appraisal?',
+                                            'method' => 'post',]*/
+                                        ]) 
+                                    ?>
+
+                                <?= Html::a('<i class="fas fa-play"></i>MY To Agreement ',['send-my-to-agreement','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],[
+                                            'class' => 'btn btn-app bg-warning  mx-1',
+                                            'title' => 'Mid-Year to Agreement Stage',
+                                            'data' => [
+                                            'confirm' => 'Are you sure you want to send MY Appraisal to Agreement Level ?',
+                                            'method' => 'post',]
+                                        ]) ;
+                                    ?>
+
+
+
+
+                                    <?= Html::a('<i class="fas fa-play"></i> To Overview ',['my-to-overview','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],[
+                                            'class' => 'btn btn-app bg-warning mx-1',
+                                            'title' => 'Send Appraisal To Overview Manager.',
+                                            'data' => [
+                                            'confirm' => 'Are you sure you want to send MY Appraisal to Overview Manager ?',
+                                            'method' => 'post',]
+                                        ]) ;
+                                    ?>
+
+                                    <?php endif; ?>
+
+<!--/ Mid YEar Supervisor Action -->
+
+
+
+<!-- Agreement actions -->
+
+
+<?php if($model->MY_Appraisal_Status == 'Agreement_Level'): ?>
+
+<?= Html::a('<i class="fas fa-play"></i>MY To Appraisee ',['my-to-appraisee','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],[
+               'class' => 'btn btn-app bg-warning  mx-1',
+               'title' => 'Mid-Year Agreement Back to Appraisee.',
+               'data' => [
+               'confirm' => 'Are you sure you want to send MY Appraisal Back to Appraisee ?',
+               'method' => 'post',]
+           ]) ;
+       ?>
+
+<?php elseif($model->EY_Appraisal_Status == 'Agreement_Level'): ?>
+
+   
+   <?= Html::a('<i class="fas fa-times"></i> Reject EY',['rejectey','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+               'class' => 'btn btn-app bg-warning rejectey',
+               'title' => 'Reject End-Year Appraisal',
+               'rel' =>  $_GET['Appraisal_No'],
+               'rev' => $_GET['Employee_No'],
+               /*'data' => [
+               'confirm' => 'Are you sure you want to Reject this End-Year Appraisal?',
+               'method' => 'post',]*/
+           ]) 
+   ?>
+
+<?php endif; ?>
+
+<!-- End Agreement actions -->
+
+<?php if($model->MY_Appraisal_Status == 'Closed' && $model->EY_Appraisal_Status == 'Agreement_Level'): ?>
+
+<div class="col-md-4">
+    <?= Html::a('<i class="fas fa-check"></i> To Ln Mgr.',['agreementtolinemgr','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+        'class' => 'btn btn-app bg-success',
+        'title' => 'Submit End Year Appraisal for Approval',
+        'data' => [
+            'confirm' => 'Are you sure you want to submit End Year Appraisal?',
+            'method' => 'post',
+        ]
+    ]) ?>
+</div>
+
+<?php endif; ?>
+
+
+<?=($model->EY_Appraisal_Status == 'Peer_1_Level' || $model->EY_Appraisal_Status == 'Peer_2_Level')?Html::a('<i class="fas fa-play"></i> Send Back to Supervisor',['sendbacktosupervisor','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+            'class' => 'btn btn-success ',
+            'title' => 'Send Peer Appraisal to Supervisor',
+            'data' => [
+                'confirm' => 'Are you sure you want to send Appraisal to Supervisor?',
+                'method' => 'post',]
+        ]) :'';
+?>
+
+
+ <!-- Overview Manager Actions -->
+
+ <?php if($model->EY_Appraisal_Status == 'Overview_Manager' && $model->isOverview()): ?>
+
+<?= Html::a('<i class="fas fa-check"></i> Approve EY',['approveey','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+            'class' => 'mx-1 btn btn-app bg-success submitforapproval',
+            'title' => 'Approve End Year Appraisal',
+            'data' => [
+            'confirm' => 'Are you sure you want to Approve this End Year Appraisal ?',
+            'method' => 'post',
+        ]
+    ])
+?>
+
+<?= Html::a('<i class="fas fa-times"></i> To Ln Manager',['rejectey','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+            'class' => 'btn btn-app bg-danger ovrejectey',
+            'title' => 'Reject Goals Set by Appraisee',
+            'rel' => $_GET['Appraisal_No'],
+            'rev' => $_GET['Employee_No'],
+            /*'data' => [
+            'confirm' => 'Are you sure you want to Reject this Mid Year Appraisal?',
+            'method' => 'post',]*/
+        ]) 
+    ?>
+
+<?php endif; ?>
+
+<?php if($model->EY_Appraisal_Status == 'Supervisor_Level' ): ?>
+
+<?= Html::a('<i class="fas fa-check"></i> Agreement..',['sendtoagreementlevel','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+            'class' => 'btn btn-app bg-success submitforapproval',
+            'title' => 'Move Appraisal to  Agreement Level',
+            'data' => [
+            'confirm' => 'Are you sure you want to send this End-Year Appraisal to Agreement Level ?',
+            'method' => 'post',
+            ]
+    ])
+?>
+
+<!-- Back to Appraisee -->
+
+<?= Html::a('<i class="fas fa-times"></i> To Appraisee',['rejectey','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+                'class' => 'btn btn-app bg-danger rejectey',
+                'title' => 'Reject Goals Set by Appraisee',
+                'rel' => $_GET['Appraisal_No'],
+                'rev' => $_GET['Employee_No'],
+                /*'data' => [
+                'confirm' => 'Are you sure you want to Reject this Mid Year Appraisal?',
+                'method' => 'post',]*/
+            ]) 
+        ?>
+
+
+ <?= Html::a('<i class="fas fa-forward"></i> Overview',['sendeytooverview','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+            'class' => 'mx-1 btn btn-app bg-success submitforapproval',
+            'title' => 'Move Appraisal to  Agreement Level',
+            'data' => [
+            'confirm' => 'Are you sure you want to send this End-Year Appraisal to Agreement Level ?',
+            'method' => 'post',
+            ]
+    ])
+?>
+
+<?php endif; ?>
 
 
                     </div>
@@ -432,7 +596,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
             <?php if(1 == 1){ //$model->EY_Appraisal_Status !== 'Agreement_Level' ?>
                 <!--KRA CARD -->
-                <div class="card-info">
+                <div class="card-ushurusecondary">
                     <div class="card-header">
                         <h4 class="card-title">Employee Appraisal Key Result Areas (KRAs)</h4>
                         <div class="card-tools">
@@ -515,7 +679,8 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
                                                     <th> <?= (
-                                                        $model->Goal_Setting_Status == 'New' || $model->MY_Appraisal_Status == 'Appraisee_Level'
+                                                        //$model->Goal_Setting_Status == 'New' || $model->MY_Appraisal_Status == 'Appraisee_Level'
+                                                        1 == 1
 
                                                     )?Html::a('<i class="fas fa-plus"></i>',['employeeappraisalkpi/create','Employee_No' => $k->Employee_No,'Appraisal_No'=> $k->Appraisal_No,'KRA_Line_No' => $k->Line_No],['class' => 'btn btn-xs btn-success add-objective','title' => 'Add Objective / KPI']):'' ?>
                                                     </th>
@@ -564,7 +729,9 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                                                     $model->MY_Appraisal_Status == 'Appraisee_Level' ||
                                                                     $model->EY_Appraisal_Status == 'Appraisee_Level' ||
                                                                     $model->EY_Appraisal_Status == 'Agreement_Level' ||
-                                                                    $model->MY_Appraisal_Status == 'Agreement_Level'
+                                                                    $model->MY_Appraisal_Status == 'Agreement_Level' ||
+                                                                    $model->MY_Appraisal_Status == 'Supervisor_Level' ||
+                                                                    $model->EY_Appraisal_Status == 'Supervisor_Level' 
 
                                                             )?
                                                            
@@ -599,7 +766,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                 <!--Employee Appraisal  Competence --->
 
-                <div class="card-info">
+                <div class="card-ushurusecondary">
                     <div class="card-header">
                         <h4 class="card-title">Employee Appraisal Competences</h4>
                     </div>
@@ -690,7 +857,9 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                                             $model->MY_Appraisal_Status == 'Appraisee_Level' || 
                                                             $model->EY_Appraisal_Status == 'Appraisee_Level' ||
                                                             $model->EY_Appraisal_Status == 'Agreement_Level' ||
-                                                            $model->MY_Appraisal_Status == 'Agreement_Level'
+                                                            $model->MY_Appraisal_Status == 'Agreement_Level' ||
+                                                            $model->MY_Appraisal_Status == 'Supervisor_Level' ||
+                                                            $model->EY_Appraisal_Status == 'Supervisor_Level'
 
 
 
@@ -718,7 +887,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
                 <!--Training Plan Card -->
-               <!-- <div class="card-info">
+               <!-- <div class="card-ushurusecondary">
                     <div class="card-header">
                         <h4 class="card-title">Training Plan </h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
@@ -770,7 +939,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
                 <!----Training Needs-->
-                <div class="card-info">
+                <div class="card-ushurusecondary">
 
 
                         <div class="card-header">
@@ -829,7 +998,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                 <!---Areas_of_Further_Development-->
 
-                <div class="card-info">
+                <div class="card-ushurusecondary">
                     <div class="card-header">
                             <h4 class="card-title">Areas of Further Development</h4> 
 

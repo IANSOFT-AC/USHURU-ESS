@@ -165,7 +165,7 @@ class EmployeeappraisalbehaviourController extends Controller
         if(Yii::$app->request->isAjax){
             return $this->renderAjax('update', [
                 'model' => $model,
-                'proficiencylevels' => ArrayHelper::map($proficiencylevels,'Level','Level'),
+                'proficiencylevels' => [], //ArrayHelper::map($proficiencylevels,'Level','Level'),
                 'ratings' => $this->getRatings(),
             ]);
         }

@@ -59,6 +59,10 @@ return [
         'recruitment',
         'employeerequisition',
     ],
+    'AuthMode' => [
+        'AD' => False,
+        'Basic' => True 
+    ],
     'codeUnits' => [
         //'Portal_Workflows', //50019
         'JobApplication', //50002
@@ -403,7 +407,7 @@ return [
 
         /* Request to Approve */
         'RequeststoApprove' => 'RequeststoApprove', //654
-        'RequestsTo_ApprovePortal'=> 'RequestsTo_ApprovePortal', // 67123
+        'RequestsTo_ApprovePortal'=> 'RequestsTo_ApprovePortal', // 67123 --OBJECT NOT - AFFETCT IS SUPERVISOR METHOD IN IDENTITY CLASS
         'ApprovalCommentsWeb' => 'ApprovalCommentsWeb', // 50068
 
 

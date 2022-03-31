@@ -46,7 +46,7 @@ public $Mid_Year_Supervisor_Comments;
 public $Key;
 public $isNewRecord;
 
-public $Level;
+//public $Level;
 
 
     public function rules()

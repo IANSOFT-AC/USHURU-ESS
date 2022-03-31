@@ -18,7 +18,7 @@ exit;*/
             <div class="col-md-3">
 
                 <!-- Profile Image -->
-                <div class="card card-info card-outline">
+                <div class="card card-ushurusecondary card-outline">
                     <div class="card-body box-profile">
                         <div class="text-center">
                             <img class="profile-user-img img-fluid img-circle"
@@ -42,14 +42,14 @@ exit;*/
                             </li>
                         </ul>
 
-                        <a href="mailto:<?= !empty($supervisor)?$supervisor->Company_E_Mail: 'Not Set' ?>" class="btn btn-info btn-block"><b>Email Supervisor</b></a>
+                        <a href="mailto:<?= !empty($supervisor)?$supervisor->Company_E_Mail: 'Not Set' ?>" class="btn bg-ushurusecondary btn-block"><b>Email Supervisor</b></a>
                     </div>
                     <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
 
                 <!-- About Me Box -->
-                <div class="card card-info">
+                <div class="card card-ushurusecondary">
                     <div class="card-header">
                         <h3 class="card-title">About Me</h3>
                     </div>
@@ -101,7 +101,7 @@ exit;*/
                     <div class="col-12 col-sm-6 col-md-3">
                         <a href="<?= Yii::$app->recruitment->absoluteUrl().'recruitment/vacancies' ?>" target="_blank">
                             <div class="info-box">
-                                <span class="info-box-icon bg-info elevation-1"><i class="fas fa-briefcase"></i></span>
+                                <span class="info-box-icon bg-ushurusecondary elevation-1"><i class="fas fa-briefcase"></i></span>
                                 <div class="info-box-content">
                                     <span class="info-box-text text-wrap">HR Vacancies</span>
                                     <span class="info-box-number"><?= Yii::$app->dashboard->getVacancies() ?>
@@ -120,7 +120,7 @@ exit;*/
                     <div class="col-12 col-sm-6 col-md-3">
                          <a href="<?= Yii::$app->recruitment->absoluteUrl().'approvals/open-approvals' ?>" target="_blank">
                             <div class="info-box">
-                                <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
+                                <span class="info-box-icon bg-ushurusecondary elevation-1"><i class="fas fa-cog"></i></span>
 
                                 <div class="info-box-content">
                                     <span class="info-box-text text-wrap">Open Approvals</span>
@@ -180,7 +180,7 @@ exit;*/
                         <div class="col-12 col-sm-6 col-md-3">
                             <a href="<?= Yii::$app->recruitment->absoluteUrl().'leave/balances' ?>" target="_blank">
                                     <div class="info-box mb-3">
-                                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-door-open"></i></span>
+                                        <span class="info-box-icon bg-ushurusecondary elevation-1"><i class="fas fa-door-open"></i></span>
 
                                         <div class="info-box-content">
                                             <span class="info-box-text text-wrap">Leave Balances</span>
@@ -201,7 +201,7 @@ exit;*/
                         <div class="col-12 col-sm-6 col-md-3">
                             <a href="<?= Yii::$app->recruitment->absoluteUrl().'leave/activeleaves' ?>" target="_blank">
                                 <div class="info-box mb-3">
-                                    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-paper-plane"></i></span>
+                                    <span class="info-box-icon bg-ushurusecondary elevation-1"><i class="fas fa-paper-plane"></i></span>
 
                                     <div class="info-box-content">
                                         <span class="info-box-text text-wrap">Staff on Leave</span>
@@ -222,7 +222,7 @@ exit;*/
                     <div class="col-12 col-sm-6 col-md-3">
                         <a href="<?= Yii::$app->recruitment->absoluteUrl().'recruitment/internalapplications' ?>" target="_blank">
                             <div class="info-box mb-3">
-                                <span class="info-box-icon bg-info elevation-1"><i class="fas fa-paper-plane"></i></span>
+                                <span class="info-box-icon bg-ushurusecondary elevation-1"><i class="fas fa-paper-plane"></i></span>
 
                                 <div class="info-box-content">
                                     <span class="info-box-text text-wrap">My Applications</span>
@@ -240,7 +240,7 @@ exit;*/
 
                         <a href="<?= Yii::$app->recruitment->absoluteUrl().'approvals/sapproved' ?>" target="_blank">
                             <div class="info-box mb-3">
-                                <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
+                                <span class="info-box-icon bg-ushurusecondary elevation-1"><i class="fas fa-users"></i></span>
 
                                 <div class="info-box-content">
                                     <span class="info-box-text text-wrap">Super Approved</span>
@@ -280,9 +280,7 @@ exit;*/
 
                      <!-- /.col - HODs on Leeave -->
 
-                     <?php
-                      
-                      if( Yii::$app->user->identity->{'Head of Division'} == Yii::$app->user->identity->Employee[0]->Global_Dimension_1_Code): ?>
+                    
                      <div class="col-12 col-sm-6 col-md-3">
                         <a href="<?= Yii::$app->recruitment->absoluteUrl().'leave/activeleaveshod' ?>" target="_blank">
 
@@ -291,14 +289,14 @@ exit;*/
 
                                 <div class="info-box-content">
                                     <span class="info-box-text text-wrap">HoDs on Leave</span>
-                                    <span class="info-box-number"><?=number_format(Yii::$app->dashboard->getOnLeavehod())?></span>
+                                    <span class="info-box-number"><?php //number_format(Yii::$app->dashboard->getOnLeavehod())?></span>
                                 </div>
                                 <!-- /.info-box-content -->
                             </div>
                             <!-- /.info-box -->
                         </a>
-                    </div>
-                    <?php endif; ?>
+                    </div> 
+                   
                     <!-- /.col -->
 
                     <!-- /.col Appraisal Status Lists for HR Admins -->
@@ -356,7 +354,7 @@ exit;*/
                     <?php endif; ?>
 
                                 <!-- HoDs Leave Balances -->
-                    <?php if( Yii::$app->user->identity->{'Head of Division'} == Yii::$app->user->identity->Employee[0]->Global_Dimension_1_Code): ?>
+                    
                                  <!-- /.col -->
                                  <div class="col-12 col-sm-6 col-md-3">
                                     <a href="<?= Yii::$app->recruitment->absoluteUrl().'leave/balances-division' ?>" target="_blank">
@@ -372,12 +370,12 @@ exit;*/
                                     <!-- /.info-box -->
                                 </div>
                                 <!-- /.col -->
-                    <?php endif; ?>
+                    
 
 
                 </div>
 
-                <div class="row"><!---row for supervisor appraisal list -->
+                <div class="row"><!-- row for supervisor appraisal list -->
                          <!-- /.col Appraisal Status Lists for HR Admins -->
                          <?php if(Yii::$app->dashboard->inSupervisorList()): ?>
 
@@ -439,7 +437,7 @@ exit;*/
                 <div class="row">
 
                     <div class="col-md-7">
-                        <div class="card card-info">
+                        <div class="card card-ushurusecondary">
                             <div class="card-header">
                                 <h3 class="card-title">My Leave Balances</h3>
                             </div>
@@ -485,7 +483,7 @@ exit;*/
 
                     <div class="col-md-5">
 
-                        <div class="card card-info">
+                        <div class="card card-ushurusecondary">
                             <div class="card-header">
                                 <h3 class="card-title">Current Performance Appraisal Status</h3>
                             </div>

@@ -20,6 +20,8 @@ AdminlteAsset::register($this);
 
 $webroot = Yii::getAlias(@$webroot);
 $absoluteUrl = \yii\helpers\Url::home(true);
+
+//Yii::$app->recruitment->printrr(Yii::$app->user->identity->employee);
 $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->employee))?Yii::$app->user->identity->employee[0]:[];
 
 
@@ -48,10 +50,10 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 
 <?php $this->beginBody() ?>
 
-<body class="hold-transition sidebar-mini layout-fixed accent-info">
+<body class="hold-transition sidebar-mini layout-fixed accent-ushuruprimary">
     <div class="wrapper">
         <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-dark navbar-info">
+        <nav class="main-header navbar navbar-expand navbar-dark navbar-ushuruprimary">
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
@@ -144,11 +146,9 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 
                         <div class="dropdown-divider"></div>
 
-                        <?= (Yii::$app->user->identity->Employee[0]->Type_of_Employee == 'Expertriate_Payable' || Yii::$app->user->identity->Employee[0]->Type_of_Employee == 'Expertriate_Non_Payable' )?
-                        Html::a('<i class="fas fa-user"></i> Exp Profile',['./employee/expetriate'],['class'=> 'dropdown-item'])
-                        :
-                         Html::a('<i class="fas fa-user"></i> Profile',['./employee'],['class'=> 'dropdown-item'])
-                        ; ?>
+                      
+                         <?= Html::a('<i class="fas fa-user"></i> Profile',['./employee'],['class'=> 'dropdown-item']) ?>
+                       
 
                         <div class="dropdown-divider"></div>
 
@@ -168,7 +168,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        <aside class="main-sidebar elevation-4 sidebar-light-info">
+        <aside class="main-sidebar elevation-4 sidebar-light-ushurusecondary">
             <!-- Brand Logo -->
             <a href="<?= $absoluteUrl ?>site" class="brand-link">
                 <!--<img src="<?= $webroot ?>/images/Logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
@@ -510,14 +510,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 
 <!-- Long Term Appraisal -->
 
-                    <?php if(Yii::$app->user->identity->Employee[0]->Long_Term == true && Yii::$app->user->identity->Employee[0]->Probation_Status == 'Confirmed' || 
-                        (
-                        Yii::$app->user->identity->Employee[0]->Type_of_Employee == 'Expertriate_Payable' ||
-                        Yii::$app->user->identity->Employee[0]->Type_of_Employee == 'Expertriate_Non_Payable' || 
-                        Yii::$app->user->identity->Employee[0]->Type_of_Employee == 'Part_Time' ||
-                        Yii::$app->user->identity->Employee[0]->Type_of_Employee == 'Seconded'
-
-                        ) ): ?>
+                    <?php if(Yii::$app->user->identity->Employee[0]->Probation_Status == 'Confirmed'): ?>
 
                         <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('appraisal')?'menu-open':'' ?>">
                             <a href="#" title="Performance Management" class="nav-link <?= Yii::$app->recruitment->currentCtrl('appraisal')?'active':'' ?>">
@@ -537,7 +530,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                         <p> Goal Setting</p>
                                     </a>
                                 </li>
-                                <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
+                                <?php if(1 == 1):  ?>
                                     <li class="nav-item">
                                         <a href="<?= $absoluteUrl ?>appraisal/submitted" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal',['submitted','viewsubmitted'])?'active':'' ?>">
                                             <i class="fa fa-check-square nav-icon"></i>
@@ -551,7 +544,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                         <p>Overview Mgr Goals List </p>
                                     </a>
                                 </li>
-                                 <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
+                                 <?php if(1 == 1):  ?>
                                     <!-- <li class="nav-item">
                                         <a href="<?= $absoluteUrl ?>appraisal/superapprovedappraisals" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','superapprovedappraisals')?'active':'' ?>">
                                             <i class="fa fa-check-square nav-icon"></i>
@@ -580,7 +573,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                             </a>
                                         </li>
 
-                                        <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
+                                        <?php if(1 == 1):  ?>
 
                                             <li class="nav-item">
                                                 <a href="<?= $absoluteUrl ?>appraisal/mysupervisorlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','mysupervisorlist')?'active':'' ?>">
@@ -624,7 +617,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                             </a>
                                         </li>
 
-                                       <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
+                                       <?php if(1 == 1):  ?>
 
                                             <li class="nav-item">
                                                 <a href="<?= $absoluteUrl ?>appraisal/myapprovedsupervisorlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','myapprovedsupervisorlist')?'active':'' ?>">
@@ -664,7 +657,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                             </a>
                                         </li>
 
-                                        <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
+                                        <?php if(1 == 1):  ?>
                                             <li class="nav-item">
                                                 <a href="<?= $absoluteUrl ?>appraisal/eysupervisorlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','eysupervisorlist')?'active':'' ?>">
                                                     <i class="fa fa-check-square nav-icon"></i>
@@ -698,7 +691,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                                                 <p>E-Y Closed (Appraisee) </p>
                                             </a>
                                         </li>
-                                        <?php if(!Yii::$app->user->isGuest && Yii::$app->user->identity->isSupervisor()):  ?>
+                                        <?php if(1 == 1):  ?>
                                             <li class="nav-item">
                                                 <a href="<?= $absoluteUrl ?>appraisal/eysupervisorclosedlist" class="nav-link <?= Yii::$app->recruitment->currentaction('appraisal','eysupervisorclosedlist')?'active':'' ?>">
                                                     <i class="fa fa-check-square nav-icon"></i>
@@ -818,7 +811,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 
 <?php if(
     
-    Yii::$app->user->identity->Employee[0]->Long_Term == false ||
+    Yii::$app->user->identity->Employee[0]->Long_Term == false && 1 == 4 &&
     (
         (Yii::$app->user->identity->Employee[0]->Probation_Status == 'Confirmed') 
     && Yii::$app->navhelper->codeunit(Yii::$app->params['ServiceName']['PortalFactory'],['employeeNo' => Yii::$app->user->identity->{'Employee No_'} ],'IanCanViewShortTerm') == true
@@ -1061,7 +1054,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 
                         <!-- power Bi -->
 
-                        <?php if( Yii::$app->user->identity->{'View Power PI'} ) : ?>
+                        <?php if( 1 == 3 ) : ?>
 
                             <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('powerbi')?'menu-open':'' ?>">
                                 <a href="#" class="nav-link <?= Yii::$app->recruitment->currentCtrl('powerbi')?'active':'' ?>" title="Power BI Reports">
@@ -1086,7 +1079,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 
                         <?php endif;  ?>
 
-                        <?php if(YII_ENV_DEV){ // start blocking phase2 modules if in prod env ?>
+                        <?php if(YII_ENV_PROD){ // start blocking phase2 modules if in prod env ?>
                             <!-- Employee Induction -->
 
                             <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl(['induction','periodic-induction'])?'menu-open':'' ?>">

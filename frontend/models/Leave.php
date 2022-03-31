@@ -51,6 +51,8 @@ public $Leave_Allowance;
 public $Rejection_Comments;
 public $isNewRecord;
 
+public $Reliever_Type;
+
     /*public function __construct(array $config = [])
     {
         return $this->getLines($this->No);

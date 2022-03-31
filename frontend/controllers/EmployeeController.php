@@ -77,10 +77,10 @@ class EmployeeController extends Controller
 
         return $this->render('index',[
             'model' => $model,
-            'dependants' => (property_exists($employee[0]->Employee_Dependants, 'Employee_Dependants'))?$employee[0]->Employee_Dependants->Employee_Dependants:[],
-            'beneficiaries' => (property_exists($employee[0]->Employee_Beneficiaries, 'Employee_Beneficiaries'))?$employee[0]->Employee_Beneficiaries->Employee_Beneficiaries:[],
-            'emergency' => (property_exists($employee[0]->Employee_Relatives, 'Employee_Relatives'))?$employee[0]->Employee_Relatives->Employee_Relatives:[],
-            'qualifications' => (property_exists($employee[0]->Employee_Qualifications, 'Employee_Qualifications'))?$employee[0]->Employee_Qualifications->Employee_Qualifications:[]
+            'dependants' =>[], //(property_exists($employee[0]->Employee_Dependants, 'Employee_Dependants'))?$employee[0]->Employee_Dependants->Employee_Dependants:[],
+            'beneficiaries' =>[], //(property_exists($employee[0]->Employee_Beneficiaries, 'Employee_Beneficiaries'))?$employee[0]->Employee_Beneficiaries->Employee_Beneficiaries:[],
+            'emergency' =>[], //(property_exists($employee[0]->Employee_Relatives, 'Employee_Relatives'))?$employee[0]->Employee_Relatives->Employee_Relatives:[],
+            'qualifications' =>[] //(property_exists($employee[0]->Employee_Qualifications, 'Employee_Qualifications'))?$employee[0]->Employee_Qualifications->Employee_Qualifications:[]
 
         ]);
     }

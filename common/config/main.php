@@ -6,7 +6,7 @@ return [
         '@npm'   => '@vendor/npm-asset',
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
-    'name' => 'KEMRI WELLCOME TRUST - ESS',
+    'name' => 'USHURU SACCO SOCIETY ESS - DEV',
     'components' => [
         'cache' => [
             'class' => 'yii\caching\FileCache',

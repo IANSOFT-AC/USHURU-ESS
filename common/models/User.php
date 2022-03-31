@@ -28,6 +28,8 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
 
+    
+
 
     /**
      * {@inheritdoc}
@@ -36,7 +38,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
        // return '{{%user}}';
 
-        return Yii::$app->params['DBCompanyName'].'User Setup ';
+        return Yii::$app->params['DBCompanyName'].'User Setup$3805f53a-484a-4136-bc03-528ff53d8d53 ';
     }
 
     /**
@@ -96,7 +98,11 @@ class User extends ActiveRecord implements IdentityInterface
     public static function findByUsername($username)
     {
        // return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
-        $username = strtoupper(Yii::$app->params['ldPrefix'].'\\'.$username);
+       if(Yii::$app->params['AuthMode']['AD'] == True) {
+
+           $username = strtoupper(Yii::$app->params['ldPrefix'].'\\'.$username);
+
+       }
 
         return static::findOne(['User ID' => $username]);
     }
@@ -306,9 +312,11 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function isApprover()
     {
-        $service = Yii::$app->params['ServiceName']['RequestsTo_ApprovePortal'];
+       // Yii::$app->recruitment->printrr(Yii::$app->user->identity->{'Employee No_'});
+        $service = Yii::$app->params['ServiceName']['RequeststoApprove'];
         $filter = [
-            'Approver_No' => Yii::$app->user->identity->{'Employee No_'},
+            //'Approver_No' => Yii::$app->user->identity->{'Employee No_'},
+           // 'ToApprove' => Yii::$app->user->identity->{'Employee No_'},
         ];
 
         $result = \Yii::$app->navhelper->getData($service,$filter);

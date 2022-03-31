@@ -47,7 +47,7 @@ class LoginForm extends Model
             $user = $this->getUser();
             //Yii::$app->recruitment->printrr($user);
 
-            if (!$user || !$user->validatePassword($this->password) || !$this->logintoAD($this->username, $this->password)) {//Add AD login condition here also--> when ad details are given
+            if (!$user || !$user->validatePassword($this->password) ) {//Add AD login condition here also--> when ad details are given
 
                 $this->addError($attribute, 'Incorrect username or password.');
             }

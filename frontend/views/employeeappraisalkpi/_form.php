@@ -104,9 +104,9 @@ use yii\widgets\ActiveForm;
                                       <?= (Yii::$app->session->get('MY_Appraisal_Status') == 'Appraisee_Level' && Yii::$app->session->get('isAppraisee')) ? $form->field($model, 'Mid_Year_Appraisee_Comments')->textArea(['rows' => 2,'maxlength' => 250]):'' ?> 
 
 
-                                       <?= (Yii::$app->session->get('MY_Appraisal_Status') == 'Supervisor_Level'  && Yii::$app->session->get('isSupervisor'))?$form->field($model, 'Mid_Year_Supervisor_Assesment')->dropDownList($ratings,['prompt' => 'Select Assement...']) :'' ?>   
+                                       <?= (Yii::$app->session->get('MY_Appraisal_Status') == 'Supervisor_Level'  )?$form->field($model, 'Mid_Year_Supervisor_Assesment')->dropDownList($ratings,['prompt' => 'Select Assement...']) :'' ?>   
 
-                                      <?= (Yii::$app->session->get('MY_Appraisal_Status') == 'Supervisor_Level' && Yii::$app->session->get('isSupervisor'))?$form->field($model, 'Mid_Year_Supervisor_Comments')->textArea(['rows' => 2,'maxlength' => 250]):'' ?> 
+                                      <?= (Yii::$app->session->get('MY_Appraisal_Status') == 'Supervisor_Level' )?$form->field($model, 'Mid_Year_Supervisor_Comments')->textArea(['rows' => 2,'maxlength' => 250]):'' ?> 
 
 
 
@@ -142,13 +142,13 @@ use yii\widgets\ActiveForm;
 
                                       <?= (
 
-                                        Yii::$app->session->get('isSupervisor') && 
+                                        
                                         Yii::$app->session->get('EY_Appraisal_Status') == 'Supervisor_Level'
                                     )?$form->field($model, 'Appraiser_Rating')->dropDownList($ratings,['prompt' => 'Select Rating...']):'' ?>
 
 
                                        <?php (
-                                        Yii::$app->session->get('isSupervisor') &&
+                                       
                                         Yii::$app->session->get('EY_Appraisal_Status') == 'Supervisor_Level')?$form->field($model, 'Move_To_PIP')->dropDownList([
                                         true => 'Yes', false => 'No'
                                      ]): '' ?>
@@ -156,7 +156,7 @@ use yii\widgets\ActiveForm;
 
 
                                      <?= (
-                                        Yii::$app->session->get('isSupervisor') && 
+                                       
                                         Yii::$app->session->get('EY_Appraisal_Status') == 'Supervisor_Level'
                                     )? $form->field($model, 'End_Year_Supervisor_Comments')->textInput(['type' => 'text']): '' ?>
 

@@ -1085,17 +1085,25 @@ class Navision extends Component
                 "features" => SOAP_SINGLE_ELEMENT_ARRAYS,
                 "stream_context" => $context);
 
-            /*
+          
+            /* Conditional Client Creation*/
+            if(Yii::$app->params['AuthMode']['Basic'] == True){
 
-            UNCOMMENT THIS FOR NAV PWD AUTH */
-           // $client = new \SoapClient($soapWsdl, $options);
+                $client = new \SoapClient($soapWsdl, $options);
+            }else if(Yii::$app->params['AuthMode']['AD'] == True)
+            {
 
-            stream_wrapper_unregister('http');
-            // we register the new HTTP wrapper //'\\common\\components\\NTLMStream'
-            stream_wrapper_register('http', '\\common\\library\\NTLMStream') or die("Failed to register protocol");
+                stream_wrapper_unregister('http');
+                // we register the new HTTP wrapper //'\\common\\components\\NTLMStream'
+                stream_wrapper_register('http', '\\common\\Library\\NTLMStream') or die("Failed to register protocol");
+                $client = new NTLMSoapClient($soapWsdl, $options);
+            }
 
+            /** End Condtional Client creation */
 
-            $client = new NTLMSoapClient($soapWsdl, $options);
+           
+
+            // Yii::$app->recruitment->printrr($client);
 
             return $client;
         } catch (\Exception $e) {

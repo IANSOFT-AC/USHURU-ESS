@@ -117,6 +117,9 @@ class Employee extends Model
     public $Section_Name;
     public $Unit_Name;
 
+    public $Job_Grade;
+    public $Allocated_Leave_Days;
+    
     public function rules()
     {
         return [

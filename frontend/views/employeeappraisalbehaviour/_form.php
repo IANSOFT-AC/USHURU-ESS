@@ -88,7 +88,7 @@ use yii\widgets\ActiveForm;
                             ''  ?>
 
 
-                            <?= ( Yii::$app->session->get('MY_Appraisal_Status') == 'Supervisor_Level' && Yii::$app->session->get('isSupervisor'))?
+                            <?= ( Yii::$app->session->get('MY_Appraisal_Status') == 'Supervisor_Level')?
 
                                     $form->field($model, 'Mid_Year_Supervisor_Rating')->dropDownList($ratings,['prompt' => 'Select Rating'])
 
@@ -99,7 +99,7 @@ use yii\widgets\ActiveForm;
                             ''  ?>
 
 
-                            <?= ( Yii::$app->session->get('MY_Appraisal_Status') == 'Supervisor_Level' && Yii::$app->session->get('isSupervisor'))?
+                            <?= ( Yii::$app->session->get('MY_Appraisal_Status') == 'Supervisor_Level')?
 
                                     
 
@@ -129,7 +129,7 @@ use yii\widgets\ActiveForm;
 
                             <?= (
 
-                                Yii::$app->user->identity->isSupervisor() &&
+                                
                                 (
                                 Yii::$app->session->get('EY_Appraisal_Status') == 'Supervisor_Level' ||
                                 Yii::$app->session->get('Appraisal_Status') == 'Supervisor_Level')
@@ -146,7 +146,7 @@ use yii\widgets\ActiveForm;
 
                             <?= (!Yii::$app->session->get('isAppraisee') && Yii::$app->session->get('EY_Appraisal_Status') == 'Agreement_Level')?$form->field($model, 'Agreed_Rating')->textInput(['type' => 'number','required' => true]):'' ?>
                             <?= (
-                                !Yii::$app->session->get('isAppraisee') && (
+                                (
                                 Yii::$app->session->get('EY_Appraisal_Status') == 'Supervisor_Level' ||
                                 Yii::$app->session->get('Appraisal_Status') == 'Supervisor_Level')
                                     
