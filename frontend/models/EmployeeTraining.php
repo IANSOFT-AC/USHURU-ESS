@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -7,6 +8,7 @@
  */
 
 namespace frontend\models;
+
 use yii\base\Model;
 
 
@@ -42,17 +44,17 @@ class EmployeeTraining extends Model
     public $Nature_of_Training;
     public $Training_Type;
     public $Training_Category;
+    public $Training_Feedback;
+
+    public $isNewRecord;
 
     public function rules()
     {
-        return [
-            
-        ];
+        return [];
     }
 
     public function attributeLabels()
     {
-        return [
-        ];
+        return [];
     }
 }

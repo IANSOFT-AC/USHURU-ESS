@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -7,6 +8,7 @@
  */
 
 namespace frontend\models;
+
 use common\models\User;
 use Yii;
 use yii\base\Model;
@@ -15,31 +17,26 @@ use yii\base\Model;
 class Fundrequisition extends Model
 {
 
-public $Key;
-public $No;
-public $Employee_No;
-public $Employee_Name;
-public $Purpose;
-public $Gross_Allowance;
-public $Net_Allowance_LCY;
-public $Status;
-public $Global_Dimension_1_Code;
-public $Global_Dimension_2_Code;
-public $Expected_Date_of_Surrender;
-public $Currency_Code;
-public $Exchange_Rate;
-public $Exchange_Rate_Factor;
-public $Posting_Date;
-public $Account_Type;
-public $Paying_Bank;
-public $Paying_Bank_Name;
-public $Pay_Mode;
-public $Payroll_Period;
-public $M_PESA_Withdrawal_Fee;
-public $Cheque_No;
-public $EFT_No;
-public $Allowance_Request_Line;
-public $isNewRecord;
+    public $Key;
+    public $No;
+    public $Employee_No;
+    public $Employee_Name;
+    public $Job_Title;
+    public $Global_Dimension_1_Code;
+    public $Global_Dimension_2_Code;
+    public $Claim_Type;
+    public $Description;
+    public $Repayment_Period;
+    public $Created_By;
+    public $Total_Surrender_Amount;
+    public $Date;
+    public $Pending_Approvals_Ext;
+    public $Approvers;
+    public $Status;
+    public $Claim_Posted;
+    public $Claim_Posted_By;
+    public $Claim_Posted_Date;
+    public $isNewRecord;
 
     /*public function __construct(array $config = [])
     {
@@ -49,19 +46,20 @@ public $isNewRecord;
     public function rules()
     {
         return [
-            [['Purpose','Global_Dimension_1_Code','Global_Dimension_2_Code'], 'required'],
+            [['Description', 'Global_Dimension_1_Code', 'Global_Dimension_2_Code'], 'required'],
         ];
     }
 
     public function attributeLabels()
     {
         return [
-            'Global_Dimension_1_Code' => 'Program',
-            'Global_Dimension_2_Code' => 'Department'
+            'Global_Dimension_1_Code' => 'Department Code',
+            'Global_Dimension_2_Code' => 'Branch Code'
         ];
     }
 
-    public function getLines($No){
+    public function getLines($No)
+    {
         $service = Yii::$app->params['ServiceName']['AllowanceRequestLine'];
         $filter = [
             'Request_No' => $No,
@@ -69,11 +67,6 @@ public $isNewRecord;
 
         $lines = Yii::$app->navhelper->getData($service, $filter);
         $this->Allowance_Request_Line = $lines;
-       return $lines;
-
-
+        return $lines;
     }
-
-
-
 }
