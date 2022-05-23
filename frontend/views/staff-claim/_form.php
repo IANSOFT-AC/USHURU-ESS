@@ -91,7 +91,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
             <div class="card-header">
                 <div class="card-title"> Staff Claim Detail</div>
                 <div class="card-tools">
-                    <?= ($model->Claim_Type == '_blank_') ? Html::a(
+                    <?= ($model->Claim_Type == 'Overtime') ? Html::a(
                         '<i class="fa fa-plus-square"></i> New Line',
                         ['add-line'],
                         [

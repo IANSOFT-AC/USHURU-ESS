@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -7,6 +8,7 @@
  */
 
 namespace frontend\controllers;
+
 use frontend\models\Employeeappraisalkra;
 use frontend\models\Experience;
 use frontend\models\Qualificationchange;
@@ -29,15 +31,15 @@ class QualificationchangeController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup','index'],
+                'only' => ['logout', 'signup', 'index'],
                 'rules' => [
                     [
-                        'actions' => ['signup','index'],
+                        'actions' => ['signup', 'index'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout','index','create','update','delete'],
+                        'actions' => ['logout', 'index', 'create', 'update', 'delete'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -49,7 +51,7 @@ class QualificationchangeController extends Controller
                     'logout' => ['post'],
                 ],
             ],
-            'contentNegotiator' =>[
+            'contentNegotiator' => [
                 'class' => ContentNegotiator::class,
                 'only' => ['commit'],
                 'formatParam' => '_format',
@@ -61,84 +63,82 @@ class QualificationchangeController extends Controller
         ];
     }
 
-    public function actionIndex(){
+    public function actionIndex()
+    {
 
         return $this->render('index');
-
     }
 
-    public function actionCreate($Change_No){
+    public function actionCreate($Change_No)
+    {
 
         $model = new Qualificationchange();
         $service = Yii::$app->params['ServiceName']['EmployeeQualificationsChange'];
         $model->Action = 'New_Addition';
         $model->Change_No = $Change_No;
         $model->Employee_No = Yii::$app->user->identity->{'Employee No_'};
-       
+
         $model->isNewRecord = true;
 
-        if(Yii::$app->request->get('Change_No') && !Yii::$app->request->post()){
+        if (Yii::$app->request->get('Change_No') && !Yii::$app->request->post()) {
             $result = Yii::$app->navhelper->postData($service, $model);
-            Yii::$app->navhelper->loadmodel($result,$model);
+            Yii::$app->navhelper->loadmodel($result, $model);
         }
 
-        if(Yii::$app->request->post() && $model->load(Yii::$app->request->post()['Qualificationchange'],'')  && $model->validate() ){
+        if (Yii::$app->request->post() && $model->load(Yii::$app->request->post()['Qualificationchange'], '')  && $model->validate()) {
 
-         Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Qualificationchange'], $model); // my fall back in case yii model loader fails
-         if(!empty(Yii::$app->request->post()['Qualificationchange']['Key'])){
-            
-             $result = Yii::$app->navhelper->updateData($service,$model);
-         }else{
-             $result = Yii::$app->navhelper->postData($service,$model);
-         }
+            Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Qualificationchange'], $model); // my fall back in case yii model loader fails
+            if (!empty(Yii::$app->request->post()['Qualificationchange']['Key'])) {
 
-           
-            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            if(is_object($result)){
-
-                return ['note' => '<div class="alert alert-success">Record Added Successfully. </div>'];
-
-            }else{
-
-                return ['note' => '<div class="alert alert-danger">Error Adding Record : '.$result.'</div>' ];
-
+                $result = Yii::$app->navhelper->updateData($service, $model);
+            } else {
+                $result = Yii::$app->navhelper->postData($service, $model);
             }
 
-        }//End Saving experience
 
-        if(Yii::$app->request->isAjax){
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            if (is_object($result)) {
+
+                return ['note' => '<div class="alert alert-success">Record Added Successfully. </div>'];
+            } else {
+
+                return ['note' => '<div class="alert alert-danger">Error Adding Record : ' . $result . '</div>'];
+            }
+        } //End Saving experience
+
+        if (Yii::$app->request->isAjax) {
             return $this->renderAjax('create', [
                 'model' => $model,
-                'qualifications' => $this->getQualifications()               
-                
+                'qualifications' => $this->getQualifications()
+
             ]);
         }
 
-        return $this->render('create',[
+        return $this->render('create', [
             'model' => $model,
             'qualifications' => $this->getQualifications()
-           
+
         ]);
     }
 
     public function actionCommit()
     {
-         $model = new Qualificationchange();
-         $service = Yii::$app->params['ServiceName']['EmployeeQualificationsChange'];
+        $model = new Qualificationchange();
+        $service = Yii::$app->params['ServiceName']['EmployeeQualificationsChange'];
 
-         $model->Employee_No = Yii::$app->user->identity->{'Employee No_'};
-         $model->Qualification_Code = Yii::$app->request->get('Qualification_Code');
-         $model->Change_No = Yii::$app->request->get('Change_No');
+        $model->Employee_No = Yii::$app->user->identity->{'Employee No_'};
+        $model->Qualification_Code = Yii::$app->request->get('Qualification_Code');
+        $model->Change_No = Yii::$app->request->get('Change_No');
 
-         $result = Yii::$app->navhelper->postData($service,$model);
+        $result = Yii::$app->navhelper->postData($service, $model);
 
-         return $result;
-
+        return $result;
     }
 
 
-    public function actionUpdate(){
-        $model = new Employeeappraisalkpi() ;
+    public function actionUpdate()
+    {
+        $model = new Employeeappraisalkpi();
         $model->isNewRecord = false;
         $service = Yii::$app->params['ServiceName']['EmployeeAppraisalKPI'];
         $filter = [
@@ -147,31 +147,30 @@ class QualificationchangeController extends Controller
             'Appraisal_No' => Yii::$app->request->get('Appraisal_No'),
             'Line_No' => Yii::$app->request->get('Line_No'),
         ];
-        $result = Yii::$app->navhelper->getData($service,$filter);
+        $result = Yii::$app->navhelper->getData($service, $filter);
 
-        if(is_array($result)){
+        if (is_array($result)) {
             //load nav result to model
-            $model = Yii::$app->navhelper->loadmodel($result[0],$model) ;
-        }else{
+            $model = Yii::$app->navhelper->loadmodel($result[0], $model);
+        } else {
             Yii::$app->recruitment->printrr($result);
         }
 
 
-        if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Employeeappraisalkpi'],$model) && $model->validate() ){
-            $result = Yii::$app->navhelper->updateData($service,$model);
+        if (Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Employeeappraisalkpi'], $model) && $model->validate()) {
+            $result = Yii::$app->navhelper->updateData($service, $model);
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            if(!is_string($result)){
+            if (!is_string($result)) {
 
-                return ['note' => '<div class="alert alert-success">Employee Objective/ KPI Updated Successfully. </div>' ];
-            }else{
+                return ['note' => '<div class="alert alert-success">Employee Objective/ KPI Updated Successfully. </div>'];
+            } else {
 
-                return ['note' => '<div class="alert alert-danger">Error Updating Employee Objective/ KPI: '.$result.'</div>'];
+                return ['note' => '<div class="alert alert-danger">Error Updating Employee Objective/ KPI: ' . $result . '</div>'];
             }
-
         }
 
-        if(Yii::$app->request->isAjax){
+        if (Yii::$app->request->isAjax) {
             return $this->renderAjax('update', [
                 'model' => $model,
                 'ratings' => $this->getRatings(),
@@ -179,10 +178,10 @@ class QualificationchangeController extends Controller
             ]);
         }
 
-        return $this->render('update',[
+        return $this->render('update', [
             'model' => $model,
             'ratings' => $this->getRatings(),
-            'assessments' => $this->getPerformancelevels() ,
+            'assessments' => $this->getPerformancelevels(),
         ]);
     }
 
@@ -194,21 +193,23 @@ class QualificationchangeController extends Controller
 
         $result = Yii::$app->navhelper->getData($service, []);
 
-        return Yii::$app->navhelper->refactorArray($result,'Code','Description');
+        return Yii::$app->navhelper->refactorArray($result, 'Code', 'Description');
     }
 
-    public function actionDelete(){
+    public function actionDelete()
+    {
         $service = Yii::$app->params['ServiceName']['EmployeeAppraisalKPI'];
-        $result = Yii::$app->navhelper->deleteData($service,Yii::$app->request->get('Key'));
+        $result = Yii::$app->navhelper->deleteData($service, Yii::$app->request->get('Key'));
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        if(!is_string($result)){
+        if (!is_string($result)) {
             return ['note' => '<div class="alert alert-success">Record Purged Successfully</div>'];
-        }else{
-            return ['note' => '<div class="alert alert-danger">Error Purging Record: '.$result.'</div>' ];
+        } else {
+            return ['note' => '<div class="alert alert-danger">Error Purging Record: ' . $result . '</div>'];
         }
     }
 
-    public function actionView($ApplicationNo){
+    public function actionView($ApplicationNo)
+    {
         $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
         $leaveTypes = $this->getLeaveTypes();
         $employees = $this->getEmployees();
@@ -221,13 +222,13 @@ class QualificationchangeController extends Controller
 
         //load nav result to model
         $leaveModel = new Leave();
-        $model = $this->loadtomodel($leave[0],$leaveModel);
+        $model = $this->loadtomodel($leave[0], $leaveModel);
 
 
-        return $this->render('view',[
+        return $this->render('view', [
             'model' => $model,
-            'leaveTypes' => ArrayHelper::map($leaveTypes,'Code','Description'),
-            'relievers' => ArrayHelper::map($employees,'No','Full_Name'),
+            'leaveTypes' => ArrayHelper::map($leaveTypes, 'Code', 'Description'),
+            'relievers' => ArrayHelper::map($employees, 'No', 'Full_Name'),
         ]);
     }
 
@@ -236,30 +237,22 @@ class QualificationchangeController extends Controller
 
     public function getRatings()
     {
-          $service = Yii::$app->params['ServiceName']['AppraisalRating'];
-          $data = Yii::$app->navhelper->getData($service, []);
-          $result = Yii::$app->navhelper->refactorArray($data,'Rating','Rating_Description');
-          return $result;
+        $service = Yii::$app->params['ServiceName']['AppraisalRating'];
+        $data = Yii::$app->navhelper->getData($service, []);
+        $result = Yii::$app->navhelper->refactorArray($data, 'Rating', 'Rating_Description');
+        return $result;
     }
 
 
 
 
- /** Updates a single field */
- public function actionSetfield($field){
-    $service = 'EmployeeQualificationsChange';
-    $value = Yii::$app->request->post('fieldValue');
-    $result = Yii::$app->navhelper->Commit($service,[$field => $value],Yii::$app->request->post('Key'));
-    Yii::$app->response->format = \yii\web\response::FORMAT_JSON;
-    return $result;
-      
-}
-
-
-
-
-
-
-
-   
+    /** Updates a single field */
+    public function actionSetfield($field)
+    {
+        $service = 'EmployeeQualificationsChange';
+        $value = Yii::$app->request->post('fieldValue');
+        $result = Yii::$app->navhelper->Commit($service, [$field => $value], Yii::$app->request->post('Key'));
+        Yii::$app->response->format = \yii\web\response::FORMAT_JSON;
+        return $result;
+    }
 }

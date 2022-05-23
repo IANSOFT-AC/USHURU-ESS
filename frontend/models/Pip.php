@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -7,6 +8,7 @@
  */
 
 namespace frontend\models;
+
 use common\models\User;
 use Yii;
 use yii\base\Model;
@@ -15,51 +17,46 @@ use yii\base\Model;
 class Pip extends Model
 {
 
-public $Key;
-public $Appraisal_No;
-public $Employee_No;
-public $Employee_Name;
-public $Employee_User_Id;
-public $Level_Grade;
-public $Job_Title;
-public $Appraisal_Period;
-public $Appraisal_Start_Date;
-public $Goal_Setting_Start_Date;
-public $Objective_Setting_Status;
-public $Goal_Setting_Status;
-public $Appraisal_Status;
-public $Supervisor_No;
-public $Supervisor_Name;
-public $Supervisor_User_Id;
-public $Overview_Manager;
-public $Overview_Manager_Name;
-public $Overview_Manager_UserID;
-public $Is_Perfomance_Improvement;
+    public $Key;
+    public $Appraisal_No;
+    public $Employee_No;
+    public $Employee_Name;
+    public $Employee_User_Id;
+    public $Level_Grade;
+    public $Job_Title;
+    public $Appraisal_Period;
+    public $Appraisal_Start_Date;
+    public $Goal_Setting_Start_Date;
+    public $Objective_Setting_Status;
+    public $Goal_Setting_Status;
+    public $Appraisal_Status;
+    public $Supervisor_No;
+    public $Supervisor_Name;
+    public $Supervisor_User_Id;
+    public $Overview_Manager;
+    public $Overview_Manager_Name;
+    public $Overview_Manager_UserID;
+    public $Is_Perfomance_Improvement;
 
-public $Overall_Score;
-public $Overview_Rejection_Comments;
-public $Supervisor_Overall_Comments;
-public $Over_View_Manager_Comments;
+    public $Overall_Score;
+    public $Overview_Rejection_Comments;
+    public $Supervisor_Overall_Comments;
+    public $Over_View_Manager_Comments;
 
-public $PIP_Recomended_Action;
+    public $PIP_Recomended_Action;
 
     public function rules()
     {
-        return [
-
-        ];
+        return [];
     }
 
     public function attributeLabels()
     {
-        return [
-
-
-
-        ];
+        return [];
     }
 
-    public function getObjectives(){
+    public function getObjectives()
+    {
         $service = Yii::$app->params['ServiceName']['ProbationKRAs'];
         $filter = [
             'Appraisal_No' => $this->Appraisal_No,
@@ -69,7 +66,8 @@ public $PIP_Recomended_Action;
         return $objectives;
     }
 
-    public function getKpi($KRA_Line_No){
+    public function getKpi($KRA_Line_No)
+    {
         $service = Yii::$app->params['ServiceName']['ProbationKPIs'];
         $filter = [
             'KRA_Line_No' => $KRA_Line_No,
@@ -87,21 +85,16 @@ public $PIP_Recomended_Action;
     {
 
         return (Yii::$app->user->identity->{'Employee No_'} == $this->Supervisor_No);
-
     }
 
     public function isOverview()
     {
 
         return (Yii::$app->user->identity->{'Employee No_'} == $this->Overview_Manager);
-
     }
 
     public function isAppraisee()
     {
         return (Yii::$app->user->identity->{'Employee No_'} == $this->Employee_No);
     }
-
-
-
 }

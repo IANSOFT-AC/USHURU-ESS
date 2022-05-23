@@ -65,7 +65,7 @@ $this->title = Yii::$app->params['welcomeText'];
     <strong>Copyright &copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?>.</strong>
     All rights reserved.
     <div class="float-right d-none d-sm-inline-block text-ushurusecondary">
-        <b class=" text text-ushurusecondary"><?= Yii::signature() ?></b>
+        <b class=" text text-ushurusecondary"></b>
     </div>
 
 </footer>

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -9,9 +10,9 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$this->title = 'Leave - '.$model->Application_No;
+$this->title = 'Leave - ' . $model->Application_No;
 $this->params['breadcrumbs'][] = ['label' => 'Leave List', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => 'Leave Card', 'url' => ['view','No'=> $model->Application_No]];
+$this->params['breadcrumbs'][] = ['label' => 'Leave Card', 'url' => ['view', 'No' => $model->Application_No]];
 /** Status Sessions */
 
 
@@ -24,144 +25,152 @@ $Attachmentmodel = new \frontend\models\Leaveattachment()
 <div class="row">
     <div class="col-md-4">
 
-        <?= ($model->Status == 'New')?Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval'],['class' => 'btn btn-app submitforapproval',
+        <?= ($model->Status == 'New') ? Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req', ['send-for-approval'], [
+            'class' => 'btn btn-app submitforapproval',
             'data' => [
                 'confirm' => 'Are you sure you want to send this document for approval?',
-                'params'=>[
-                    'No'=> $_GET['No'],
+                'params' => [
+                    'No' => $_GET['No'],
                     'employeeNo' => Yii::$app->user->identity->{'Employee No_'},
                 ],
                 'method' => 'get',
-        ],
+            ],
             'title' => 'Submit Leave Approval'
 
-        ]):'' ?>
+        ]) : '' ?>
 
 
-        <?php ($model->Status == 'Pending_Approval')?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-app submitforapproval',
+        <?php ($model->Status == 'Pending_Approval') ? Html::a('<i class="fas fa-times"></i> Cancel Approval Req.', ['cancel-request'], [
+            'class' => 'btn btn-app submitforapproval',
             'data' => [
-            'confirm' => 'Are you sure you want to cancel imprest approval request?',
-            'params'=>[
-                'No'=> $_GET['No'],
+                'confirm' => 'Are you sure you want to cancel imprest approval request?',
+                'params' => [
+                    'No' => $_GET['No'],
+                ],
+                'method' => 'get',
             ],
-            'method' => 'get',
-        ],
             'title' => 'Cancel Leave Approval Request'
 
-        ]):'' ?>
+        ]) : '' ?>
     </div>
 </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card-info">
-                <div class="card-header">
-                    <h3>Leave Application Card </h3>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card-info">
+            <div class="card-header">
+                <h3>Leave Application Card </h3>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+
+
+
+
+                <h3 class="card-title">Leave Application : <?= $model->Application_No ?></h3>
+
+
+
+                <?php
+                if (Yii::$app->session->hasFlash('success')) {
+                    print ' <div class="alert alert-success alert-dismissable">
+                                 ';
+                    echo Yii::$app->session->getFlash('success');
+                    print '</div>';
+                } else if (Yii::$app->session->hasFlash('error')) {
+                    print ' <div class="alert alert-danger alert-dismissable">
+                                 ';
+                    echo Yii::$app->session->getFlash('error');
+                    print '</div>';
+                }
+                ?>
+            </div>
+            <div class="card-body">
+
+
+                <?php $form = ActiveForm::begin(); ?>
+
+
+                <div class="row">
+                    <div class=" row col-md-12">
+                        <div class="col-md-6">
+                            <?= '<p><span>Employee No</span> ' . Html::a($model->Employee_No, '#');
+                            '</p>' ?>
+                            <?= '<p><span>Employee Name</span> ' . Html::a($model->Employee_Name, '#');
+                            '</p>' ?>
+                            <?= '<p><span>Program Code</span> ' . Html::a($model->_x003C_Global_Dimension_1_Code_x003E_, '#');
+                            '</p>' ?>
+                            <?= '<p><span>Department Code </span> ' . Html::a($model->Global_Dimension_2_Code, '#');
+                            '</p>' ?>
+                            <?= $form->field($model, 'Application_No')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Application_Date')->textInput(['required' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'User_ID')->textInput(['required' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Leave_Code')->textInput(['readonly' => true]) ?>
+                            <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date', 'required' => true, 'readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Days_To_Go_on_Leave')->textInput(['type' => 'number', 'required' =>  true, 'min' => 1, 'readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'End_Date')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Total_No_Of_Days')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Leave_balance')->textInput(['readonly' => true, 'disabled' => true]) ?>
+
+                            <?php if ($model->Rejection_Comments) : ?>
+
+                                <?= $form->field($model, 'Rejection_Comments')->textArea(['rows' => 2, 'readonly' => true, 'disabled' => true]) ?>
+
+                            <?php endif; ?>
+
+
+
+
+
+                        </div>
+                        <div class="col-md-6">
+                            <?= $form->field($model, 'Holidays')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Weekend_Days')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Balance_After')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Reporting_Date')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Comments')->textarea(['rows' => 2, 'maxlength' => 250, 'readonly' => true]) ?>
+                            <?= $form->field($model, 'Reliever')->textInput(['readonly' => true]) ?>
+
+                            <?= $form->field($model, 'Reliever_Name')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Status')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= '<p><span>Approval_Entries</span> ' . Html::a($model->Approval_Entries, '#');
+                            '</p>' ?>
+
+
+
+
+                        </div>
+                    </div>
                 </div>
 
 
+
+
+                <?php ActiveForm::end(); ?>
+
+
+                <?php if ($Attachmentmodel->getPath($model->Application_No)) {   ?>
+
+                    <iframe src="data:application/pdf;base64,<?= $Attachmentmodel->readAttachment($model->Application_No); ?>" height="950px" width="100%"></iframe>
+
+
+                <?php }  ?>
 
             </div>
         </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
+        <!--end details card-->
 
 
-
-
-                    <h3 class="card-title">Leave Application : <?= $model->Application_No?></h3>
-
-
-
-                    <?php
-                    if(Yii::$app->session->hasFlash('success')){
-                        print ' <div class="alert alert-success alert-dismissable">
-                                 ';
-                        echo Yii::$app->session->getFlash('success');
-                        print '</div>';
-                    }else if(Yii::$app->session->hasFlash('error')){
-                        print ' <div class="alert alert-danger alert-dismissable">
-                                 ';
-                        echo Yii::$app->session->getFlash('error');
-                        print '</div>';
-                    }
-                    ?>
-                </div>
-                <div class="card-body">
-
-
-                    <?php $form = ActiveForm::begin(); ?>
-
-
-                    <div class="row">
-                        <div class=" row col-md-12">
-                            <div class="col-md-6">
-                                <?= '<p><span>Employee No</span> '.Html::a($model->Employee_No,'#'); '</p>' ?>
-                                <?= '<p><span>Employee Name</span> '.Html::a($model->Employee_Name,'#'); '</p>' ?>
-                                <?= '<p><span>Program Code</span> '.Html::a($model->_x003C_Global_Dimension_1_Code_x003E_,'#'); '</p>' ?>
-                                <?= '<p><span>Department Code </span> '.Html::a($model->Global_Dimension_2_Code,'#'); '</p>' ?>
-                                <?= $form->field($model, 'Application_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Application_Date')->textInput(['required' => true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'User_ID')->textInput(['required' => true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Leave_Code')->textInput(['readonly' => true]) ?>
-                                <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date','required' => true, 'readonly' => true, 'disabled'=> true]) ?>
-                                <?= $form->field($model, 'Days_To_Go_on_Leave')->textInput(['type' => 'number','required' =>  true,'min'=> 1, 'readonly' => true, 'disabled'=> true]) ?>
-                                <?= $form->field($model, 'End_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Total_No_Of_Days')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Leave_balance')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-
-                                <?php if($model->Rejection_Comments): ?>
-
-                                    <?= $form->field($model, 'Rejection_Comments')->textArea(['rows' => 2,'readonly'=> true, 'disabled'=>true]) ?>
-
-                                <?php endif; ?>
-
-
-
-
-
-                            </div>
-                            <div class="col-md-6">
-                                <?= $form->field($model, 'Holidays')->textInput(['readonly'=> true,'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Weekend_Days')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Balance_After')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Reporting_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Comments')->textarea(['rows'=> 2,'maxlength' => 250,'readonly' => true]) ?>
-                                <?= $form->field($model, 'Reliever')->textInput(['readonly' => true]) ?>
-
-                                <?= $form->field($model, 'Reliever_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= '<p><span>Approval_Entries</span> '.Html::a($model->Approval_Entries,'#'); '</p>' ?>
-
-
-
-
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
-                    <?php ActiveForm::end(); ?>
-
-
-            <?php if($Attachmentmodel->getPath($model->Application_No)){   ?>
-
-                <iframe src="data:application/pdf;base64,<?= $Attachmentmodel->readAttachment($model->Application_No); ?>" height="950px" width="100%"></iframe>
-
-
-            <?php }  ?>
-
-                </div>
-            </div><!--end details card-->
-
-
-            <!--Objectives card -->
+        <!--Objectives card -->
 
 
 
@@ -191,9 +200,9 @@ $Attachmentmodel = new \frontend\models\Leaveattachment()
     </div>
 
 
-<?php
+    <?php
 
-$script = <<<JS
+    $script = <<<JS
 
     $(function(){
       
@@ -405,9 +414,9 @@ $script = <<<JS
         
 JS;
 
-$this->registerJs($script);
+    $this->registerJs($script);
 
-$style = <<<CSS
+    $style = <<<CSS
     p span {
         margin-right: 50%;
         font-weight: bold;
@@ -445,4 +454,4 @@ $style = <<<CSS
     }
 CSS;
 
-$this->registerCss($style);
+    $this->registerCss($style);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -9,22 +10,22 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$this->title = 'Overtime - '.$model->No;
+$this->title = 'Overtime - ' . $model->No;
 $this->params['breadcrumbs'][] = ['label' => 'Overtime List', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => 'Overtime Card', 'url' => ['view','No'=> $model->No]];
+$this->params['breadcrumbs'][] = ['label' => 'Overtime Card', 'url' => ['view', 'No' => $model->No]];
 
 
 
 
 
-if(Yii::$app->session->hasFlash('success')){
+if (Yii::$app->session->hasFlash('success')) {
     print ' <div class="alert alert-success alert-dismissable">
                              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                                     <h5><i class="icon fas fa-check"></i> Success!</h5>
  ';
     echo Yii::$app->session->getFlash('success');
     print '</div>';
-}else if(Yii::$app->session->hasFlash('error')){
+} else if (Yii::$app->session->hasFlash('error')) {
     print ' <div class="alert alert-danger alert-dismissable">
                                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                                     <h5><i class="icon fas fa-times"></i> Error!</h5>
@@ -39,111 +40,116 @@ if(Yii::$app->session->hasFlash('success')){
 <div class="row">
     <div class="col-md-4">
 
-        <?= ($model->Status== 'Open')?Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval'],['class' => 'btn btn-app submitforapproval',
+        <?= ($model->Status == 'Open') ? Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req', ['send-for-approval'], [
+            'class' => 'btn btn-app submitforapproval',
             'data' => [
                 'confirm' => 'Are you sure you want to send this document for approval?',
-                'params'=>[
-                    'No'=> $model->No,
+                'params' => [
+                    'No' => $model->No,
                     'employeeNo' => Yii::$app->user->identity->{'Employee No_'},
                 ],
                 'method' => 'get',
-        ],
+            ],
             'title' => 'Submit Document for Approval'
 
-        ]):'' ?>
+        ]) : '' ?>
 
 
-        <?= ($model->Status == 'Pending_Approval' && !Yii::$app->request->get('Approval'))?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-app submitforapproval',
+        <?= ($model->Status == 'Pending_Approval' && !Yii::$app->request->get('Approval')) ? Html::a('<i class="fas fa-times"></i> Cancel Approval Req.', ['cancel-request'], [
+            'class' => 'btn btn-app submitforapproval',
             'data' => [
-            'confirm' => 'Are you sure you want to cancel document approval request?',
-            'params'=>[
-                'No'=> $model->No,
+                'confirm' => 'Are you sure you want to cancel document approval request?',
+                'params' => [
+                    'No' => $model->No,
+                ],
+                'method' => 'get',
             ],
-            'method' => 'get',
-        ],
             'title' => 'Cancel Document Approval Request'
 
-        ]):'' ?>
+        ]) : '' ?>
     </div>
 </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card-info">
-                <div class="card-header">
-                    <h3>Overtime Document </h3>
-                </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card-info">
+            <div class="card-header">
+                <h3>Overtime Document </h3>
             </div>
         </div>
     </div>
+</div>
 
 
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
 
-                    <h3 class="card-title">Document No. : <?= $model->No?></h3>
-
-
-                </div>
-                <div class="card-body">
+                <h3 class="card-title">Document No. : <?= $model->No ?></h3>
 
 
-                    <?php $form = ActiveForm::begin(); ?>
+            </div>
+            <div class="card-body">
 
 
-                    <div class="row">
-                        <div class=" row col-md-12">
-                            <div class="col-md-6">
-
-                                <?= $form->field($model, 'No')->textInput(['readonly' => true]) ?>
-                                <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
-                                <?= $form->field($model, 'Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Rejection_Comments')->textarea(['rows' => 2,'readonly'=> true, 'disabled'=>true]) ?>
+                <?php $form = ActiveForm::begin(); ?>
 
 
-                            </div>
-                            <div class="col-md-6">
+                <div class="row">
+                    <div class=" row col-md-12">
+                        <div class="col-md-6">
 
-                                <?= $form->field($model, 'Global_Dimension_1_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Hours_Worked')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                            <?= $form->field($model, 'No')->textInput(['readonly' => true]) ?>
+                            <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
+                            <?= $form->field($model, 'Employee_No')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Employee_Name')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Rejection_Comments')->textarea(['rows' => 2, 'readonly' => true, 'disabled' => true]) ?>
+
+
+                        </div>
+                        <div class="col-md-6">
+
+                            <?= $form->field($model, 'Global_Dimension_1_Code')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Hours_Worked')->textInput(['readonly' => true, 'disabled' => true]) ?>
 
 
 
-                            </div>
                         </div>
                     </div>
-
-
-
-
-                    <?php ActiveForm::end(); ?>
-
-
-
-                </div>
-            </div><!--end details card-->
-
-            <!--Lines -->
-
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <?= ($model->Status == 'Open')?Html::a('<i class="fa fa-plus-square"></i> Add Line',['overtimeline/create','No'=>$model->No],['class' => 'add-line btn btn-outline-info',
-                        ]):'' ?>
-                    </div>
                 </div>
 
-                <div class="card-body">
 
-                    <?php if(is_array($model->lines)){ //show Lines ?>
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead>
+
+
+                <?php ActiveForm::end(); ?>
+
+
+
+            </div>
+        </div>
+        <!--end details card-->
+
+        <!--Lines -->
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <?= ($model->Status == 'Open') ? Html::a('<i class="fa fa-plus-square"></i> Add Line', ['overtimeline/create', 'No' => $model->No], [
+                        'class' => 'add-line btn btn-outline-info',
+                    ]) : '' ?>
+                </div>
+            </div>
+
+            <div class="card-body">
+
+                <?php if (is_array($model->lines)) { //show Lines 
+                ?>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
                                 <tr>
 
                                     <td><b>Date</b></td>
@@ -155,34 +161,34 @@ if(Yii::$app->session->hasFlash('success')){
 
 
                                 </tr>
-                                </thead>
-                                <tbody>
+                            </thead>
+                            <tbody>
                                 <?php
-                               foreach($model->lines as $obj):
-                                   $deleteLink = ($model->Status == 'Open')?Html::a('<i class="fa fa-trash"></i>',['overtimeline/delete','Key'=> $obj->Key ],['class'=>'delete btn btn-outline-danger btn-xs','title' => 'Delete Overtime Line.']):'';
+                                foreach ($model->lines as $obj) :
+                                    $deleteLink = ($model->Status == 'Open') ? Html::a('<i class="fa fa-trash"></i>', ['overtimeline/delete', 'Key' => $obj->Key], ['class' => 'delete btn btn-outline-danger btn-xs', 'title' => 'Delete Overtime Line.']) : '';
 
-                                   $updateLink = ($model->Status == 'Open')?Html::a('<i class="fa fa-edit"></i>',['overtimeline/update','No'=> $obj->Line_No],['class' => 'add-line btn btn-info btn-xs mx-2','title' => 'update overtime line.']):'';
-                                    ?>
+                                    $updateLink = ($model->Status == 'Open') ? Html::a('<i class="fa fa-edit"></i>', ['overtimeline/update', 'No' => $obj->Line_No], ['class' => 'add-line btn btn-info btn-xs mx-2', 'title' => 'update overtime line.']) : '';
+                                ?>
                                     <tr>
 
-                                        <td data-key="<?= $obj->Key ?>" data-name="Date" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine"><?= !empty($obj->Date)?$obj->Date:'Not Set' ?></td>
-                                        <td data-key="<?= $obj->Key ?>" data-name="Start_Time" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine" ><?= !empty($obj->Start_Time)?Yii::$app->formatter->asTime($obj->Start_Time):'' ?></td>
-                                        <td data-validate="Hours_Worked" data-key="<?= $obj->Key ?>" data-name="End_Time" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine" ><?= !empty($obj->End_Time)?Yii::$app->formatter->asTime($obj->End_Time):'' ?></td>
-                                        <td id="Hours_Worked"><?= !empty($obj->Hours_Worked)?$obj->Hours_Worked:'Not Set' ?></td>
-                                        <td data-key="<?= $obj->Key ?>" data-name="Work_Done" data-no="<?= $obj->Line_No ?>"  data-service="OvertimeLine" ><?= !empty($obj->Work_Done)?$obj->Work_Done:'' ?></td>
-                                        <td class="text-center"><?= $updateLink.$deleteLink ?></td>
+                                        <td data-key="<?= $obj->Key ?>" data-name="Date" data-no="<?= $obj->Line_No ?>" data-service="OvertimeLine"><?= !empty($obj->Date) ? $obj->Date : 'Not Set' ?></td>
+                                        <td data-key="<?= $obj->Key ?>" data-name="Start_Time" data-no="<?= $obj->Line_No ?>" data-service="OvertimeLine"><?= !empty($obj->Start_Time) ? Yii::$app->formatter->asTime($obj->Start_Time) : '' ?></td>
+                                        <td data-validate="Hours_Worked" data-key="<?= $obj->Key ?>" data-name="End_Time" data-no="<?= $obj->Line_No ?>" data-service="OvertimeLine"><?= !empty($obj->End_Time) ? Yii::$app->formatter->asTime($obj->End_Time) : '' ?></td>
+                                        <td id="Hours_Worked"><?= !empty($obj->Hours_Worked) ? $obj->Hours_Worked : 'Not Set' ?></td>
+                                        <td data-key="<?= $obj->Key ?>" data-name="Work_Done" data-no="<?= $obj->Line_No ?>" data-service="OvertimeLine"><?= !empty($obj->Work_Done) ? $obj->Work_Done : '' ?></td>
+                                        <td class="text-center"><?= $updateLink . $deleteLink ?></td>
 
                                     </tr>
                                 <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
+                            </tbody>
+                        </table>
+                    </div>
 
-                    <?php } ?>
-                </div>
+                <?php } ?>
             </div>
+        </div>
 
-            <!--End Lines -->
+        <!--End Lines -->
 
     </div>
 
@@ -210,9 +216,9 @@ if(Yii::$app->session->hasFlash('success')){
     </div>
 
 
-<?php
+    <?php
 
-$script = <<<JS
+    $script = <<<JS
 
     $(function(){
       
@@ -424,9 +430,9 @@ $script = <<<JS
         
 JS;
 
-$this->registerJs($script);
+    $this->registerJs($script);
 
-$style = <<<CSS
+    $style = <<<CSS
     p span {
         margin-right: 50%;
         font-weight: bold;
@@ -475,4 +481,4 @@ $style = <<<CSS
     }
 CSS;
 
-$this->registerCss($style);
+    $this->registerCss($style);

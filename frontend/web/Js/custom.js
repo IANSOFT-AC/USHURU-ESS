@@ -9,7 +9,7 @@ const Toast = Swal.mixin({
   toast: true,
   position: 'top-end',
   showConfirmButton: false,
-  timer: 3000
+  timer: 5000
 });
 
 function closeInput(elm) {
@@ -58,6 +58,15 @@ function closeInput(elm) {
       let validatedElement = parent.querySelector('.' + ClassName);
       const DataKey = data.validate;
       validatedElement.innerText = typeof (msg) === 'string' ? msg : msg[DataKey];
+
+      // bs3 ErrOr reporting
+
+
+      const helpbBlock = parent.children[2];
+      helpbBlock.innerText = msg;
+      disableSubmit();
+
+
     }
 
 
@@ -339,6 +348,7 @@ async function globalUpload(attachmentService, entity, fieldName, documentServic
   formData.append("attachment", fileInput.files[0]);
   formData.append("Key", key);
   formData.append("DocumentService", documentService);
+  formData.append("AttachmentService", attachmentService);
 
 
   console.log(fileInput.files);

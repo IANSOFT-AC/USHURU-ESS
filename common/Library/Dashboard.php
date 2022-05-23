@@ -101,7 +101,7 @@ class Dashboard extends Component
         return 0;
         $service = Yii::$app->params['ServiceName']['RequestsTo_ApprovePortal'];
         $filter = [
-            'Approver_No' => Yii::$app->user->identity->{'Employee No_'},
+             'Approver_ID' => Yii::$app->user->identity->{'User ID'},
             'Status' => 'Approved'
         ];
         $result = Yii::$app->navhelper->getData($service,$filter);
@@ -120,7 +120,7 @@ class Dashboard extends Component
         return 0;
         $service = Yii::$app->params['ServiceName']['RequestsTo_ApprovePortal'];
         $filter = [
-            'Approver_No' => Yii::$app->user->identity->{'Employee No_'},
+             'Approver_ID' => Yii::$app->user->identity->{'User ID'},
             'Status' => 'Rejected'
         ];
         $result = Yii::$app->navhelper->getData($service,$filter);

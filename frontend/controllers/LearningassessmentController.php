@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -7,6 +8,7 @@
  */
 
 namespace frontend\controllers;
+
 use frontend\models\Employeeappraisalkra;
 use frontend\models\Experience;
 use frontend\models\Learningassessmentcompetence;
@@ -31,15 +33,15 @@ class LearningassessmentController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup','index'],
+                'only' => ['logout', 'signup', 'index'],
                 'rules' => [
                     [
-                        'actions' => ['signup','index'],
+                        'actions' => ['signup', 'index'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout','index'],
+                        'actions' => ['logout', 'index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -51,7 +53,7 @@ class LearningassessmentController extends Controller
                     'logout' => ['post'],
                 ],
             ],
-            'contentNegotiator' =>[
+            'contentNegotiator' => [
                 'class' => ContentNegotiator::class,
                 'only' => ['getexperience'],
                 'formatParam' => '_format',
@@ -63,26 +65,27 @@ class LearningassessmentController extends Controller
         ];
     }
 
-    public function actionIndex(){
+    public function actionIndex()
+    {
 
         return $this->render('index');
-
     }
 
-    public function actionCreate($Appraisal_No,$Employee_No){
+    public function actionCreate($Appraisal_No, $Employee_No)
+    {
 
-        $model = new Learningassessmentcompetence() ;
+        $model = new Learningassessmentcompetence();
         $service = Yii::$app->params['ServiceName']['LearningAssessmentCompetence'];
         $performcelevels = $this->getPerformancelevels();
 
 
-        if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Learningassessmentcompetence'],$model)  ){
+        if (Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Learningassessmentcompetence'], $model)) {
 
             $model->Appraisal_No = $Appraisal_No;
             $model->Employee_No = $Employee_No;
-            $result = Yii::$app->navhelper->postData($service,$model);
+            $result = Yii::$app->navhelper->postData($service, $model);
 
-           /* if(is_object($result)){
+            /* if(is_object($result)){
                 Yii::$app->session->setFlash('success','Learning Assessment Added Successfully',true);
                 return $this->redirect(['appraisal/view','Employee_No'=>$model->Employee_No,'Appraisal_No' => $model->Appraisal_No]);
 
@@ -93,32 +96,32 @@ class LearningassessmentController extends Controller
             }*/
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            if(!is_string($result)){
+            if (!is_string($result)) {
 
-                return ['note' => '<div class="alert alert-success">Learning Assessment Added Successfully. </div>' ];
-            }else{
+                return ['note' => '<div class="alert alert-success">Learning Assessment Added Successfully. </div>'];
+            } else {
 
-                return ['note' => '<div class="alert alert-danger">Error Adding Learning Assessment Line : '.$result.'</div>'];
+                return ['note' => '<div class="alert alert-danger">Error Adding Learning Assessment Line : ' . $result . '</div>'];
             }
-
-        }//End Saving experience
+        } //End Saving experience
         $model->isNewRecord = True;
-        if(Yii::$app->request->isAjax){
+        if (Yii::$app->request->isAjax) {
             return $this->renderAjax('create', [
                 'model' => $model,
-                'performancelevels' => ArrayHelper::map($performcelevels,'Line_Nos','Perfomace_Level'),
+                'performancelevels' => ArrayHelper::map($performcelevels, 'Line_Nos', 'Perfomace_Level'),
             ]);
         }
 
-        return $this->render('create',[
+        return $this->render('create', [
             'model' => $model,
         ]);
     }
 
 
-    public function actionUpdate(){
+    public function actionUpdate()
+    {
 
-        $model = new Learningassessmentcompetence() ;
+        $model = new Learningassessmentcompetence();
         $service = Yii::$app->params['ServiceName']['LearningAssessmentCompetence'];
         $model->isNewRecord = false;
         $performcelevels = $this->getPerformancelevels();
@@ -127,21 +130,21 @@ class LearningassessmentController extends Controller
             'Employee_No' => Yii::$app->request->get('Employee_No'),
             'Appraisal_No' => Yii::$app->request->get('Appraisal_No')
         ];
-        $result = Yii::$app->navhelper->getData($service,$filter);
+        $result = Yii::$app->navhelper->getData($service, $filter);
         $ratings = $this->getAppraisalrating();
-        if(is_array($result)){
+        if (is_array($result)) {
             //load nav result to model
-            $model = Yii::$app->navhelper->loadmodel($result[0],$model) ;//$this->loadtomodeEmployee_Nol($result[0],$Expmodel);
-        }else{
+            $model = Yii::$app->navhelper->loadmodel($result[0], $model); //$this->loadtomodeEmployee_Nol($result[0],$Expmodel);
+        } else {
             Yii::$app->recruitment->printrr($result);
         }
 
 
-        if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Learningassessmentcompetence'],$model) ){
-            $result = Yii::$app->navhelper->updateData($service,$model);
+        if (Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Learningassessmentcompetence'], $model)) {
+            $result = Yii::$app->navhelper->updateData($service, $model);
 
             //Yii::$app->recruitment->printrr($result);
-           /* if(!empty($result)){
+            /* if(!empty($result)){
                 Yii::$app->session->setFlash('success','Learning Assessment Line Updated Successfully',true);
                 return $this->redirect(['appraisal/view','Employee_No'=>$model->Employee_No,'Appraisal_No' => $model->Appraisal_No]);
             }else{
@@ -150,42 +153,43 @@ class LearningassessmentController extends Controller
             }*/
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            if(!is_string($result)){
+            if (!is_string($result)) {
 
-                return ['note' => '<div class="alert alert-success">Learning Assessment Updated Successfully. </div>' ];
-            }else{
+                return ['note' => '<div class="alert alert-success">Learning Assessment Updated Successfully. </div>'];
+            } else {
 
-                return ['note' => '<div class="alert alert-danger">Error Updating Learning Assessment Line : '.$result.'</div>'];
+                return ['note' => '<div class="alert alert-danger">Error Updating Learning Assessment Line : ' . $result . '</div>'];
             }
-
         }
 
-        if(Yii::$app->request->isAjax){
+        if (Yii::$app->request->isAjax) {
             return $this->renderAjax('update', [
                 'model' => $model,
-                'performancelevels' => ArrayHelper::map($performcelevels,'Line_Nos','Perfomace_Level'),
+                'performancelevels' => ArrayHelper::map($performcelevels, 'Line_Nos', 'Perfomace_Level'),
 
             ]);
         }
 
-        return $this->render('update',[
+        return $this->render('update', [
             'model' => $model,
         ]);
     }
 
-    public function actionDelete(){
+    public function actionDelete()
+    {
         $service = Yii::$app->params['ServiceName']['experience'];
-        $result = Yii::$app->navhelper->deleteData($service,Yii::$app->request->get('Key'));
-        if(!is_string($result)){
-            Yii::$app->session->setFlash('success','Work Experience Purged Successfully .',true);
+        $result = Yii::$app->navhelper->deleteData($service, Yii::$app->request->get('Key'));
+        if (!is_string($result)) {
+            Yii::$app->session->setFlash('success', 'Work Experience Purged Successfully .', true);
             return $this->redirect(['index']);
-        }else{
-            Yii::$app->session->setFlash('error','Error Purging Work Experience: '.$result,true);
+        } else {
+            Yii::$app->session->setFlash('error', 'Error Purging Work Experience: ' . $result, true);
             return $this->redirect(['index']);
         }
     }
 
-    public function actionView($ApplicationNo){
+    public function actionView($ApplicationNo)
+    {
         $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
         $leaveTypes = $this->getLeaveTypes();
         $employees = $this->getEmployees();
@@ -198,97 +202,100 @@ class LearningassessmentController extends Controller
 
         //load nav result to model
         $leaveModel = new Leave();
-        $model = $this->loadtomodel($leave[0],$leaveModel);
+        $model = $this->loadtomodel($leave[0], $leaveModel);
 
 
-        return $this->render('view',[
+        return $this->render('view', [
             'model' => $model,
-            'leaveTypes' => ArrayHelper::map($leaveTypes,'Code','Description'),
-            'relievers' => ArrayHelper::map($employees,'No','Full_Name'),
+            'leaveTypes' => ArrayHelper::map($leaveTypes, 'Code', 'Description'),
+            'relievers' => ArrayHelper::map($employees, 'No', 'Full_Name'),
         ]);
     }
 
 
-    public function actionApprovalRequest($app){
+    public function actionApprovalRequest($app)
+    {
         $service = Yii::$app->params['ServiceName']['Portal_Workflows'];
         $data = ['applicationNo' => $app];
 
         $request = Yii::$app->navhelper->SendLeaveApprovalRequest($service, $data);
 
-        if(is_array($request)){
-            Yii::$app->session->setFlash('success','Leave request sent for approval Successfully',true);
+        if (is_array($request)) {
+            Yii::$app->session->setFlash('success', 'Leave request sent for approval Successfully', true);
             return $this->redirect(['index']);
-        }else{
-            Yii::$app->session->setFlash('error','Error sending leave request for approval: '.$request,true);
+        } else {
+            Yii::$app->session->setFlash('error', 'Error sending leave request for approval: ' . $request, true);
             return $this->redirect(['index']);
         }
     }
 
-    public function actionCancelRequest($app){
+    public function actionCancelRequest($app)
+    {
         $service = Yii::$app->params['ServiceName']['Portal_Workflows'];
         $data = ['applicationNo' => $app];
 
         $request = Yii::$app->navhelper->CancelLeaveApprovalRequest($service, $data);
 
-        if(is_array($request)){
-            Yii::$app->session->setFlash('success','Leave Approval Request Cancelled Successfully',true);
+        if (is_array($request)) {
+            Yii::$app->session->setFlash('success', 'Leave Approval Request Cancelled Successfully', true);
             return $this->redirect(['index']);
-        }else{
-            Yii::$app->session->setFlash('error','Error Cancelling Leave Approval: '.$request,true);
+        } else {
+            Yii::$app->session->setFlash('error', 'Error Cancelling Leave Approval: ' . $request, true);
             return $this->redirect(['index']);
         }
     }
 
     /*Data access functions */
 
-    public function actionLeavebalances(){
+    public function actionLeavebalances()
+    {
 
         $balances = $this->Getleavebalance();
 
-        return $this->render('leavebalances',['balances' => $balances]);
-
+        return $this->render('leavebalances', ['balances' => $balances]);
     }
 
-    public function actionGetexperience(){
+    public function actionGetexperience()
+    {
         $service = Yii::$app->params['ServiceName']['experience'];
         $experience = \Yii::$app->navhelper->getData($service);
 
         $result = [];
         $count = 0;
-        foreach($experience as $exp){
-          if(!empty($exp->Job_Application_No) && !empty($exp->Position)){
-              ++$count;
-              $link = $updateLink =  '';
+        foreach ($experience as $exp) {
+            if (!empty($exp->Job_Application_No) && !empty($exp->Position)) {
+                ++$count;
+                $link = $updateLink =  '';
 
 
-              $updateLink = Html::a('Update Experience',['update','Line'=> $exp->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
+                $updateLink = Html::a('Update Experience', ['update', 'Line' => $exp->Line_No], ['class' => 'update btn btn-outline-info btn-xs']);
 
-              $link = Html::a('Remove Experience',['delete','Key'=> $exp->Key ],['class'=>'btn btn-outline-warning btn-xs']);
-
-
+                $link = Html::a('Remove Experience', ['delete', 'Key' => $exp->Key], ['class' => 'btn btn-outline-warning btn-xs']);
 
 
-              $result['data'][] = [
-                  'index' => $count,
-                  'Key' => $exp->Key,
-                  'Position' => $exp->Position,
-                  'Job_Description' => $exp->Job_Description,
-                  'Institution' => !empty($exp->Institution)? $exp->Institution : '',
-                  'Update_Action' => $updateLink,
-                  'Remove' => $link
-              ];
-          }
 
+
+                $result['data'][] = [
+                    'index' => $count,
+                    'Key' => $exp->Key,
+                    'Position' => $exp->Position,
+                    'Job_Description' => $exp->Job_Description,
+                    'Institution' => !empty($exp->Institution) ? $exp->Institution : '',
+                    'Update_Action' => $updateLink,
+                    'Remove' => $link
+                ];
+            }
         }
 
         return $result;
     }
 
-    public function actionReport(){
+    public function actionReport()
+    {
         $service = Yii::$app->params['ServiceName']['expApplicationList'];
         $leaves = \Yii::$app->navhelper->getData($service);
-        krsort( $leaves);//sort by keys in descending order
-        $content = $this->renderPartial('_historyreport',[
+        krsort($leaves); //sort by keys in descending order
+        $content = $this->renderPartial('_historyreport', [
             'leaves' => $leaves
         ]);
 
@@ -304,25 +311,27 @@ class LearningassessmentController extends Controller
         return $content;
     }
 
-    public function actionReportview(){
-        return $this->render('_viewreport',[
-            'content'=>$this->actionReport()
+    public function actionReportview()
+    {
+        return $this->render('_viewreport', [
+            'content' => $this->actionReport()
         ]);
     }
 
-    public function Getleavebalance(){
+    public function Getleavebalance()
+    {
         $service = Yii::$app->params['ServiceName']['leaveBalance'];
         $filter = [
             'No' => Yii::$app->user->identity->{'Employee No_'},
         ];
 
-        $balances = \Yii::$app->navhelper->getData($service,$filter);
+        $balances = \Yii::$app->navhelper->getData($service, $filter);
         $result = [];
 
         //print '<pre>';
         // print_r($balances);exit;
 
-        foreach($balances as $b){
+        foreach ($balances as $b) {
             $result = [
                 'Key' => $b->Key,
                 'Annual_Leave_Bal' => $b->Annual_Leave_Bal,
@@ -335,27 +344,27 @@ class LearningassessmentController extends Controller
         }
 
         return $result;
-
     }
 
 
 
-    public function getAppraisalrating(){
+    public function getAppraisalrating()
+    {
         $service = Yii::$app->params['ServiceName']['AppraisalRating'];
-        $filter = [
-        ];
+        $filter = [];
 
-        $ratings = \Yii::$app->navhelper->getData($service,$filter);
+        $ratings = \Yii::$app->navhelper->getData($service, $filter);
         return $ratings;
     }
 
-    public function getCountries(){
+    public function getCountries()
+    {
         $service = Yii::$app->params['ServiceName']['Countries'];
 
         $res = [];
         $countries = \Yii::$app->navhelper->getData($service);
-        foreach($countries as $c){
-            if(!empty($c->Name))
+        foreach ($countries as $c) {
+            if (!empty($c->Name))
                 $res[] = [
                     'Code' => $c->Code,
                     'Name' => $c->Name
@@ -365,7 +374,8 @@ class LearningassessmentController extends Controller
         return $res;
     }
 
-    public function getReligion(){
+    public function getReligion()
+    {
         $service = Yii::$app->params['ServiceName']['Religion'];
         $filter = [
             'Type' => 'Religion'
@@ -374,25 +384,26 @@ class LearningassessmentController extends Controller
         return $religion;
     }
 
-    public function getPerformancelevels(){
+    public function getPerformancelevels()
+    {
         $service = Yii::$app->params['ServiceName']['PerformanceLevel'];
 
         $ratings = \Yii::$app->navhelper->getData($service);
         return $ratings;
     }
 
-    public function loadtomodel($obj,$model){
+    public function loadtomodel($obj, $model)
+    {
 
-        if(!is_object($obj)){
+        if (!is_object($obj)) {
             return false;
         }
-        $modeldata = (get_object_vars($obj)) ;
-        foreach($modeldata as $key => $val){
-            if(is_object($val)) continue;
+        $modeldata = (get_object_vars($obj));
+        foreach ($modeldata as $key => $val) {
+            if (is_object($val)) continue;
             $model->$key = $val;
         }
 
         return $model;
     }
-
 }

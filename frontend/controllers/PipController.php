@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -7,6 +8,7 @@
  */
 
 namespace frontend\controllers;
+
 use frontend\models\Employeeappraisalkra;
 use frontend\models\Experience;
 use frontend\models\Pip;
@@ -30,7 +32,7 @@ class PipController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup','index','create','update','delete','view'],
+                'only' => ['logout', 'signup', 'index', 'create', 'update', 'delete', 'view'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -38,7 +40,7 @@ class PipController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout','index','create','update','delete','view'],
+                        'actions' => ['logout', 'index', 'create', 'update', 'delete', 'view'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -50,7 +52,7 @@ class PipController extends Controller
                     'logout' => ['post'],
                 ],
             ],
-            'contentNegotiator' =>[
+            'contentNegotiator' => [
                 'class' => ContentNegotiator::class,
                 'only' => [
                     'getprobations',
@@ -70,70 +72,68 @@ class PipController extends Controller
         ];
     }
 
-    public function actionIndex(){
+    public function actionIndex()
+    {
 
 
         return $this->render('index');
-
     }
 
-     public function actionSuperlist(){
+    public function actionSuperlist()
+    {
 
 
         return $this->render('superproblist');
-
     }
 
-    public function actionOvlist(){
+    public function actionOvlist()
+    {
 
 
         return $this->render('ovproblist');
-
     }
 
-    public function actionAgreementlist(){
+    public function actionAgreementlist()
+    {
 
 
         return $this->render('agreementlist');
-
     }
 
-    public function actionClosedlist(){
+    public function actionClosedlist()
+    {
 
 
         return $this->render('closedlist');
-
     }
 
 
 
-    public function actionCreate(){
+    public function actionCreate()
+    {
 
-       
-            $service = Yii::$app->params['ServiceName']['ProbationCard'];
 
-       
-            $data = [
-                'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
-            ];
+        $service = Yii::$app->params['ServiceName']['ProbationCard'];
 
-            $result = Yii::$app->navhelper->postData($service,$data);
 
-            if(!is_string($result)){
-                Yii::$app->session->setFlash('success','Probation Appraisal Initiated successfully.',true);
-                return $this->redirect(['view','Employee_No' => $result->Employee_No, 'Appraisal_No' => $result->Appraisal_No]);
+        $data = [
+            'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
+        ];
 
-            }else{
-                Yii::$app->session->setFlash('error','Error Creating Probation Appraisal: '.$result,true);
-               return $this->redirect(['view','Employee_No' => $result->Employee_No, 'Appraisal_No' => $result->Appraisal_No]);
+        $result = Yii::$app->navhelper->postData($service, $data);
 
-            }
-
-      
+        if (!is_string($result)) {
+            Yii::$app->session->setFlash('success', 'Probation Appraisal Initiated successfully.', true);
+            return $this->redirect(['view', 'Employee_No' => $result->Employee_No, 'Appraisal_No' => $result->Appraisal_No]);
+        } else {
+            Yii::$app->session->setFlash('error', 'Error Creating Probation Appraisal: ' . $result, true);
+            return $this->redirect(['view', 'Employee_No' => $result->Employee_No, 'Appraisal_No' => $result->Appraisal_No]);
+        }
     }
 
 
-    public function actionUpdate(){
+    public function actionUpdate()
+    {
         $model = new Employeeappraisalkra();
         $model->isNewRecord = false;
         $service = Yii::$app->params['ServiceName']['EmployeeAppraisalKRA'];
@@ -142,58 +142,58 @@ class PipController extends Controller
             'Employee_No' => Yii::$app->request->get('Employee_No'),
             'Appraisal_No' => Yii::$app->request->get('Appraisal_No')
         ];
-        $result = Yii::$app->navhelper->getData($service,$filter);
+        $result = Yii::$app->navhelper->getData($service, $filter);
         $ratings = $this->getAppraisalrating();
         $performcelevels = $this->getPerformancelevels();
-        if(is_array($result)){
+        if (is_array($result)) {
             //load nav result to model
-            $model = Yii::$app->navhelper->loadmodel($result[0],$model) ;//$this->loadtomodeEmployee_Nol($result[0],$Expmodel);
-        }else{
+            $model = Yii::$app->navhelper->loadmodel($result[0], $model); //$this->loadtomodeEmployee_Nol($result[0],$Expmodel);
+        } else {
             Yii::$app->navhelper->printrr($result);
         }
 
 
-        if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Employeeappraisalkra'],$model) ){
-            $result = Yii::$app->navhelper->updateData($service,$model);
+        if (Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Employeeappraisalkra'], $model)) {
+            $result = Yii::$app->navhelper->updateData($service, $model);
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            if(!is_string($result)){
+            if (!is_string($result)) {
 
-                return ['note' => '<div class="alert alert-success">Key Result Area Evaluated Successfully </div>' ];
-            }else{
+                return ['note' => '<div class="alert alert-success">Key Result Area Evaluated Successfully </div>'];
+            } else {
 
-                return ['note' => '<div class="alert alert-danger">Error Evaluating Key Result Area : '.$result.'</div>'];
+                return ['note' => '<div class="alert alert-danger">Error Evaluating Key Result Area : ' . $result . '</div>'];
             }
-
-
         }
 
-        if(Yii::$app->request->isAjax){
+        if (Yii::$app->request->isAjax) {
             return $this->renderAjax('update', [
                 'model' => $model,
-                'ratings' => ArrayHelper::map($ratings,'Rating','Rating_Description'),
-                'performancelevels' => ArrayHelper::map($performcelevels,'Line_Nos','Perfomace_Level'),
+                'ratings' => ArrayHelper::map($ratings, 'Rating', 'Rating_Description'),
+                'performancelevels' => ArrayHelper::map($performcelevels, 'Line_Nos', 'Perfomace_Level'),
             ]);
         }
 
-        return $this->render('update',[
+        return $this->render('update', [
             'model' => $model,
         ]);
     }
 
-    public function actionDelete(){
+    public function actionDelete()
+    {
         $service = Yii::$app->params['ServiceName']['experience'];
-        $result = Yii::$app->navhelper->deleteData($service,Yii::$app->request->get('Key'));
-        if(!is_string($result)){
-            Yii::$app->session->setFlash('success','Work Experience Purged Successfully .',true);
+        $result = Yii::$app->navhelper->deleteData($service, Yii::$app->request->get('Key'));
+        if (!is_string($result)) {
+            Yii::$app->session->setFlash('success', 'Work Experience Purged Successfully .', true);
             return $this->redirect(['index']);
-        }else{
-            Yii::$app->session->setFlash('error','Error Purging Work Experience: '.$result,true);
+        } else {
+            Yii::$app->session->setFlash('error', 'Error Purging Work Experience: ' . $result, true);
             return $this->redirect(['index']);
         }
     }
 
-    public function actionView($Employee_No, $Appraisal_No){
+    public function actionView($Employee_No, $Appraisal_No)
+    {
         $service = Yii::$app->params['ServiceName']['PIPCard'];
         $model = new Pip();
 
@@ -203,8 +203,8 @@ class PipController extends Controller
         ];
 
         $appraisal = Yii::$app->navhelper->getData($service, $filter);
-        if(is_array($appraisal)){
-            $model = Yii::$app->navhelper->loadmodel($appraisal[0],$model);
+        if (is_array($appraisal)) {
+            $model = Yii::$app->navhelper->loadmodel($appraisal[0], $model);
         }
 
         //Yii::$app->recruitment->printrr($model->getObjectives());
@@ -225,7 +225,7 @@ class PipController extends Controller
             'Terminate_Employee' => 'Terminate_Employee'
         ];
 
-        return $this->render('view',[
+        return $this->render('view', [
             'model' => $model,
             'card' => $appraisal[0],
             'appraisal_status' => $appraisal_status,
@@ -234,61 +234,64 @@ class PipController extends Controller
     }
 
 
-    public function actionApprovalRequest($app){
+    public function actionApprovalRequest($app)
+    {
         $service = Yii::$app->params['ServiceName']['Portal_Workflows'];
         $data = ['applicationNo' => $app];
 
         $request = Yii::$app->navhelper->SendLeaveApprovalRequest($service, $data);
 
-        if(is_array($request)){
-            Yii::$app->session->setFlash('success','Leave request sent for approval Successfully',true);
+        if (is_array($request)) {
+            Yii::$app->session->setFlash('success', 'Leave request sent for approval Successfully', true);
             return $this->redirect(['index']);
-        }else{
-            Yii::$app->session->setFlash('error','Error sending leave request for approval: '.$request,true);
+        } else {
+            Yii::$app->session->setFlash('error', 'Error sending leave request for approval: ' . $request, true);
             return $this->redirect(['index']);
         }
     }
 
-    public function actionCancelRequest($app){
+    public function actionCancelRequest($app)
+    {
         $service = Yii::$app->params['ServiceName']['Portal_Workflows'];
         $data = ['applicationNo' => $app];
 
         $request = Yii::$app->navhelper->CancelLeaveApprovalRequest($service, $data);
 
-        if(is_array($request)){
-            Yii::$app->session->setFlash('success','Leave Approval Request Cancelled Successfully',true);
+        if (is_array($request)) {
+            Yii::$app->session->setFlash('success', 'Leave Approval Request Cancelled Successfully', true);
             return $this->redirect(['index']);
-        }else{
-            Yii::$app->session->setFlash('error','Error Cancelling Leave Approval: '.$request,true);
+        } else {
+            Yii::$app->session->setFlash('error', 'Error Cancelling Leave Approval: ' . $request, true);
             return $this->redirect(['index']);
         }
     }
 
     /*Data access functions */
 
-    public function actionLeavebalances(){
+    public function actionLeavebalances()
+    {
 
         $balances = $this->Getleavebalance();
 
-        return $this->render('leavebalances',['balances' => $balances]);
-
+        return $this->render('leavebalances', ['balances' => $balances]);
     }
 
     // Employee List -- PIP Appraisee List
 
-    public function actionGetprobations(){
+    public function actionGetprobations()
+    {
         $service = Yii::$app->params['ServiceName']['PIPAppraiseeList'];
         $filter = [
-           'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
+            'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
         ];
-        $appraisals = \Yii::$app->navhelper->getData($service,$filter);
+        $appraisals = \Yii::$app->navhelper->getData($service, $filter);
         // Yii::$app->recruitment->printrr($appraisals);
         $result = [];
 
-        if(is_array($appraisals)){
-            foreach($appraisals as $req){
+        if (is_array($appraisals)) {
+            foreach ($appraisals as $req) {
 
-                $Viewlink = Html::a('View', ['view','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
+                $Viewlink = Html::a('View', ['view', 'Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : ''], ['class' => 'btn btn-outline-primary btn-xs']);
 
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
@@ -296,13 +299,12 @@ class PipController extends Controller
                     'Employee_Name' => !empty($req->Employee_Name) ? $req->Employee_Name : 'Not Set',
                     'Level_Grade' => !empty($req->Level_Grade) ? $req->Level_Grade : 'Not Set',
                     'Job_Title' => !empty($req->Job_Title) ? $req->Job_Title : '',
-                    'Appraisal_Start_Date' =>  !empty($req->Appraisal_Start_Date) ?$req->Appraisal_Start_Date : '',
-                    'Appraisal_End_Date' =>  !empty($req->Appraisal_End_Date) ?$req->Appraisal_End_Date : '',
-                    
+                    'Appraisal_Start_Date' =>  !empty($req->Appraisal_Start_Date) ? $req->Appraisal_Start_Date : '',
+                    'Appraisal_End_Date' =>  !empty($req->Appraisal_End_Date) ? $req->Appraisal_End_Date : '',
+
                     'Action' => !empty($Viewlink) ? $Viewlink : '',
 
                 ];
-
             }
         }
 
@@ -312,19 +314,20 @@ class PipController extends Controller
 
     // Supervisor Objectives List
 
-    public function actionGetLinemanagerobjlist(){
+    public function actionGetLinemanagerobjlist()
+    {
         $service = Yii::$app->params['ServiceName']['LnManagerObjList'];
         $filter = [
             'Supervisor_No' => Yii::$app->user->identity->{'Employee No_'},
         ];
-        $appraisals = \Yii::$app->navhelper->getData($service,$filter);
+        $appraisals = \Yii::$app->navhelper->getData($service, $filter);
         //ksort($appraisals);
         $result = [];
 
-        if(is_array($appraisals)){
-            foreach($appraisals as $req){
+        if (is_array($appraisals)) {
+            foreach ($appraisals as $req) {
 
-                $Viewlink = Html::a('View', ['view','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
+                $Viewlink = Html::a('View', ['view', 'Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : ''], ['class' => 'btn btn-outline-primary btn-xs']);
 
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
@@ -332,13 +335,12 @@ class PipController extends Controller
                     'Employee_Name' => !empty($req->Employee_Name) ? $req->Employee_Name : 'Not Set',
                     'Level_Grade' => !empty($req->Level_Grade) ? $req->Level_Grade : 'Not Set',
                     'Job_Title' => !empty($req->Job_Title) ? $req->Job_Title : '',
-                    'Appraisal_Start_Date' =>  !empty($req->Appraisal_Start_Date) ?$req->Appraisal_Start_Date : '',
-                    'Appraisal_End_Date' =>  !empty($req->Appraisal_End_Date) ?$req->Appraisal_End_Date : '',
-                    
+                    'Appraisal_Start_Date' =>  !empty($req->Appraisal_Start_Date) ? $req->Appraisal_Start_Date : '',
+                    'Appraisal_End_Date' =>  !empty($req->Appraisal_End_Date) ? $req->Appraisal_End_Date : '',
+
                     'Action' => !empty($Viewlink) ? $Viewlink : '',
 
                 ];
-
             }
         }
 
@@ -348,53 +350,54 @@ class PipController extends Controller
 
     // Overview Mgr Objectives List
 
-    public function actionGetoverviewmgrobjlist(){
+    public function actionGetoverviewmgrobjlist()
+    {
         $service = Yii::$app->params['ServiceName']['ProbationOverviewObjList'];
         $filter = [
             'Overview_Manager' => Yii::$app->user->identity->{'Employee No_'},
         ];
-        $appraisals = \Yii::$app->navhelper->getData($service,$filter);
+        $appraisals = \Yii::$app->navhelper->getData($service, $filter);
         //ksort($appraisals);
         $result = [];
 
-        if(is_array($appraisals)){
-            foreach($appraisals as $req){
+        if (is_array($appraisals)) {
+            foreach ($appraisals as $req) {
 
-                $Viewlink = Html::a('View', ['view','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
+                $Viewlink = Html::a('View', ['view', 'Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : ''], ['class' => 'btn btn-outline-primary btn-xs']);
 
-               
+
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
                     'Employee_No' => !empty($req->Employee_No) ? $req->Employee_No : '',
                     'Employee_Name' => !empty($req->Employee_Name) ? $req->Employee_Name : 'Not Set',
                     'Level_Grade' => !empty($req->Level_Grade) ? $req->Level_Grade : 'Not Set',
                     'Job_Title' => !empty($req->Job_Title) ? $req->Job_Title : '',
-                    'Appraisal_Start_Date' =>  !empty($req->Appraisal_Start_Date) ?$req->Appraisal_Start_Date : '',
-                    'Appraisal_End_Date' =>  !empty($req->Appraisal_End_Date) ?$req->Appraisal_End_Date : '',
-                    
+                    'Appraisal_Start_Date' =>  !empty($req->Appraisal_Start_Date) ? $req->Appraisal_Start_Date : '',
+                    'Appraisal_End_Date' =>  !empty($req->Appraisal_End_Date) ? $req->Appraisal_End_Date : '',
+
                     'Action' => !empty($Viewlink) ? $Viewlink : '',
 
                 ];
-
             }
         }
 
         return $result;
     }
 
-    public function actionAppraiseeapprovedgoals(){
+    public function actionAppraiseeapprovedgoals()
+    {
         $service = Yii::$app->params['ServiceName']['ProbationAppraiseeList'];
         $filter = [
             'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
         ];
-        $appraisals = \Yii::$app->navhelper->getData($service,$filter);
+        $appraisals = \Yii::$app->navhelper->getData($service, $filter);
         //ksort($appraisals);
         $result = [];
 
-        if(is_array($appraisals)){
-            foreach($appraisals as $req){
+        if (is_array($appraisals)) {
+            foreach ($appraisals as $req) {
 
-                $Viewlink = Html::a('View', ['view','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
+                $Viewlink = Html::a('View', ['view', 'Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : ''], ['class' => 'btn btn-outline-primary btn-xs']);
 
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
@@ -402,32 +405,32 @@ class PipController extends Controller
                     'Employee_Name' => !empty($req->Employee_Name) ? $req->Employee_Name : 'Not Set',
                     'Level_Grade' => !empty($req->Level_Grade) ? $req->Level_Grade : 'Not Set',
                     'Job_Title' => !empty($req->Job_Title) ? $req->Job_Title : '',
-                    'Appraisal_Start_Date' =>  !empty($req->Appraisal_Start_Date) ?$req->Appraisal_Start_Date : '',
-                    'Appraisal_End_Date' =>  !empty($req->Appraisal_End_Date) ?$req->Appraisal_End_Date : '',
-                    
+                    'Appraisal_Start_Date' =>  !empty($req->Appraisal_Start_Date) ? $req->Appraisal_Start_Date : '',
+                    'Appraisal_End_Date' =>  !empty($req->Appraisal_End_Date) ? $req->Appraisal_End_Date : '',
+
                     'Action' => !empty($Viewlink) ? $Viewlink : '',
 
                 ];
-
             }
         }
 
         return $result;
     }
 
-    public function actionSupervisorprobationlist(){
+    public function actionSupervisorprobationlist()
+    {
         $service = Yii::$app->params['ServiceName']['PIPSupervisorList'];
         $filter = [
             'Supervisor_No' => Yii::$app->user->identity->{'Employee No_'},
         ];
-        $appraisals = \Yii::$app->navhelper->getData($service,$filter);
+        $appraisals = \Yii::$app->navhelper->getData($service, $filter);
         //ksort($appraisals);
         $result = [];
 
-        if(is_array($appraisals)){
-            foreach($appraisals as $req){
+        if (is_array($appraisals)) {
+            foreach ($appraisals as $req) {
 
-                $Viewlink = Html::a('View', ['view','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
+                $Viewlink = Html::a('View', ['view', 'Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : ''], ['class' => 'btn btn-outline-primary btn-xs']);
 
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
@@ -435,13 +438,12 @@ class PipController extends Controller
                     'Employee_Name' => !empty($req->Employee_Name) ? $req->Employee_Name : 'Not Set',
                     'Level_Grade' => !empty($req->Level_Grade) ? $req->Level_Grade : 'Not Set',
                     'Job_Title' => !empty($req->Job_Title) ? $req->Job_Title : '',
-                    'Appraisal_Start_Date' =>  !empty($req->Appraisal_Start_Date) ?$req->Appraisal_Start_Date : '',
-                    'Appraisal_End_Date' =>  !empty($req->Appraisal_End_Date) ?$req->Appraisal_End_Date : '',
-                    
+                    'Appraisal_Start_Date' =>  !empty($req->Appraisal_Start_Date) ? $req->Appraisal_Start_Date : '',
+                    'Appraisal_End_Date' =>  !empty($req->Appraisal_End_Date) ? $req->Appraisal_End_Date : '',
+
                     'Action' => !empty($Viewlink) ? $Viewlink : '',
 
                 ];
-
             }
         }
 
@@ -449,19 +451,20 @@ class PipController extends Controller
     }
 
 
-    public function actionOverviewprobationlist(){
+    public function actionOverviewprobationlist()
+    {
         $service = Yii::$app->params['ServiceName']['PIPOverviewList'];
         $filter = [
             'Overview_Manager' => Yii::$app->user->identity->{'Employee No_'},
         ];
-        $appraisals = \Yii::$app->navhelper->getData($service,$filter);
+        $appraisals = \Yii::$app->navhelper->getData($service, $filter);
         //ksort($appraisals);
         $result = [];
 
-        if(is_array($appraisals)){
-            foreach($appraisals as $req){
+        if (is_array($appraisals)) {
+            foreach ($appraisals as $req) {
 
-                $Viewlink = Html::a('View', ['view','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
+                $Viewlink = Html::a('View', ['view', 'Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : ''], ['class' => 'btn btn-outline-primary btn-xs']);
 
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
@@ -469,32 +472,32 @@ class PipController extends Controller
                     'Employee_Name' => !empty($req->Employee_Name) ? $req->Employee_Name : 'Not Set',
                     'Level_Grade' => !empty($req->Level_Grade) ? $req->Level_Grade : 'Not Set',
                     'Job_Title' => !empty($req->Job_Title) ? $req->Job_Title : '',
-                    'Appraisal_Start_Date' =>  !empty($req->Appraisal_Start_Date) ?$req->Appraisal_Start_Date : '',
-                    'Appraisal_End_Date' =>  !empty($req->Appraisal_End_Date) ?$req->Appraisal_End_Date : '',
-                    
+                    'Appraisal_Start_Date' =>  !empty($req->Appraisal_Start_Date) ? $req->Appraisal_Start_Date : '',
+                    'Appraisal_End_Date' =>  !empty($req->Appraisal_End_Date) ? $req->Appraisal_End_Date : '',
+
                     'Action' => !empty($Viewlink) ? $Viewlink : '',
 
                 ];
-
             }
         }
 
         return $result;
     }
 
-    public function actionGetagreementlist(){
+    public function actionGetagreementlist()
+    {
         $service = Yii::$app->params['ServiceName']['PIPAgreementList'];
         $filter = [
             'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
         ];
-        $appraisals = \Yii::$app->navhelper->getData($service,$filter);
+        $appraisals = \Yii::$app->navhelper->getData($service, $filter);
         //ksort($appraisals);
         $result = [];
 
-        if(is_array($appraisals)){
-            foreach($appraisals as $req){
+        if (is_array($appraisals)) {
+            foreach ($appraisals as $req) {
 
-                $Viewlink = Html::a('View', ['view','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
+                $Viewlink = Html::a('View', ['view', 'Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : ''], ['class' => 'btn btn-outline-primary btn-xs']);
 
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
@@ -502,13 +505,12 @@ class PipController extends Controller
                     'Employee_Name' => !empty($req->Employee_Name) ? $req->Employee_Name : 'Not Set',
                     'Level_Grade' => !empty($req->Level_Grade) ? $req->Level_Grade : 'Not Set',
                     'Job_Title' => !empty($req->Job_Title) ? $req->Job_Title : '',
-                    'Appraisal_Start_Date' =>  !empty($req->Appraisal_Start_Date) ?$req->Appraisal_Start_Date : '',
-                    'Appraisal_End_Date' =>  !empty($req->Appraisal_End_Date) ?$req->Appraisal_End_Date : '',
-                    
+                    'Appraisal_Start_Date' =>  !empty($req->Appraisal_Start_Date) ? $req->Appraisal_Start_Date : '',
+                    'Appraisal_End_Date' =>  !empty($req->Appraisal_End_Date) ? $req->Appraisal_End_Date : '',
+
                     'Action' => !empty($Viewlink) ? $Viewlink : '',
 
                 ];
-
             }
         }
 
@@ -516,19 +518,20 @@ class PipController extends Controller
     }
 
 
-    public function actionClosedappraisallist(){
+    public function actionClosedappraisallist()
+    {
         $service = Yii::$app->params['ServiceName']['PIPClosedAppraisals'];
         $filter = [
             'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
         ];
-        $appraisals = \Yii::$app->navhelper->getData($service,$filter);
+        $appraisals = \Yii::$app->navhelper->getData($service, $filter);
         //ksort($appraisals);
         $result = [];
 
-        if(is_array($appraisals)){
-            foreach($appraisals as $req){
+        if (is_array($appraisals)) {
+            foreach ($appraisals as $req) {
 
-                $Viewlink = Html::a('View', ['view','Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No)?$req->Appraisal_No: ''], ['class' => 'btn btn-outline-primary btn-xs']);
+                $Viewlink = Html::a('View', ['view', 'Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : ''], ['class' => 'btn btn-outline-primary btn-xs']);
 
                 $result['data'][] = [
                     'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
@@ -536,38 +539,39 @@ class PipController extends Controller
                     'Employee_Name' => !empty($req->Employee_Name) ? $req->Employee_Name : 'Not Set',
                     'Level_Grade' => !empty($req->Level_Grade) ? $req->Level_Grade : 'Not Set',
                     'Job_Title' => !empty($req->Job_Title) ? $req->Job_Title : '',
-                    'Appraisal_Start_Date' =>  !empty($req->Appraisal_Start_Date) ?$req->Appraisal_Start_Date : '',
-                    'Appraisal_End_Date' =>  !empty($req->Appraisal_End_Date) ?$req->Appraisal_End_Date : '',
-                    
+                    'Appraisal_Start_Date' =>  !empty($req->Appraisal_Start_Date) ? $req->Appraisal_Start_Date : '',
+                    'Appraisal_End_Date' =>  !empty($req->Appraisal_End_Date) ? $req->Appraisal_End_Date : '',
+
                     'Action' => !empty($Viewlink) ? $Viewlink : '',
 
                 ];
-
             }
         }
 
         return $result;
     }
 
-    public function actionReportview(){
-        return $this->render('_viewreport',[
-            'content'=>$this->actionReport()
+    public function actionReportview()
+    {
+        return $this->render('_viewreport', [
+            'content' => $this->actionReport()
         ]);
     }
 
-    public function Getleavebalance(){
+    public function Getleavebalance()
+    {
         $service = Yii::$app->params['ServiceName']['leaveBalance'];
         $filter = [
             'No' => Yii::$app->user->identity->{'Employee No_'},
         ];
 
-        $balances = \Yii::$app->navhelper->getData($service,$filter);
+        $balances = \Yii::$app->navhelper->getData($service, $filter);
         $result = [];
 
         //print '<pre>';
         // print_r($balances);exit;
 
-        foreach($balances as $b){
+        foreach ($balances as $b) {
             $result = [
                 'Key' => $b->Key,
                 'Annual_Leave_Bal' => $b->Annual_Leave_Bal,
@@ -580,34 +584,35 @@ class PipController extends Controller
         }
 
         return $result;
-
     }
 
 
 
-    public function getAppraisalrating(){
+    public function getAppraisalrating()
+    {
         $service = Yii::$app->params['ServiceName']['AppraisalRating'];
-        $filter = [
-        ];
+        $filter = [];
 
-        $ratings = \Yii::$app->navhelper->getData($service,$filter);
+        $ratings = \Yii::$app->navhelper->getData($service, $filter);
         return $ratings;
     }
 
-    public function getPerformancelevels(){
+    public function getPerformancelevels()
+    {
         $service = Yii::$app->params['ServiceName']['PerformanceLevel'];
 
         $ratings = \Yii::$app->navhelper->getData($service);
         return $ratings;
     }
 
-    public function getCountries(){
+    public function getCountries()
+    {
         $service = Yii::$app->params['ServiceName']['Countries'];
 
         $res = [];
         $countries = \Yii::$app->navhelper->getData($service);
-        foreach($countries as $c){
-            if(!empty($c->Name))
+        foreach ($countries as $c) {
+            if (!empty($c->Name))
                 $res[] = [
                     'Code' => $c->Code,
                     'Name' => $c->Name
@@ -617,7 +622,8 @@ class PipController extends Controller
         return $res;
     }
 
-    public function getReligion(){
+    public function getReligion()
+    {
         $service = Yii::$app->params['ServiceName']['Religion'];
         $filter = [
             'Type' => 'Religion'
@@ -628,28 +634,26 @@ class PipController extends Controller
 
     //Submit Appraisal to supervisor
 
-    public function actionSubmit($appraisalNo,$employeeNo)
+    public function actionSubmit($appraisalNo, $employeeNo)
     {
         $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
         $data = [
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
             'sendEmail' => 1,
-            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['pip/view', 'Appraisal_No' =>$appraisalNo, 'Employee_No' =>$employeeNo ])
+            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['pip/view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo])
         ];
 
-        $result = Yii::$app->navhelper->CodeUnit($service,$data,'IanSendGoalSettingForApproval');
+        $result = Yii::$app->navhelper->CodeUnit($service, $data, 'IanSendGoalSettingForApproval');
 
-        if(!is_string($result)){
+        if (!is_string($result)) {
             Yii::$app->session->setFlash('success', 'PIP Appraisal Submitted Successfully.', true);
             return $this->redirect(['index']);
-        }else{
+        } else {
 
-            Yii::$app->session->setFlash('error', 'Error : '. $result);
+            Yii::$app->session->setFlash('error', 'Error : ' . $result);
             return $this->redirect(['index']);
-
         }
-
     }
 
 
@@ -657,7 +661,7 @@ class PipController extends Controller
 
     /*Send to Agreement*/
 
-    public function actionAgreementlevel($appraisalNo,$employeeNo)
+    public function actionAgreementlevel($appraisalNo, $employeeNo)
     {
         $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
         $data = [
@@ -667,76 +671,70 @@ class PipController extends Controller
             'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['pip/agreementlist'])
         ];
 
-        $result = Yii::$app->navhelper->CodeUnit($service,$data,'IanSendEYAppraisalToAgreementLevel');
+        $result = Yii::$app->navhelper->CodeUnit($service, $data, 'IanSendEYAppraisalToAgreementLevel');
 
-        if(!is_string($result)){
+        if (!is_string($result)) {
             Yii::$app->session->setFlash('success', 'Probation Appraisal Send to Agreement Successfully.', true);
             return $this->redirect(['agreementlist']);
-        }else{
+        } else {
 
-            Yii::$app->session->setFlash('error', 'Error : '. $result);
+            Yii::$app->session->setFlash('error', 'Error : ' . $result);
             return $this->redirect(['agreementlist']);
-
         }
-
     }
 
 
 
-    public function actionSubmittooverview($appraisalNo,$employeeNo)
+    public function actionSubmittooverview($appraisalNo, $employeeNo)
     {
         $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
         $data = [
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
             'sendEmail' => 1,
-            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['probation/view', 'Appraisal_No' =>$appraisalNo, 'Employee_No' =>$employeeNo ])
+            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['probation/view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo])
         ];
 
-        $result = Yii::$app->navhelper->CodeUnit($service,$data,'IanSendGoalSettingToOverview');
+        $result = Yii::$app->navhelper->CodeUnit($service, $data, 'IanSendGoalSettingToOverview');
 
-        if(!is_string($result)){
+        if (!is_string($result)) {
             Yii::$app->session->setFlash('success', 'Probation Appraisal Submitted to Overview Manager Successfully.', true);
-            return $this->redirect(['view','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
-        }else{
+            return $this->redirect(['view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]);
+        } else {
 
-            Yii::$app->session->setFlash('error', 'Error Submitting Probation Appraisal to Overview Manager : '. $result);
-            return $this->redirect(['view','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
-
+            Yii::$app->session->setFlash('error', 'Error Submitting Probation Appraisal to Overview Manager : ' . $result);
+            return $this->redirect(['view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]);
         }
-
     }
 
 
 
 
 
-    public function actionApprovegoals($appraisalNo,$employeeNo)
+    public function actionApprovegoals($appraisalNo, $employeeNo)
     {
         $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
         $data = [
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
             'sendEmail' => 1,
-            
+
         ];
 
-        $result = Yii::$app->navhelper->CodeUnit($service,$data,'IanApproveGoalSetting');
+        $result = Yii::$app->navhelper->CodeUnit($service, $data, 'IanApproveGoalSetting');
 
-        if(!is_string($result)){
+        if (!is_string($result)) {
             Yii::$app->session->setFlash('success', 'Appraisal Goals Approved Successfully.', true);
-            return $this->redirect(['view','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
-        }else{
+            return $this->redirect(['view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]);
+        } else {
 
-            Yii::$app->session->setFlash('error', 'Error   : '. $result);
-            return $this->redirect(['view','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
-
+            Yii::$app->session->setFlash('error', 'Error   : ' . $result);
+            return $this->redirect(['view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]);
         }
-
     }
 
 
-     public function actionBacktosuper($appraisalNo,$employeeNo)
+    public function actionBacktosuper($appraisalNo, $employeeNo)
     {
         $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
         $data = [
@@ -747,18 +745,16 @@ class PipController extends Controller
             'rejectionComments' => 'The Appraisal is not conclusive and hence rejected.'
         ];
 
-        $result = Yii::$app->navhelper->IanSendNewEmployeeAppraisalBackToSupervisor($service,$data);
+        $result = Yii::$app->navhelper->IanSendNewEmployeeAppraisalBackToSupervisor($service, $data);
 
-        if(!is_string($result)){
+        if (!is_string($result)) {
             Yii::$app->session->setFlash('success', 'Probation Appraisal Sent Back to Supervisor Successfully.', true);
-            return $this->redirect(['view','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
-        }else{
+            return $this->redirect(['view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]);
+        } else {
 
-            Yii::$app->session->setFlash('error', 'Error Sending Probation Back to Supervisor  : '. $result);
-            return $this->redirect(['view','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
-
+            Yii::$app->session->setFlash('error', 'Error Sending Probation Back to Supervisor  : ' . $result);
+            return $this->redirect(['view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]);
         }
-
     }
 
     public function actionBacktoemp()
@@ -770,22 +766,20 @@ class PipController extends Controller
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
             'sendEmail' => 1,
-            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['probation/view', 'Appraisal_No' =>$appraisalNo, 'Employee_No' =>$employeeNo ]),
+            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['probation/view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]),
             'rejectionComments' => Yii::$app->request->post('comment'),
         ];
 
-        $result = Yii::$app->navhelper->CodeUnit($service,$data,'IanSendGoalSettingBackToAppraisee');
+        $result = Yii::$app->navhelper->CodeUnit($service, $data, 'IanSendGoalSettingBackToAppraisee');
 
-        if(!is_string($result)){
+        if (!is_string($result)) {
             Yii::$app->session->setFlash('success', 'Probation Appraisal Sent Back to Appraisee Successfully.', true);
-            return $this->redirect(['view','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
-        }else{
+            return $this->redirect(['view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]);
+        } else {
 
-            Yii::$app->session->setFlash('error', 'Error Sending Probation Back to Appraisee  : '. $result);
-            return $this->redirect(['view','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
-
+            Yii::$app->session->setFlash('error', 'Error Sending Probation Back to Appraisee  : ' . $result);
+            return $this->redirect(['view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]);
         }
-
     }
 
 
@@ -800,48 +794,44 @@ class PipController extends Controller
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
             'sendEmail' => 1,
-            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['probation/view', 'Appraisal_No' =>$appraisalNo, 'Employee_No' =>$employeeNo ]),
+            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['probation/view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]),
             'rejectionComments' => Yii::$app->request->post('comment'),
         ];
 
-        $result = Yii::$app->navhelper->CodeUnit($service,$data,'IanSendGoalSettingBackToLineManager');
+        $result = Yii::$app->navhelper->CodeUnit($service, $data, 'IanSendGoalSettingBackToLineManager');
 
-        if(!is_string($result)){
+        if (!is_string($result)) {
             Yii::$app->session->setFlash('success', 'Probation Sent Back Line Manager with comments Successfully.', true);
-            return $this->redirect(['view','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
-        }else{
+            return $this->redirect(['view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]);
+        } else {
 
-            Yii::$app->session->setFlash('error', 'Error Line Manager : '. $result);
-            return $this->redirect(['view','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
-
+            Yii::$app->session->setFlash('error', 'Error Line Manager : ' . $result);
+            return $this->redirect(['view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]);
         }
-
     }
 
     // Submit Probation to Line Mgr
 
-    public function actionSubmitprobationtolinemgr($appraisalNo,$employeeNo)
+    public function actionSubmitprobationtolinemgr($appraisalNo, $employeeNo)
     {
         $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
         $data = [
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
             'sendEmail' => 1,
-            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['pip/view', 'Appraisal_No' =>$appraisalNo, 'Employee_No' =>$employeeNo ])
+            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['pip/view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo])
         ];
 
-        $result = Yii::$app->navhelper->CodeUnit($service,$data,'IanSendEYAppraisalForApproval');
+        $result = Yii::$app->navhelper->CodeUnit($service, $data, 'IanSendEYAppraisalForApproval');
 
-        if(!is_string($result)){
+        if (!is_string($result)) {
             Yii::$app->session->setFlash('success', 'PIP Appraisal Submitted Successfully.', true);
             return $this->redirect(['index']);
-        }else{
+        } else {
 
-            Yii::$app->session->setFlash('error', 'Error  : '. $result);
+            Yii::$app->session->setFlash('error', 'Error  : ' . $result);
             return $this->redirect(['index']);
-
         }
-
     }
 
     // Reject Probation and send it back to appraisee
@@ -855,29 +845,27 @@ class PipController extends Controller
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
             'sendEmail' => 1,
-            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['pip/view', 'Appraisal_No' =>$appraisalNo, 'Employee_No' =>$employeeNo ]),
+            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['pip/view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]),
             'rejectionComments' => Yii::$app->request->post('comment'),
         ];
 
-        $result = Yii::$app->navhelper->CodeUnit($service,$data,'IanSendEYAppraisaBackToAppraisee');
+        $result = Yii::$app->navhelper->CodeUnit($service, $data, 'IanSendEYAppraisaBackToAppraisee');
 
-        if(!is_string($result)){
+        if (!is_string($result)) {
             Yii::$app->session->setFlash('success', 'PIP Sent Back to Appraisee with Comments Successfully.', true);
-            return $this->redirect(['superlist','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
-        }else{
+            return $this->redirect(['superlist', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]);
+        } else {
 
-            Yii::$app->session->setFlash('error', 'Error  : '. $result);
-            return $this->redirect(['superlist','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
-
+            Yii::$app->session->setFlash('error', 'Error  : ' . $result);
+            return $this->redirect(['superlist', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]);
         }
-
     }
 
 
-    
-// Overview Manager Sending Probation Appraisal Back to Line Mgr
 
-     public function actionOverviewbacktolinemgr()
+    // Overview Manager Sending Probation Appraisal Back to Line Mgr
+
+    public function actionOverviewbacktolinemgr()
     {
         $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
         $appraisalNo = Yii::$app->request->post('Appraisal_No');
@@ -886,99 +874,91 @@ class PipController extends Controller
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
             'sendEmail' => 1,
-            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['pip/view','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]),
+            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['pip/view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]),
             'rejectionComments' => Yii::$app->request->post('comment'),
         ];
 
-        $result = Yii::$app->navhelper->CodeUnit($service,$data,'IanSendEYAppraisaBackToLineManager');
+        $result = Yii::$app->navhelper->CodeUnit($service, $data, 'IanSendEYAppraisaBackToLineManager');
 
-        if(!is_string($result)){
+        if (!is_string($result)) {
             Yii::$app->session->setFlash('success', 'PIP Sent Back to Line Manager with Comments Successfully.', true);
             return $this->redirect(['ovlist']);
-        }else{
+        } else {
 
-            Yii::$app->session->setFlash('error', 'Error  : '. $result);
+            Yii::$app->session->setFlash('error', 'Error  : ' . $result);
             return $this->redirect(['ovlist']);
-
         }
-
     }
 
 
-// Submit Appraisal to Overview
-    public function actionSubmitprobationtooverview($appraisalNo,$employeeNo)
+    // Submit Appraisal to Overview
+    public function actionSubmitprobationtooverview($appraisalNo, $employeeNo)
     {
         $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
         $data = [
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
             'sendEmail' => 1,
-            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['pip/view', 'Appraisal_No' =>$appraisalNo, 'Employee_No' =>$employeeNo ])
+            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['pip/view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo])
         ];
 
-        $result = Yii::$app->navhelper->CodeUnit($service,$data,'IanSendEYAppraisalToOverview');
+        $result = Yii::$app->navhelper->CodeUnit($service, $data, 'IanSendEYAppraisalToOverview');
 
-        if(!is_string($result)){
+        if (!is_string($result)) {
             Yii::$app->session->setFlash('success', 'PIP Appraisal Submitted Successfully.', true);
             return $this->redirect(['superlist']);
-        }else{
+        } else {
 
-            Yii::$app->session->setFlash('error', 'Error : '. $result);
+            Yii::$app->session->setFlash('error', 'Error : ' . $result);
             return $this->redirect(['superlist']);
-
         }
-
     }
 
-    public function actionAgreementoverview($appraisalNo,$employeeNo)
+    public function actionAgreementoverview($appraisalNo, $employeeNo)
     {
         $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
         $data = [
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
             'sendEmail' => 1,
-            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['probation/view', 'Appraisal_No' =>$appraisalNo, 'Employee_No' =>$employeeNo ])
+            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['probation/view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo])
         ];
 
-        $result = Yii::$app->navhelper->CodeUnit($service,$data,'IanSendEYAppraisalToAgreementLevel');
+        $result = Yii::$app->navhelper->CodeUnit($service, $data, 'IanSendEYAppraisalToAgreementLevel');
 
-        if(!is_string($result)){
+        if (!is_string($result)) {
             Yii::$app->session->setFlash('success', 'Probation Appraisal Submitted Successfully.', true);
-            return $this->redirect(['view','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
-        }else{
+            return $this->redirect(['view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]);
+        } else {
 
-            Yii::$app->session->setFlash('error', 'Error : '. $result);
-            return $this->redirect(['view','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
-
+            Yii::$app->session->setFlash('error', 'Error : ' . $result);
+            return $this->redirect(['view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]);
         }
-
     }
 
 
     /*Approve Probation by Overview*/
 
-     public function actionApproveprobationoverview($appraisalNo,$employeeNo)
+    public function actionApproveprobationoverview($appraisalNo, $employeeNo)
     {
         $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
         $data = [
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
             'sendEmail' => 1,
-            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['pip/view', 'Appraisal_No' =>$appraisalNo, 'Employee_No' =>$employeeNo ])
+            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['pip/view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo])
         ];
 
-        $result = Yii::$app->navhelper->CodeUnit($service,$data,'IanApproveEYAppraisal');
+        $result = Yii::$app->navhelper->CodeUnit($service, $data, 'IanApproveEYAppraisal');
 
-        if(!is_string($result)){
+        if (!is_string($result)) {
             Yii::$app->session->setFlash('success', 'PIP Approved Successfully.', true);
             return $this->redirect(['ovlist']);
-        }else{
+        } else {
 
-            Yii::$app->session->setFlash('error', 'Error : '. $result);
+            Yii::$app->session->setFlash('error', 'Error : ' . $result);
             return $this->redirect(['ovlist']);
-
         }
-
     }
 
 
@@ -987,10 +967,10 @@ class PipController extends Controller
 
     // Take Recommended Action.
 
-     public function actionSetaction()
+    public function actionSetaction()
     {
         $model = new Probation();
-         
+
         $service = Yii::$app->params['ServiceName']['ProbationCard'];
 
         $filter = [
@@ -998,27 +978,26 @@ class PipController extends Controller
         ];
         $request = Yii::$app->navhelper->getData($service, $filter);
 
-        if(is_array($request)){
-            Yii::$app->navhelper->loadmodel($request[0],$model);
+        if (is_array($request)) {
+            Yii::$app->navhelper->loadmodel($request[0], $model);
             $model->Key = $request[0]->Key;
             $model->Probation_Recomended_Action = Yii::$app->request->post('Probation_Recomended_Action');
         }
 
 
-        $result = Yii::$app->navhelper->updateData($service,$model);
+        $result = Yii::$app->navhelper->updateData($service, $model);
 
         Yii::$app->response->format = \yii\web\response::FORMAT_JSON;
 
         return $result;
-
     }
 
     // Set Overview Comments
 
-     public function actionSetOverviewComment()
+    public function actionSetOverviewComment()
     {
         $model = new Probation();
-         
+
         $service = Yii::$app->params['ServiceName']['ProbationCard'];
 
         $filter = [
@@ -1026,19 +1005,18 @@ class PipController extends Controller
         ];
         $request = Yii::$app->navhelper->getData($service, $filter);
 
-        if(is_array($request)){
-            Yii::$app->navhelper->loadmodel($request[0],$model);
+        if (is_array($request)) {
+            Yii::$app->navhelper->loadmodel($request[0], $model);
             $model->Key = $request[0]->Key;
             $model->Over_View_Manager_Comments = Yii::$app->request->post('Over_View_Manager_Comments');
         }
 
 
-        $result = Yii::$app->navhelper->updateData($service,$model);
+        $result = Yii::$app->navhelper->updateData($service, $model);
 
         Yii::$app->response->format = \yii\web\response::FORMAT_JSON;
 
         return $result;
-
     }
 
 
@@ -1047,7 +1025,7 @@ class PipController extends Controller
     public function actionSetSuperComment()
     {
         $model = new Pip();
-         
+
         $service = Yii::$app->params['ServiceName']['PIPCard'];
 
         $filter = [
@@ -1055,38 +1033,38 @@ class PipController extends Controller
         ];
         $request = Yii::$app->navhelper->getData($service, $filter);
 
-        if(is_array($request)){
-            Yii::$app->navhelper->loadmodel($request[0],$model);
+        if (is_array($request)) {
+            Yii::$app->navhelper->loadmodel($request[0], $model);
             $model->Key = $request[0]->Key;
             $model->Supervisor_Overall_Comments = Yii::$app->request->post('Supervisor_Overall_Comments');
         }
 
 
-        $result = Yii::$app->navhelper->updateData($service,$model);
+        $result = Yii::$app->navhelper->updateData($service, $model);
 
         Yii::$app->response->format = \yii\web\response::FORMAT_JSON;
 
         return $result;
-
     }
 
 
 
-    public function actionReport(){
+    public function actionReport()
+    {
 
         $service = Yii::$app->params['ServiceName']['PortalReports'];
 
-        if(Yii::$app->request->post()){
+        if (Yii::$app->request->post()) {
 
             $data = [
-                'appraisalNo' =>Yii::$app->request->post('appraisalNo'),
+                'appraisalNo' => Yii::$app->request->post('appraisalNo'),
                 'employeeNo' => Yii::$app->request->post('employeeNo')
             ];
-            $path = Yii::$app->navhelper->CodeUnit($service,$data,'IanGenerateNewEmployeeAppraisalReport');
+            $path = Yii::$app->navhelper->CodeUnit($service, $data, 'IanGenerateNewEmployeeAppraisalReport');
             //Yii::$app->recruitment->printrr($path);
-            if(!is_file($path['return_value'])){
+            if (!is_file($path['return_value'])) {
 
-                return $this->render('report',[
+                return $this->render('report', [
                     'report' => false,
                     'message' => $path['return_value']
                 ]);
@@ -1097,21 +1075,21 @@ class PipController extends Controller
             unlink($path['return_value']);
 
             // Yii::$app->recruitment->printrr($path);
-            return $this->render('report',[
+            return $this->render('report', [
                 'report' => true,
                 'content' => $content,
             ]);
         }
 
-        return $this->render('report',[
+        return $this->render('report', [
             'report' => false,
             'content' => '',
         ]);
-
     }
 
 
-    public function actionSetfield($field){
+    public function actionSetfield($field)
+    {
         $model = new  Pip();
         $service = Yii::$app->params['ServiceName']['PIPCard'];
 
@@ -1119,20 +1097,16 @@ class PipController extends Controller
             'Appraisal_No' => Yii::$app->request->post('Appraisal_No'),
         ];
         $result = Yii::$app->navhelper->getData($service, $filter);
-      
-        if(is_array($result)){
-            Yii::$app->navhelper->loadmodel($result[0],$model);
+
+        if (is_array($result)) {
+            Yii::$app->navhelper->loadmodel($result[0], $model);
             $model->Key = $result[0]->Key;
             $model->$field = Yii::$app->request->post($field);
-
         }
 
 
-        $result = Yii::$app->navhelper->updateData($service,$model);
-         // Yii::$app->recruitment->printrr( $result);
+        $result = Yii::$app->navhelper->updateData($service, $model);
+        // Yii::$app->recruitment->printrr( $result);
         return $result;
-
     }
-
-
 }

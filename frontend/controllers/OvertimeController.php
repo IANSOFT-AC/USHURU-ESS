@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -7,6 +8,7 @@
  */
 
 namespace frontend\controllers;
+
 use frontend\models\Overtime;
 use frontend\models\Purchaserequisition;
 use frontend\models\SalaryIncrement;
@@ -28,7 +30,7 @@ class OvertimeController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout','signup','index','list','create','update','delete','view'],
+                'only' => ['logout', 'signup', 'index', 'list', 'create', 'update', 'delete', 'view'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -36,7 +38,7 @@ class OvertimeController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout','index','list','create','update','delete','view'],
+                        'actions' => ['logout', 'index', 'list', 'create', 'update', 'delete', 'view'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -48,7 +50,7 @@ class OvertimeController extends Controller
                     'logout' => ['post'],
                 ],
             ],
-            'contentNegotiator' =>[
+            'contentNegotiator' => [
                 'class' => ContentNegotiator::class,
                 'only' => ['list'],
                 'formatParam' => '_format',
@@ -60,58 +62,55 @@ class OvertimeController extends Controller
         ];
     }
 
-    public function actionIndex(){
+    public function actionIndex()
+    {
 
         return $this->render('index');
-
     }
 
 
-    public function actionCreate(){
-       // Yii::$app->recruitment->printrr($this->getPayrollscales());
+    public function actionCreate()
+    {
+        // Yii::$app->recruitment->printrr($this->getPayrollscales());
         $model = new Overtime();
         $service = Yii::$app->params['ServiceName']['OvertimeCard'];
 
         /*Do initial request */
-        if(!isset(Yii::$app->request->post()['Overtime'])){
+        if (!isset(Yii::$app->request->post()['Overtime'])) {
             $model->Employee_No = Yii::$app->user->identity->{'Employee No_'};
             $request = Yii::$app->navhelper->postData($service, $model);
-            if(!is_string($request) )
-            {
-                Yii::$app->navhelper->loadmodel($request,$model);
-            }else{
+            if (!is_string($request)) {
+                Yii::$app->navhelper->loadmodel($request, $model);
+            } else {
 
-                Yii::$app->session->setFlash('error',$request);
-                 return $this->render('create',[
+                Yii::$app->session->setFlash('error', $request);
+                return $this->render('create', [
                     'model' => $model,
                     'programs' => $this->getPrograms(),
                     'departments' => $this->getDepartments(),
-                     'grades' => $this->getPayrollscales(),
+                    'grades' => $this->getPayrollscales(),
                 ]);
             }
         }
 
-        if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Overtime'],$model) ){
+        if (Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Overtime'], $model)) {
 
 
-            $result = Yii::$app->navhelper->updateData($service,$model);
-            if(!is_string($result)){
+            $result = Yii::$app->navhelper->updateData($service, $model);
+            if (!is_string($result)) {
 
-                Yii::$app->session->setFlash('success','Request Created Successfully.' );
-                return $this->redirect(['view','No' => $result->No]);
-
-            }else{
-                Yii::$app->session->setFlash('error','Error Creating Request '.$result );
+                Yii::$app->session->setFlash('success', 'Request Created Successfully.');
+                return $this->redirect(['view', 'No' => $result->No]);
+            } else {
+                Yii::$app->session->setFlash('error', 'Error Creating Request ' . $result);
                 return $this->redirect(['index']);
-
             }
-
         }
 
 
         //Yii::$app->recruitment->printrr($model);
 
-        return $this->render('create',[
+        return $this->render('create', [
             'model' => $model,
             'programs' => $this->getPrograms(),
             'departments' => $this->getDepartments(),
@@ -122,7 +121,8 @@ class OvertimeController extends Controller
 
 
 
-    public function actionUpdate($No){
+    public function actionUpdate($No)
+    {
         $model = new Overtime();
         $service = Yii::$app->params['ServiceName']['OvertimeCard'];
         $model->isNewRecord = false;
@@ -130,37 +130,34 @@ class OvertimeController extends Controller
         $filter = [
             'No' => $No,
         ];
-        $result = Yii::$app->navhelper->getData($service,$filter);
+        $result = Yii::$app->navhelper->getData($service, $filter);
 
-        if(is_array($result)){
+        if (is_array($result)) {
             //load nav result to model
-            $model = Yii::$app->navhelper->loadmodel($result[0],$model) ;
-        }else{
+            $model = Yii::$app->navhelper->loadmodel($result[0], $model);
+        } else {
             Yii::$app->recruitment->printrr($result);
         }
 
 
-        if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Overtime'],$model) ){
+        if (Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Overtime'], $model)) {
 
-            $result = Yii::$app->navhelper->updateData($service,$model);
+            $result = Yii::$app->navhelper->updateData($service, $model);
 
-            if(!is_string($result)){
-                Yii::$app->session->setFlash('success','Document Updated Successfully.' );
-                return $this->redirect(['view','No' => $result->No]);
-
-            }else{
-                Yii::$app->session->setFlash('success','Error Updating Document'.$result );
-                return $this->render('update',[
+            if (!is_string($result)) {
+                Yii::$app->session->setFlash('success', 'Document Updated Successfully.');
+                return $this->redirect(['view', 'No' => $result->No]);
+            } else {
+                Yii::$app->session->setFlash('success', 'Error Updating Document' . $result);
+                return $this->render('update', [
                     'model' => $model,
                 ]);
-
             }
-
         }
 
 
         // Yii::$app->recruitment->printrr($model);
-        if(Yii::$app->request->isAjax){
+        if (Yii::$app->request->isAjax) {
             return $this->renderAjax('update', [
                 'model' => $model,
                 'programs' => $this->getPrograms(),
@@ -171,7 +168,7 @@ class OvertimeController extends Controller
             ]);
         }
 
-        return $this->render('update',[
+        return $this->render('update', [
             'model' => $model,
             'programs' => $this->getPrograms(),
             'departments' => $this->getDepartments(),
@@ -180,19 +177,21 @@ class OvertimeController extends Controller
         ]);
     }
 
-    public function actionDelete(){
+    public function actionDelete()
+    {
         $service = Yii::$app->params['ServiceName']['SalaryIncrementCard'];
-        $result = Yii::$app->navhelper->deleteData($service,Yii::$app->request->get('Key'));
+        $result = Yii::$app->navhelper->deleteData($service, Yii::$app->request->get('Key'));
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        if(!is_string($result)){
+        if (!is_string($result)) {
 
             return ['note' => '<div class="alert alert-success">Record Purged Successfully</div>'];
-        }else{
-            return ['note' => '<div class="alert alert-danger">Error Purging Record: '.$result.'</div>' ];
+        } else {
+            return ['note' => '<div class="alert alert-danger">Error Purging Record: ' . $result . '</div>'];
         }
     }
 
-    public function actionView($No){
+    public function actionView($No)
+    {
         $model = new Overtime();
         $service = Yii::$app->params['ServiceName']['OvertimeCard'];
 
@@ -203,48 +202,48 @@ class OvertimeController extends Controller
         $result = Yii::$app->navhelper->getData($service, $filter);
 
         //load nav result to model
-        $model = Yii::$app->navhelper->loadmodel($result[0],$model) ;
+        $model = Yii::$app->navhelper->loadmodel($result[0], $model);
 
         //Yii::$app->recruitment->printrr($model);
 
-        return $this->render('view',[
+        return $this->render('view', [
             'model' => $model,
         ]);
     }
 
-   // Get list
+    // Get list
 
-    public function actionList(){
+    public function actionList()
+    {
         $service = Yii::$app->params['ServiceName']['OvertimeList'];
         $filter = [
             'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
         ];
 
 
-        $results = \Yii::$app->navhelper->getData($service,$filter);
+        $results = \Yii::$app->navhelper->getData($service, $filter);
         //Yii::$app->recruitment->printrr($results);
         $result = [];
-        foreach($results as $item){
+        foreach ($results as $item) {
 
-            if(!empty($item->No ))
-            {
+            if (!empty($item->No)) {
                 $link = $updateLink = $deleteLink =  '';
 
-                $Viewlink = Html::a('<i class="fas fa-eye"></i>',['view','No'=> $item->No ],['class'=>'btn btn-outline-primary btn-xs','title' => 'View Request.' ]);
-                if($item->Status == 'Open'){
-                    $link = Html::a('<i class="fas fa-paper-plane"></i>',['send-for-approval','No'=> $item->No ],['title'=>'Send Approval Request','class'=>'btn btn-primary btn-xs']);
-                    $updateLink = Html::a('<i class="far fa-edit"></i>',['update','No'=> $item->No ],['class'=>'btn btn-info btn-xs','title' => 'Update Request']);
-                }else if($item->Status == 'Pending_Approval'){
-                    $link = Html::a('<i class="fas fa-times"></i>',['cancel-request','No'=> $item->No ],['title'=>'Cancel Approval Request','class'=>'btn btn-warning btn-xs']);
+                $Viewlink = Html::a('<i class="fas fa-eye"></i>', ['view', 'No' => $item->No], ['class' => 'btn btn-outline-primary btn-xs', 'title' => 'View Request.']);
+                if ($item->Status == 'Open') {
+                    $link = Html::a('<i class="fas fa-paper-plane"></i>', ['send-for-approval', 'No' => $item->No], ['title' => 'Send Approval Request', 'class' => 'btn btn-primary btn-xs']);
+                    $updateLink = Html::a('<i class="far fa-edit"></i>', ['update', 'No' => $item->No], ['class' => 'btn btn-info btn-xs', 'title' => 'Update Request']);
+                } else if ($item->Status == 'Pending_Approval') {
+                    $link = Html::a('<i class="fas fa-times"></i>', ['cancel-request', 'No' => $item->No], ['title' => 'Cancel Approval Request', 'class' => 'btn btn-warning btn-xs']);
                 }
 
                 $result['data'][] = [
                     'Key' => $item->Key,
                     'No' => $item->No,
-                    'Employee_No' => !empty($item->Employee_No)?$item->Employee_No:'',
-                    'Employee_Name' => !empty($item->Employee_Name)?$item->Employee_Name:'',
-                    'Status' => !empty($item->Status)?$item->Status:'',
-                    'Action' => $link.' '. $updateLink.' '.$Viewlink ,
+                    'Employee_No' => !empty($item->Employee_No) ? $item->Employee_No : '',
+                    'Employee_Name' => !empty($item->Employee_Name) ? $item->Employee_Name : '',
+                    'Status' => !empty($item->Status) ? $item->Status : '',
+                    'Action' => $link . ' ' . $updateLink . ' ' . $Viewlink,
 
                 ];
             }
@@ -255,7 +254,8 @@ class OvertimeController extends Controller
 
     /*Get Programs */
 
-    public function getPrograms(){
+    public function getPrograms()
+    {
         $service = Yii::$app->params['ServiceName']['DimensionValueList'];
 
         $filter = [
@@ -263,19 +263,20 @@ class OvertimeController extends Controller
         ];
 
         $result = \Yii::$app->navhelper->getData($service, $filter);
-        return ArrayHelper::map($result,'Code','Name');
+        return ArrayHelper::map($result, 'Code', 'Name');
     }
 
     /* Get Department*/
 
-    public function getDepartments(){
+    public function getDepartments()
+    {
         $service = Yii::$app->params['ServiceName']['DimensionValueList'];
 
         $filter = [
             'Global_Dimension_No' => 2
         ];
         $result = \Yii::$app->navhelper->getData($service, $filter);
-        return ArrayHelper::map($result,'Code','Name');
+        return ArrayHelper::map($result, 'Code', 'Name');
     }
 
     public function getPayrollscales()
@@ -283,7 +284,7 @@ class OvertimeController extends Controller
         $service = Yii::$app->params['ServiceName']['PayrollScales'];
         $result = Yii::$app->navhelper->getData($service, []);
 
-         return Yii::$app->navhelper->refactorArray($result,'Scale','Sequence');
+        return Yii::$app->navhelper->refactorArray($result, 'Scale', 'Sequence');
     }
 
     public function actionPointerDd($scale)
@@ -292,15 +293,13 @@ class OvertimeController extends Controller
         $filter = ['Scale' => $scale];
         $result = Yii::$app->navhelper->getData($service, $filter);
 
-        $data = Yii::$app->navhelper->refactorArray($result, 'Pointer','Pointer');
+        $data = Yii::$app->navhelper->refactorArray($result, 'Pointer', 'Pointer');
 
-        if(count($data) )
-        {
-            foreach($data  as $k => $v )
-            {
-                echo "<option value='$k'>".$v."</option>";
+        if (count($data)) {
+            foreach ($data  as $k => $v) {
+                echo "<option value='$k'>" . $v . "</option>";
             }
-        }else{
+        } else {
             echo "<option value=''>No data Available</option>";
         }
     }
@@ -309,43 +308,41 @@ class OvertimeController extends Controller
 
     /* Get Dimension 3*/
 
-    public function getD3(){
+    public function getD3()
+    {
         $service = Yii::$app->params['ServiceName']['DimensionValueList'];
 
         $filter = [
             'Global_Dimension_No' => 3
         ];
         $result = \Yii::$app->navhelper->getData($service, $filter);
-        return ArrayHelper::map($result,'Code','Name');
+        return ArrayHelper::map($result, 'Code', 'Name');
     }
 
-    
 
 
 
 
 
-    public function getEmployees(){
+
+    public function getEmployees()
+    {
         $service = Yii::$app->params['ServiceName']['Employees'];
 
         $employees = \Yii::$app->navhelper->getData($service);
         $data = [];
         $i = 0;
-        if(is_array($employees)){
+        if (is_array($employees)) {
 
-            foreach($employees as  $emp){
+            foreach ($employees as  $emp) {
                 $i++;
-                if(!empty($emp->Full_Name) && !empty($emp->No)){
+                if (!empty($emp->Full_Name) && !empty($emp->No)) {
                     $data[$i] = [
                         'No' => $emp->No,
                         'Full_Name' => $emp->Full_Name
                     ];
                 }
-
             }
-
-
-
         }
 
         return $data;
@@ -372,16 +369,15 @@ class OvertimeController extends Controller
         ];
 
 
-        $result = Yii::$app->navhelper->PortalWorkFlows($service,$data,'IanSendOverTimeForApproval');
+        $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'IanSendOverTimeForApproval');
 
-        if(!is_string($result)){
+        if (!is_string($result)) {
             Yii::$app->session->setFlash('success', 'Approval Request Sent to Supervisor Successfully.', true);
-            return $this->redirect(['view','No' => $No]);
-        }else{
+            return $this->redirect(['view', 'No' => $No]);
+        } else {
 
-            Yii::$app->session->setFlash('error', 'Error Sending Approval Request for Approval  : '. $result);
-            return $this->redirect(['view','No' => $No]);
-
+            Yii::$app->session->setFlash('error', 'Error Sending Approval Request for Approval  : ' . $result);
+            return $this->redirect(['view', 'No' => $No]);
         }
     }
 
@@ -396,20 +392,20 @@ class OvertimeController extends Controller
         ];
 
 
-        $result = Yii::$app->navhelper->PortalWorkFlows($service,$data,'IanCancelOverTimeApprovalRequest');
+        $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'IanCancelOverTimeApprovalRequest');
 
-        if(!is_string($result)){
+        if (!is_string($result)) {
             Yii::$app->session->setFlash('success', 'Approval Request Cancelled Successfully.', true);
-            return $this->redirect(['view','No' => $No]);
-        }else{
+            return $this->redirect(['view', 'No' => $No]);
+        } else {
 
-            Yii::$app->session->setFlash('error', 'Error Cancelling Approval Approval Request.  : '. $result);
-            return $this->redirect(['view','No' => $No]);
-
+            Yii::$app->session->setFlash('error', 'Error Cancelling Approval Approval Request.  : ' . $result);
+            return $this->redirect(['view', 'No' => $No]);
         }
     }
 
-    public function actionSetGrade(){
+    public function actionSetGrade()
+    {
         $model = new SalaryIncrement();
         $service = Yii::$app->params['ServiceName']['SalaryIncrementCard'];
 
@@ -418,27 +414,26 @@ class OvertimeController extends Controller
         ];
         $request = Yii::$app->navhelper->getData($service, $filter);
 
-        if(is_array($request)){
-            Yii::$app->navhelper->loadmodel($request[0],$model);
+        if (is_array($request)) {
+            Yii::$app->navhelper->loadmodel($request[0], $model);
             $model->Key = $request[0]->Key;
             $model->New_Grade = Yii::$app->request->post('New_Grade');
             $model->New_Pointer = Yii::$app->request->post('New_Pointer');
-
-        }else{
+        } else {
             Yii::$app->response->format = \yii\web\response::FORMAT_JSON;
             return $request;
         }
 
 
-        $result = Yii::$app->navhelper->updateData($service,$model);
+        $result = Yii::$app->navhelper->updateData($service, $model);
 
         Yii::$app->response->format = \yii\web\response::FORMAT_JSON;
 
         return $result;
-
     }
 
-    public function actionCommit(){
+    public function actionCommit()
+    {
         $commitModel = trim(Yii::$app->request->post('model'));
         $commitService = Yii::$app->request->post('service');
         $key = Yii::$app->request->post('key');
@@ -450,13 +445,11 @@ class OvertimeController extends Controller
 
         $service = Yii::$app->params['ServiceName'][$commitService];
 
-        if(!empty($filterKey))
-        {
+        if (!empty($filterKey)) {
             $filter = [
                 $filterKey => Yii::$app->request->post('no')
             ];
-        }
-        else{
+        } else {
             $filter = [
                 'Line_No' => Yii::$app->request->post('no')
             ];
@@ -466,26 +459,22 @@ class OvertimeController extends Controller
 
 
         $data = [];
-        if(is_array($request)){
+        if (is_array($request)) {
             $data = [
                 'Key' => $request[0]->Key,
                 $name => $value
             ];
-        }else{
+        } else {
             Yii::$app->response->format = \yii\web\response::FORMAT_JSON;
             return ['error' => $request];
         }
 
 
 
-        $result = Yii::$app->navhelper->updateData($service,$data);
+        $result = Yii::$app->navhelper->updateData($service, $data);
 
         Yii::$app->response->format = \yii\web\response::FORMAT_JSON;
 
         return $result;
-
     }
-
-
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace common\models;
 
 use Yii;
@@ -114,7 +115,8 @@ class Hruser extends ActiveRecord implements IdentityInterface
      * @param string $token verify email token
      * @return static|null
      */
-    public static function findByVerificationToken($token) {
+    public static function findByVerificationToken($token)
+    {
 
         return static::findOne([
             'verification_token' => $token,
@@ -225,14 +227,14 @@ class Hruser extends ActiveRecord implements IdentityInterface
         return Yii::$app->nav;
     }*/
 
-    public function getEmployee(){
+    public function getEmployee()
+    {
         $service = Yii::$app->params['ServiceName']['employeeCard'];
         $filter = [
             'No' => Yii::$app->user->identity->{'Employee No_'},
         ];
 
-        $employee = \Yii::$app->navhelper->getData($service,$filter);
+        $employee = \Yii::$app->navhelper->getData($service, $filter);
         return $employee;
     }
-
 }

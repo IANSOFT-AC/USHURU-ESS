@@ -74,9 +74,11 @@ return [
         'EmployeeExitManagement',
         'HRAPPRAISALMGT',
         'TRAININGMGT',
+        'DocumentAttachment'
 
     ],
     'ServiceName' => [
+        'DocumentAttachment' => 'DocumentAttachment',
 
         /**************************IMPREST*************************************/
         'ImprestRequestList' => 'ImprestRequestList', //64020 (Page)

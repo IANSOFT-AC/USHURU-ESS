@@ -95,6 +95,32 @@ class Navhelper extends Component
         }
     }
 
+    public function getRecordID($service, $Key)
+    {
+        $filter = [];
+        $url  =  new Services($service);
+        $wsdl = $url->getUrl();
+        $username =  Yii::$app->params['NavisionUsername'];
+        $password =  Yii::$app->params['NavisionPassword'];
+        $creds = (object)[];
+        $creds->UserName = $username;
+        $creds->PassWord = $password;
+
+        if (!Yii::$app->navision->isUp($wsdl, $creds)) {
+
+            return ['error' => 'Service unavailable.'];
+        }
+
+
+        $res = (array)$result = Yii::$app->navision->getRecordID($creds, $wsdl, $Key);
+        //Yii::$app->recruitment->printrr($res);
+        if (count($res)) {
+            return $res['GetRecIdFromKey_Result'];
+        } else {
+            return false;
+        }
+    }
+
     /*Read a single Record By Key*/
 
 
@@ -103,8 +129,8 @@ class Navhelper extends Component
 
         $url  =  new Services($service);
         $wsdl = $url->getUrl();
-        $username = (!Yii::$app->user->isGuest) ? Yii::$app->user->identity->{'User ID'} : Yii::$app->params['ldPrefix'] . '\\' . Yii::$app->params['NavisionUsername'];
-        $password = Yii::$app->session->has('IdentityPassword') ? Yii::$app->session->get('IdentityPassword') : Yii::$app->params['NavisionPassword'];
+        $username = Yii::$app->params['NavisionUsername'];
+        $password = Yii::$app->params['NavisionPassword'];
 
         $creds = (object)[];
         $creds->UserName = $username;

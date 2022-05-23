@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -9,9 +10,9 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$this->title = 'Job Requisition - '.$model->Requisition_No;
+$this->title = 'Job Requisition - ' . $model->Requisition_No;
 $this->params['breadcrumbs'][] = ['label' => 'Leave List', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => 'Job Requisition Card', 'url' => ['view','No'=> $model->Requisition_No]];
+$this->params['breadcrumbs'][] = ['label' => 'Job Requisition Card', 'url' => ['view', 'No' => $model->Requisition_No]];
 /** Status Sessions */
 
 
@@ -24,147 +25,149 @@ $Attachmentmodel = new \frontend\models\Leaveattachment()
 <div class="row">
     <div class="col-md-4">
 
-        <?= ($model->Status == 'New')?Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval'],['class' => 'btn btn-app submitforapproval',
+        <?= ($model->Status == 'New') ? Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req', ['send-for-approval'], [
+            'class' => 'btn btn-app submitforapproval',
             'data' => [
                 'confirm' => 'Are you sure you want to send this document for approval?',
-                'params'=>[
-                    'No'=> $_GET['No'],
+                'params' => [
+                    'No' => $_GET['No'],
                     'employeeNo' => Yii::$app->user->identity->{'Employee No_'},
                 ],
                 'method' => 'get',
-        ],
+            ],
             'title' => 'Submit For Approval'
 
-        ]):'' ?>
+        ]) : '' ?>
 
 
-        <?php ($model->Status == 'Pending_Approval')?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-app submitforapproval',
+        <?php ($model->Status == 'Pending_Approval') ? Html::a('<i class="fas fa-times"></i> Cancel Approval Req.', ['cancel-request'], [
+            'class' => 'btn btn-app submitforapproval',
             'data' => [
-            'confirm' => 'Are you sure you want to cancel imprest approval request?',
-            'params'=>[
-                'No'=> $_GET['No'],
+                'confirm' => 'Are you sure you want to cancel imprest approval request?',
+                'params' => [
+                    'No' => $_GET['No'],
+                ],
+                'method' => 'get',
             ],
-            'method' => 'get',
-        ],
             'title' => 'Cancel Approval Request'
 
-        ]):'' ?>
+        ]) : '' ?>
     </div>
 </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card-info">
-                <div class="card-header">
-                    <h3>Job Reqisition Card </h3>
-                </div>
-
-
-
+<div class="row">
+    <div class="col-md-12">
+        <div class="card-info">
+            <div class="card-header">
+                <h3>Job Reqisition Card </h3>
             </div>
+
+
+
         </div>
     </div>
+</div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-
-
-
-
-                    <!-- <h3 class="card-title">Job Requisition : <?= $model->Requisition_No?></h3> -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
 
 
 
-                    <?php
-                    if(Yii::$app->session->hasFlash('success')){
-                        print ' <div class="alert alert-success alert-dismissable">
+
+                <!-- <h3 class="card-title">Job Requisition : <?= $model->Requisition_No ?></h3> -->
+
+
+
+                <?php
+                if (Yii::$app->session->hasFlash('success')) {
+                    print ' <div class="alert alert-success alert-dismissable">
                                  ';
-                        echo Yii::$app->session->getFlash('success');
-                        print '</div>';
-                    }else if(Yii::$app->session->hasFlash('error')){
-                        print ' <div class="alert alert-danger alert-dismissable">
+                    echo Yii::$app->session->getFlash('success');
+                    print '</div>';
+                } else if (Yii::$app->session->hasFlash('error')) {
+                    print ' <div class="alert alert-danger alert-dismissable">
                                  ';
-                        echo Yii::$app->session->getFlash('error');
-                        print '</div>';
-                    }
-                    ?>
-                </div>
-                <div class="card-body">
+                    echo Yii::$app->session->getFlash('error');
+                    print '</div>';
+                }
+                ?>
+            </div>
+            <div class="card-body">
 
 
-                    <?php $form = ActiveForm::begin(); ?>
-                    <?= $form->field($model, 'Requisition_No')->hiddenInput()->label(false); ?>
-                    <?= $form->field($model, 'Key')->hiddenInput()->label(false); ?>
-
-
-
-                    <div class="row">
-                        <div class=" row col-md-12">
-                            <div class="col-md-4">
-
-                                <?= $form->field($model, 'Job_Id')->dropDownList($ApprovedHRJobs,['prompt' => '-- Select Job --']) ?>
-
-                                <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date','required' => true]) ?>
-                                <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date','required' => true]) ?>
-                                <?= $form->field($model, 'Probation_Period')->textInput(['required' => true]) ?>
-                                <?= $form->field($model, 'Global_Dimension_1_Code')->dropDownList($Programs,['prompt' => '-- Select Program --']) ?>
-                                <?= $form->field($model, 'Type')->dropDownList([
-                                    'New'=>'New',
-                                    'Re_Advert'=>'Re_Advert',
-                                ],['prompt' => '-- Select Type -- ','required'=> true]) ?>
+                <?php $form = ActiveForm::begin(); ?>
+                <?= $form->field($model, 'Requisition_No')->hiddenInput()->label(false); ?>
+                <?= $form->field($model, 'Key')->hiddenInput()->label(false); ?>
 
 
 
-                            </div>
+                <div class="row">
+                    <div class=" row col-md-12">
+                        <div class="col-md-4">
 
-                            <div class="col-md-4">
-                            
-                                <?= $form->field($model, 'Occupied_Position')->textInput(['readonly' =>  true]) ?>
-                                <?= $form->field($model, 'Requisition_Period')->textInput(['required' => true]) ?>
+                            <?= $form->field($model, 'Job_Id')->dropDownList($ApprovedHRJobs, ['prompt' => '-- Select Job --']) ?>
 
-                                <?= $form->field($model, 'Requisition_Type')->dropDownList([
-                                    'Internal'=>'Internal',
-                                    'External'=>'External',
-                                    'Both'=>'Both',
-                                ],['prompt' => '-- Select Requisition Type -- ','required'=> true]) ?>
-                                <?= $form->field($model, 'Contract_Period')->textInput(['required' => true]) ?>
-                                <?= $form->field($model, 'Global_Dimension_2_Code')->dropDownList($Departments,['prompt' => '-- Select Department --']) ?>
-                                <?= $form->field($model, 'Criticality')->dropDownList([
-                                    'High'=>'High',
-                                    'Low'=>'Low',
-                                ],['prompt' => '-- Select Criticality -- ','required'=> true]) ?>
-
-                                
-                            </div>
-
-                            <div class="col-md-4">
-
-                                <?= $form->field($model, 'No_Posts')->textInput() ?>
-
-                                <?= $form->field($model, 'End_Date')->textInput(['readonly' => true]) ?>
+                            <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date', 'required' => true]) ?>
+                            <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date', 'required' => true]) ?>
+                            <?= $form->field($model, 'Probation_Period')->textInput(['required' => true]) ?>
+                            <?= $form->field($model, 'Global_Dimension_1_Code')->dropDownList($Programs, ['prompt' => '-- Select Program --']) ?>
+                            <?= $form->field($model, 'Type')->dropDownList([
+                                'New' => 'New',
+                                'Re_Advert' => 'Re_Advert',
+                            ], ['prompt' => '-- Select Type -- ', 'required' => true]) ?>
 
 
-                                <?= $form->field($model, 'Employment_Type')->dropDownList([
-                                    'Permanent'=>'Permanent',
-                                    'Contract'=>'Contract',
-                                    'Consultant'=>'Consultant',
-                                    'Intern'=>'Intern',
-                                    'Board'=>'Board',
-                                ],['prompt' => '-- Select Employment Type -- ','required'=> true]) ?>
 
-                                <?= $form->field($model, 'Contract_Type')->dropDownList($ContractTypes,['prompt' => '-- Select Job --']) ?>
-                                <?= $form->field($model, 'Location')->dropDownList($Locations,['prompt' => '-- Select Department --']) ?>                                
-                                <?= $form->field($model, 'Reasons_For_Requisition')->textarea(['rows'=> 2,'maxlength' => 250]) ?>
+                        </div>
 
-                              
+                        <div class="col-md-4">
+
+                            <?= $form->field($model, 'Occupied_Position')->textInput(['readonly' =>  true]) ?>
+                            <?= $form->field($model, 'Requisition_Period')->textInput(['required' => true]) ?>
+
+                            <?= $form->field($model, 'Requisition_Type')->dropDownList([
+                                'Internal' => 'Internal',
+                                'External' => 'External',
+                                'Both' => 'Both',
+                            ], ['prompt' => '-- Select Requisition Type -- ', 'required' => true]) ?>
+                            <?= $form->field($model, 'Contract_Period')->textInput(['required' => true]) ?>
+                            <?= $form->field($model, 'Global_Dimension_2_Code')->dropDownList($Departments, ['prompt' => '-- Select Department --']) ?>
+                            <?= $form->field($model, 'Criticality')->dropDownList([
+                                'High' => 'High',
+                                'Low' => 'Low',
+                            ], ['prompt' => '-- Select Criticality -- ', 'required' => true]) ?>
 
 
-                      
-                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <?= $form->field($model, 'No_Posts')->textInput() ?>
+
+                            <?= $form->field($model, 'End_Date')->textInput(['readonly' => true]) ?>
+
+
+                            <?= $form->field($model, 'Employment_Type')->dropDownList([
+                                'Permanent' => 'Permanent',
+                                'Contract' => 'Contract',
+                                'Consultant' => 'Consultant',
+                                'Intern' => 'Intern',
+                                'Board' => 'Board',
+                            ], ['prompt' => '-- Select Employment Type -- ', 'required' => true]) ?>
+
+                            <?= $form->field($model, 'Contract_Type')->dropDownList($ContractTypes, ['prompt' => '-- Select Job --']) ?>
+                            <?= $form->field($model, 'Location')->dropDownList($Locations, ['prompt' => '-- Select Department --']) ?>
+                            <?= $form->field($model, 'Reasons_For_Requisition')->textarea(['rows' => 2, 'maxlength' => 250]) ?>
+
+
+
+
+
                         </div>
                     </div>
+                </div>
 
 
 
@@ -172,27 +175,28 @@ $Attachmentmodel = new \frontend\models\Leaveattachment()
                 <div class="row">
 
                     <div class="form-group">
-                        <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success',]) ?>
+                        <?= Html::submitButton(($model->isNewRecord) ? 'Save' : 'Update', ['class' => 'btn btn-success',]) ?>
                     </div>
 
 
                 </div>
 
-                    <?php ActiveForm::end(); ?>
+                <?php ActiveForm::end(); ?>
 
 
-            <?php if($Attachmentmodel->getPath($model->Requisition_No)){   ?>
+                <?php if ($Attachmentmodel->getPath($model->Requisition_No)) {   ?>
 
-                <iframe src="data:application/pdf;base64,<?= $Attachmentmodel->readAttachment($model->Requisition_No); ?>" height="950px" width="100%"></iframe>
-
-
-            <?php }  ?>
-
-                </div>
-            </div><!--end details card-->
+                    <iframe src="data:application/pdf;base64,<?= $Attachmentmodel->readAttachment($model->Requisition_No); ?>" height="950px" width="100%"></iframe>
 
 
-            <!--Objectives card -->
+                <?php }  ?>
+
+            </div>
+        </div>
+        <!--end details card-->
+
+
+        <!--Objectives card -->
 
 
 
@@ -222,9 +226,9 @@ $Attachmentmodel = new \frontend\models\Leaveattachment()
     </div>
 
 
-<?php
+    <?php
 
-$script = <<<JS
+    $script = <<<JS
 
     $(function(){
       
@@ -501,9 +505,9 @@ $script = <<<JS
         
 JS;
 
-$this->registerJs($script);
+    $this->registerJs($script);
 
-$style = <<<CSS
+    $style = <<<CSS
     p span {
         margin-right: 50%;
         font-weight: bold;
@@ -541,4 +545,4 @@ $style = <<<CSS
     }
 CSS;
 
-$this->registerCss($style);
+    $this->registerCss($style);

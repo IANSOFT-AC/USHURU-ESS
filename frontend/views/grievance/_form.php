@@ -1,77 +1,80 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
  * Date: 2/24/2020
  * Time: 12:13 PM
  */
+
 use yii\helpers\Html;
 use yii\bootstrap4\ActiveForm;
+
 $absoluteUrl = \yii\helpers\Url::home(true);
- //Yii::$app->recruitment->printrr(Yii::$app->user->identity->{'Employee No_'});
+//Yii::$app->recruitment->printrr(Yii::$app->user->identity->{'Employee No_'});
 $activeState = [];
- if($model->Status == 'New')
- {
-     $activeStete = [];
- }else {
-     $activeState = ['readonly' =>  true, 'diasbled' => true];
- }
+if ($model->Status == 'New') {
+    $activeStete = [];
+} else {
+    $activeState = ['readonly' =>  true, 'diasbled' => true];
+}
 ?>
 
 
-                       <?php if(Yii::$app->session->hasFlash('success')): ?>
-                            <div class="alert alert-success"><?= Yii::$app->session->getFlash('success')?></div>
-                        <?php endif; ?>
+<?php if (Yii::$app->session->hasFlash('success')) : ?>
+    <div class="alert alert-success"><?= Yii::$app->session->getFlash('success') ?></div>
+<?php endif; ?>
 
-                    <?php if(Yii::$app->session->hasFlash('error')): ?>
-                        <div class="alert alert-danger"><?= Yii::$app->session->getFlash('error')?></div>
-                    <?php endif; ?>
-                
+<?php if (Yii::$app->session->hasFlash('error')) : ?>
+    <div class="alert alert-danger"><?= Yii::$app->session->getFlash('error') ?></div>
+<?php endif; ?>
+
 
 <div class="card">
     <div class="actions card-body">
-                         <?= ($model->Status == 'New' && $model->Employee_No == Yii::$app->user->identity->{'Employee No_'}  )?Html::a('<i class="fas fa-forward"></i>To HRO',['send-to-hro'],['class' => 'btn btn-app bg-success btn-success',
-                                'data' => [
-                                    'confirm' => 'Are you sure you want to send this Document to HRO?',
-                                    'params'=>[
-                                        'No'=> $model->No
-                                    ],
-                                    'method' => 'post',
-                            ],
-                                'title' => 'Send Document to HRO for Acceptance'
-    
-                            ]):'' ?>
-    
-    
-                           
+        <?= ($model->Status == 'New' && $model->Employee_No == Yii::$app->user->identity->{'Employee No_'}) ? Html::a('<i class="fas fa-forward"></i>To HRO', ['send-to-hro'], [
+            'class' => 'btn btn-app bg-success btn-success',
+            'data' => [
+                'confirm' => 'Are you sure you want to send this Document to HRO?',
+                'params' => [
+                    'No' => $model->No
+                ],
+                'method' => 'post',
+            ],
+            'title' => 'Send Document to HRO for Acceptance'
 
-                           
-    
-    
-                            
+        ]) : '' ?>
+
+
+
+
+
+
+
+
     </div>
 
 </div>
 
-               
+
 
 <div class="row">
-    
+
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title"><?= Html::encode($this->title) ?></h3>
                 <div class="card-tools">
                 </div>
-           </div>
+            </div>
 
             <div class="card-body">
 
 
 
-        <?php
+                <?php
 
-            $form = ActiveForm::begin(); ?>
+                $form = ActiveForm::begin(); ?>
                 <div class="row">
                     <div class="row col-md-12">
 
@@ -79,93 +82,93 @@ $activeState = [];
 
                         <div class="col-md-6">
 
-                            <?= $form->field($model, 'No')->textInput(['readonly'=> true]) ?>
+                            <?= $form->field($model, 'No')->textInput(['readonly' => true]) ?>
                             <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
-                            <?= $form->field($model, 'Employee_No')->textInput(['readonly'=> true]) ?>
+                            <?= $form->field($model, 'Employee_No')->textInput(['readonly' => true]) ?>
                             <?= $form->field($model, 'Employee_Name')->textInput(['readonly' =>  true]) ?>
-                            <?= ($model->Status == 'New')?$form->field($model, 'Grievance_Against')->dropdownList($employees,['prompt'=> 'Select ...']):'' ?>
-                            <?= $form->field($model, 'Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= ($model->Status == 'New')?
-                                $form->field($model, 'Date_of_grievance')->textInput(['type'=> 'date']):
-                                    $form->field($model, 'Date_of_grievance')->textInput($activeState)
-                                    ?>
+                            <?= ($model->Status == 'New') ? $form->field($model, 'Grievance_Against')->dropdownList($employees, ['prompt' => 'Select ...']) : '' ?>
+                            <?= $form->field($model, 'Name')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= ($model->Status == 'New') ?
+                                $form->field($model, 'Date_of_grievance')->textInput(['type' => 'date']) :
+                                $form->field($model, 'Date_of_grievance')->textInput($activeState)
+                            ?>
 
 
-                            <?= ($model->Status == 'HRO' && $model->HRO_Emp_No == Yii::$app->user->identity->{'Employee No_'})?
-                                $form->field($model, 'HRO_Findings')->textarea(['rows'=> 2]):
-                                    $form->field($model, 'HRO_Findings')->textInput($activeState)
-                                    ?> 
-                             
-                             <?= $form->field($model, 'Employee_Comments')->textInput(['readonly'=> true, 'disabled'=>true]) ?> 
+                            <?= ($model->Status == 'HRO' && $model->HRO_Emp_No == Yii::$app->user->identity->{'Employee No_'}) ?
+                                $form->field($model, 'HRO_Findings')->textarea(['rows' => 2]) :
+                                $form->field($model, 'HRO_Findings')->textInput($activeState)
+                            ?>
 
-                             <?= $form->field($model, 'attachment')->fileInput(['accept' => 'application/*']) ?>
-                            
+                            <?= $form->field($model, 'Employee_Comments')->textInput(['readonly' => true, 'disabled' => true]) ?>
+
+                            <?= $form->field($model, 'attachment')->fileInput(['accept' => 'application/*']) ?>
+
                         </div>
-                        
+
                         <div class="col-md-6">
-                            <?= ($model->Status == 'New')?
-                            $form->field($model, 'Grievance_Type')->dropdownList($complaintTypes, ['prompt'=> 'Select ...']):
+                            <?= ($model->Status == 'New') ?
+                                $form->field($model, 'Grievance_Type')->dropdownList($complaintTypes, ['prompt' => 'Select ...']) :
                                 $form->field($model, 'Grievance_Type')->textInput($activeState)
-                                ?>        
-                            <?= ($model->Status == 'New')?
-                                $form->field($model, 'Grievance_Description')->textarea(['rows' => 2]):
-                                    $form->field($model, 'Grievance_Description')->textarea($activeState)
-                                    ?>
-                                    <?=  $form->field($model, 'Witness_Type')->dropdownList([
-                                        'Employee' => 'Employee',
-                                        'Self' => 'Self',
-                                    ], ['prompt'=> 'Select ...']) ?>
-                            <?= ($model->Status == 'New')?$form->field($model, 'Witness')->dropdownList($employees,['prompt' => 'Select ...']):'' ?>        
-                            <?= $form->field($model, 'Witness_Name')->textInput(['readonly'=> true]) ?>        
-                            <?= $form->field($model, 'Status')->textInput(['readonly'=> true]) ?>
-                            <?= $form->field($model, 'Rejection_Comments')->textInput(['readonly'=> true, 'disabled'=>true]) ?> 
+                            ?>
+                            <?= ($model->Status == 'New') ?
+                                $form->field($model, 'Grievance_Description')->textarea(['rows' => 2]) :
+                                $form->field($model, 'Grievance_Description')->textarea($activeState)
+                            ?>
+                            <?= $form->field($model, 'Witness_Type')->dropdownList([
+                                'Employee' => 'Employee',
+                                'Self' => 'Self',
+                            ], ['prompt' => 'Select ...']) ?>
+                            <?= ($model->Status == 'New') ? $form->field($model, 'Witness')->dropdownList($employees, ['prompt' => 'Select ...']) : '' ?>
+                            <?= $form->field($model, 'Witness_Name')->textInput(['readonly' => true]) ?>
+                            <?= $form->field($model, 'Status')->textInput(['readonly' => true]) ?>
+                            <?= $form->field($model, 'Rejection_Comments')->textInput(['readonly' => true, 'disabled' => true]) ?>
 
-                            <?= ($model->Status == 'HRO' && $model->HRO_Emp_No == Yii::$app->user->identity->{'Employee No_'})?
-                                $form->field($model, 'Severity_of_grievance')->dropdownList($severity, ['prompt'=> 'Select ...']):
+                            <?= ($model->Status == 'HRO' && $model->HRO_Emp_No == Yii::$app->user->identity->{'Employee No_'}) ?
+                                $form->field($model, 'Severity_of_grievance')->dropdownList($severity, ['prompt' => 'Select ...']) :
                                 $form->field($model, 'Severity_of_grievance')->textInput($activeState)
-                            ?> 
+                            ?>
 
-                            <?= ($model->Status == 'HRO' && $model->HRO_Emp_No == Yii::$app->user->identity->{'Employee No_'})?
-                                $form->field($model, 'Complaint_Classification')->dropdownList($complaintTypes, ['prompt'=> 'Select ...']):
+                            <?= ($model->Status == 'HRO' && $model->HRO_Emp_No == Yii::$app->user->identity->{'Employee No_'}) ?
+                                $form->field($model, 'Complaint_Classification')->dropdownList($complaintTypes, ['prompt' => 'Select ...']) :
                                 $form->field($model, 'Complaint_Classification')->textInput($activeState)
-                            ?> 
+                            ?>
 
                         </div>
-                  
+
 
 
 
                     </div>
                 </div>
 
-               
+
 
                 <?php ActiveForm::end(); ?>
             </div>
         </div>
 
-          <!-- Attachment View -->
-          <?php if(is_object($attachment) && $attachment->File_path): ?>
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Attachment View</h3>
-                        </div>
-                        <div class="card-body">
-                        <?php
-                                echo \lesha724\documentviewer\ViewerJsDocumentViewer::widget([
-                                'url' => $attachment->File_path, 
-                                'width'=>'100%',
-                                'height'=>'1100px',
-                                ]);?>
-                        </div>
-                    </div>
+        <!-- Attachment View -->
+        <?php if (is_object($attachment) && $attachment->File_path) : ?>
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Attachment View</h3>
+                </div>
+                <div class="card-body">
+                    <?php
+                    echo \lesha724\documentviewer\ViewerJsDocumentViewer::widget([
+                        'url' => $attachment->File_path,
+                        'width' => '100%',
+                        'height' => '1100px',
+                    ]); ?>
+                </div>
+            </div>
 
-            <?php endif; ?>
+        <?php endif; ?>
 
-            <!-- End Attachment View -->
+        <!-- End Attachment View -->
 
 
-       
+
 
 
 

@@ -28,14 +28,14 @@ return [
         ],
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'sqlsrv:server='.env("DB_INSTANCE").';database='.env("DB_NAME"), 
-            'username' =>  env('DB_USER'),
+            'dsn' => 'sqlsrv:server='.env('DB_INSTANCE').';database='.env('DB_NAME'),
+            'username' => env('DB_USER'),
             'password' => env('DB_PWD'),
             'charset' => 'utf8',
         ],
         'nav' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'sqlsrv:server='.env("DB_INSTANCE").';database='.env("DB_NAME"), 
+            'dsn' => 'sqlsrv:server='.env('DB_INSTANCE').';database='.env('DB_NAME'),
             'username' => env('DB_USER'),
             'password' => env('DB_PWD'),
             'charset' => 'utf8',

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -9,23 +10,23 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$this->title = 'Salary Increment Requisition - '.$model->No;
+$this->title = 'Salary Increment Requisition - ' . $model->No;
 $this->params['breadcrumbs'][] = ['label' => 'Salary Increment', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => 'Salary Increment Card', 'url' => ['view','No'=> $model->No]];
+$this->params['breadcrumbs'][] = ['label' => 'Salary Increment Card', 'url' => ['view', 'No' => $model->No]];
 
 ?>
 
 
 
 <?php
-if(Yii::$app->session->hasFlash('success')){
+if (Yii::$app->session->hasFlash('success')) {
     print ' <div class="alert alert-success alert-dismissable">
                              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                                     <h5><i class="icon fas fa-check"></i> Success!</h5>
  ';
     echo Yii::$app->session->getFlash('success');
     print '</div>';
-}else if(Yii::$app->session->hasFlash('error')){
+} else if (Yii::$app->session->hasFlash('error')) {
     print ' <div class="alert alert-danger alert-dismissable">
                                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                                     <h5><i class="icon fas fa-times"></i> Error!</h5>
@@ -39,112 +40,117 @@ if(Yii::$app->session->hasFlash('success')){
 <div class="row">
     <div class="col-md-4">
 
-        <?= ($model->Approval_Status== 'New')?Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval'],['class' => 'btn btn-app submitforapproval',
+        <?= ($model->Approval_Status == 'New') ? Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req', ['send-for-approval'], [
+            'class' => 'btn btn-app submitforapproval',
             'data' => [
                 'confirm' => 'Are you sure you want to send this document for approval?',
-                'params'=>[
-                    'No'=> $model->No,
+                'params' => [
+                    'No' => $model->No,
                     'employeeNo' => Yii::$app->user->identity->{'Employee No_'},
                 ],
                 'method' => 'get',
-        ],
+            ],
             'title' => 'Submit Document for Approval'
 
-        ]):'' ?>
+        ]) : '' ?>
 
 
-        <?= ($model->Approval_Status == 'Pending_Approval')?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-app submitforapproval',
+        <?= ($model->Approval_Status == 'Pending_Approval') ? Html::a('<i class="fas fa-times"></i> Cancel Approval Req.', ['cancel-request'], [
+            'class' => 'btn btn-app submitforapproval',
             'data' => [
-            'confirm' => 'Are you sure you want to cancel document approval request?',
-            'params'=>[
-                'No'=> $model->No,
+                'confirm' => 'Are you sure you want to cancel document approval request?',
+                'params' => [
+                    'No' => $model->No,
+                ],
+                'method' => 'get',
             ],
-            'method' => 'get',
-        ],
             'title' => 'Cancel Document Approval Request'
 
-        ]):'' ?>
+        ]) : '' ?>
     </div>
 </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card-info">
-                <div class="card-header">
-                    <h3>Salary Increment Requisition Document </h3>
-                </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card-info">
+            <div class="card-header">
+                <h3>Salary Increment Requisition Document </h3>
             </div>
         </div>
     </div>
+</div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
 
-                    <h3 class="card-title">Requisition No : <?= $model->No?></h3>
-
-
-                </div>
-                <div class="card-body">
+                <h3 class="card-title">Requisition No : <?= $model->No ?></h3>
 
 
-                    <?php $form = ActiveForm::begin(); ?>
+            </div>
+            <div class="card-body">
 
 
-                    <div class="row">
-                        <div class=" row col-md-12">
-                            <div class="col-md-6">
+                <?php $form = ActiveForm::begin(); ?>
 
-                                <?= $form->field($model, 'No')->textInput(['readonly' => true]) ?>
-                                <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
-                                <?= $form->field($model, 'Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Current_Grade')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Current_Pointer')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
 
-                            </div>
-                            <div class="col-md-6">
+                <div class="row">
+                    <div class=" row col-md-12">
+                        <div class="col-md-6">
 
-                                <?= $form->field($model, 'Current_Salary_Grade')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'New_Grade')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'New_Pointer')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'New_Salary_Grade')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Approval_Entries')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Approval_Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                            <?= $form->field($model, 'No')->textInput(['readonly' => true]) ?>
+                            <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
+                            <?= $form->field($model, 'Employee_No')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Employee_Name')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Current_Grade')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Current_Pointer')->textInput(['readonly' => true, 'disabled' => true]) ?>
 
-                               
+                        </div>
+                        <div class="col-md-6">
 
-                            </div>
+                            <?= $form->field($model, 'Current_Salary_Grade')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'New_Grade')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'New_Pointer')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'New_Salary_Grade')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Approval_Entries')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Approval_Status')->textInput(['readonly' => true, 'disabled' => true]) ?>
+
+
+
                         </div>
                     </div>
-
-
-
-
-                    <?php ActiveForm::end(); ?>
-
-
-
-                </div>
-            </div><!--end details card-->
-
-            <!--Lines -->
-
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <?php ($model->Approval_Status == 'New')?Html::a('<i class="fa fa-plus-square"></i> Add Line',['purchase-requisitionline/create','No'=>$model->No],['class' => 'add-line btn btn-outline-info',
-                        ]):'' ?>
-                    </div>
                 </div>
 
-                <div class="card-body">
 
-                    <?php if(is_array($model->lines)){ //show Lines ?>
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead>
+
+
+                <?php ActiveForm::end(); ?>
+
+
+
+            </div>
+        </div>
+        <!--end details card-->
+
+        <!--Lines -->
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <?php ($model->Approval_Status == 'New') ? Html::a('<i class="fa fa-plus-square"></i> Add Line', ['purchase-requisitionline/create', 'No' => $model->No], [
+                        'class' => 'add-line btn btn-outline-info',
+                    ]) : '' ?>
+                </div>
+            </div>
+
+            <div class="card-body">
+
+                <?php if (is_array($model->lines)) { //show Lines 
+                ?>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
                                 <tr>
                                     <td><b>Contract Code</b></td>
                                     <td><b>Contract Description</b></td>
@@ -164,45 +170,45 @@ if(Yii::$app->session->hasFlash('success')){
                                     <td><b>Approval Status</b></td>
 
                                 </tr>
-                                </thead>
-                                <tbody>
+                            </thead>
+                            <tbody>
                                 <?php
                                 // print '<pre>'; print_r($model->getObjectives()); exit;
 
-                                foreach($model->lines as $obj):
+                                foreach ($model->lines as $obj) :
 
-                                    ?>
+                                ?>
                                     <tr>
 
-                                        <td><?= !empty($obj->Contract_Code)?$obj->Contract_Code:'Not Set' ?></td>
-                                        <td><?= !empty($obj->Contract_Description)?$obj->Contract_Description:'Not Set' ?></td>
-                                        <td><?= !empty($obj->Contract_Start_Date)?$obj->Contract_Start_Date:'Not Set' ?></td>
-                                        <td><?= !empty($obj->Contract_Period)?$obj->Contract_Period:'Not Set' ?></td>
-                                        <td><?= !empty($obj->Contract_End_Date)?$obj->Contract_End_Date:'Not Set' ?></td>
-                                        <td><?= !empty($obj->Notice_Period)?$obj->Notice_Period:'Not Set' ?></td>
-                                        <td><?= !empty($obj->Job_Title)?$obj->Job_Title:'Not Set' ?></td>
-                                        <td><?= !empty($obj->Line_Manager)?$obj->Line_Manager:'Not Set' ?></td>
-                                        <td><?= !empty($obj->Manager_Name)?$obj->Manager_Name:'Not Set' ?></td>
+                                        <td><?= !empty($obj->Contract_Code) ? $obj->Contract_Code : 'Not Set' ?></td>
+                                        <td><?= !empty($obj->Contract_Description) ? $obj->Contract_Description : 'Not Set' ?></td>
+                                        <td><?= !empty($obj->Contract_Start_Date) ? $obj->Contract_Start_Date : 'Not Set' ?></td>
+                                        <td><?= !empty($obj->Contract_Period) ? $obj->Contract_Period : 'Not Set' ?></td>
+                                        <td><?= !empty($obj->Contract_End_Date) ? $obj->Contract_End_Date : 'Not Set' ?></td>
+                                        <td><?= !empty($obj->Notice_Period) ? $obj->Notice_Period : 'Not Set' ?></td>
+                                        <td><?= !empty($obj->Job_Title) ? $obj->Job_Title : 'Not Set' ?></td>
+                                        <td><?= !empty($obj->Line_Manager) ? $obj->Line_Manager : 'Not Set' ?></td>
+                                        <td><?= !empty($obj->Manager_Name) ? $obj->Manager_Name : 'Not Set' ?></td>
 
-                                        <td><?= !empty($obj->Department)?$obj->Department:'Not Set' ?></td>
-                                        <td><?= !empty($obj->Pointer)?$obj->Pointer:'Not Set' ?></td>
-                                        <td><?= !empty($obj->Grade)?$obj->Grade:'Not Set' ?></td>
+                                        <td><?= !empty($obj->Department) ? $obj->Department : 'Not Set' ?></td>
+                                        <td><?= !empty($obj->Pointer) ? $obj->Pointer : 'Not Set' ?></td>
+                                        <td><?= !empty($obj->Grade) ? $obj->Grade : 'Not Set' ?></td>
 
-                                        <td><?= !empty($obj->Salary)?$obj->Salary:'Not Set' ?></td>
-                                        <td><?= !empty($obj->New_Salary)?$obj->New_Salary:'Not Set' ?></td>
-                                        <td><?= !empty($obj->Approval_Status)?$obj->Approval_Status:'Not Set' ?></td>
+                                        <td><?= !empty($obj->Salary) ? $obj->Salary : 'Not Set' ?></td>
+                                        <td><?= !empty($obj->New_Salary) ? $obj->New_Salary : 'Not Set' ?></td>
+                                        <td><?= !empty($obj->Approval_Status) ? $obj->Approval_Status : 'Not Set' ?></td>
 
                                     </tr>
                                 <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
+                            </tbody>
+                        </table>
+                    </div>
 
-                    <?php } ?>
-                </div>
+                <?php } ?>
             </div>
+        </div>
 
-            <!--End Lines -->
+        <!--End Lines -->
 
     </div>
 
@@ -230,9 +236,9 @@ if(Yii::$app->session->hasFlash('success')){
     </div>
 
 
-<?php
+    <?php
 
-$script = <<<JS
+    $script = <<<JS
 
     $(function(){
       
@@ -444,9 +450,9 @@ $script = <<<JS
         
 JS;
 
-$this->registerJs($script);
+    $this->registerJs($script);
 
-$style = <<<CSS
+    $style = <<<CSS
     p span {
         margin-right: 50%;
         font-weight: bold;
@@ -495,4 +501,4 @@ $style = <<<CSS
     }
 CSS;
 
-$this->registerCss($style);
+    $this->registerCss($style);

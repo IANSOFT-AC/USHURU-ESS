@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -9,9 +10,9 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$this->title = 'Change Request - '.$model->Exit_No;
+$this->title = 'Change Request - ' . $model->Exit_No;
 $this->params['breadcrumbs'][] = ['label' => 'Change Request', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => 'Change Request Card', 'url' => ['view','No'=> $model->Exit_No]];
+$this->params['breadcrumbs'][] = ['label' => 'Change Request Card', 'url' => ['view', 'No' => $model->Exit_No]];
 /** Status Sessions */
 
 
@@ -23,204 +24,209 @@ Yii::$app->session->set('isSupervisor',false);*/
 <div class="row">
     <div class="col-md-4">
 
-        <?= ($model->Status == 'New')?Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval'],['class' => 'btn btn-app submitforapproval',
+        <?= ($model->Status == 'New') ? Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req', ['send-for-approval'], [
+            'class' => 'btn btn-app submitforapproval',
             'data' => [
                 'confirm' => 'Are you sure you want to send this document for approval?',
-                'params'=>[
-                    'No'=> $model->Exit_No,
+                'params' => [
+                    'No' => $model->Exit_No,
                     'employeeNo' => Yii::$app->user->identity->{'Employee No_'},
                 ],
                 'method' => 'get',
-        ],
+            ],
             'title' => 'Send Request for Approval'
 
-        ]):'' ?>
+        ]) : '' ?>
 
 
-        <?= ($model->Status == 'Pending_Approval' && !Yii::$app->request->get('Approval'))?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-app submitforapproval',
+        <?= ($model->Status == 'Pending_Approval' && !Yii::$app->request->get('Approval')) ? Html::a('<i class="fas fa-times"></i> Cancel Approval Req.', ['cancel-request'], [
+            'class' => 'btn btn-app submitforapproval',
             'data' => [
-            'confirm' => 'Are you sure you want to cancel  approval request?',
-            'params'=>[
-                'No'=> $model->Exit_No,
-            ],
-            'method' => 'get',
-        ],
-            'title' => 'Cancel Approval Request'
-
-        ]):'' ?>
-
-
-        <?= ($model->Status == 'Approved')?Html::a('<i class="fas fa-file"></i> Generate Exit Form',['gen-exit-form'],['class' => 'btn btn-app',
-            'data' => [
-                'confirm' => 'Are you sure you want to Generate Exit Form ?',
-                'params'=>[
-                    'No'=> $model->Exit_No,
+                'confirm' => 'Are you sure you want to cancel  approval request?',
+                'params' => [
+                    'No' => $model->Exit_No,
                 ],
                 'method' => 'get',
             ],
             'title' => 'Cancel Approval Request'
 
-        ]):'' ?>
+        ]) : '' ?>
+
+
+        <?= ($model->Status == 'Approved') ? Html::a('<i class="fas fa-file"></i> Generate Exit Form', ['gen-exit-form'], [
+            'class' => 'btn btn-app',
+            'data' => [
+                'confirm' => 'Are you sure you want to Generate Exit Form ?',
+                'params' => [
+                    'No' => $model->Exit_No,
+                ],
+                'method' => 'get',
+            ],
+            'title' => 'Cancel Approval Request'
+
+        ]) : '' ?>
     </div>
 </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card-info">
-                <div class="card-header">
-                    <h3>Employee Exit Document </h3>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card-info">
+            <div class="card-header">
+                <h3>Employee Exit Document </h3>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+
+
+
+
+                <h3 class="card-title">Request No : <?= $model->Exit_No ?></h3>
+
+
+
+                <?php
+                if (Yii::$app->session->hasFlash('success')) {
+                    print ' <div class="alert alert-success alert-dismissable">
+                                 ';
+                    echo Yii::$app->session->getFlash('success');
+                    print '</div>';
+                } else if (Yii::$app->session->hasFlash('error')) {
+                    print ' <div class="alert alert-danger alert-dismissable">
+                                 ';
+                    echo Yii::$app->session->getFlash('error');
+                    print '</div>';
+                }
+                ?>
+            </div>
+            <div class="card-body">
+
+
+                <?php $form = ActiveForm::begin(); ?>
+
+
+                <div class="row">
+                    <div class=" row col-md-12">
+                        <div class="col-md-6">
+                            <?= $form->field($model, 'Exit_No')->textInput(['readonly' => true]) ?>
+                            <?= $form->field($model, 'Employee_No')->textInput(['readonly' => true]) ?>
+                            <?= $form->field($model, 'Employee_Name')->textInput(['readonly' => true]) ?>
+                            <?= $form->field($model, 'Job_Title')->textInput(['readonly' => true]) ?>
+                            <?= $form->field($model, 'Key')->hiddenInput(['readonly' => true])->label(false) ?>
+
+
+                        </div>
+                        <div class="col-md-6">
+                            <?= $form->field($model, 'Job_Description')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Payroll_Grade')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Global_Dimension_1_Code')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Status')->textInput(['readonly' => true, 'disabled' => true]) ?>
+
+                        </div>
+                    </div>
                 </div>
+
+                <p class="text-muted lead">Exit Details</p>
+
+                <div class="row">
+                    <div class=" row col-md-12">
+                        <div class="col-md-6">
+                            <?= $form->field($model, 'Date_of_Exit')->textInput(['readonly' => true]) ?>
+                            <?php $form->field($model, 'Interview_Conducted_By')->textInput(['readonly' => true]) ?>
+                            <?= $form->field($model, 'Reason_For_Exit')->textInput(['readonly' => true]) ?>
+                            <?= $form->field($model, 'Reason_Description')->textInput(['readonly' => true]) ?>
+                            <?= $form->field($model, 'Notice_Period')->hiddenInput(['readonly' => true])->label(false) ?>
+
+
+                        </div>
+                        <div class="col-md-6">
+                            <?= $form->field($model, 'Date_Of_Notice')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Expiry_of_Notice')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?php $form->field($model, 'Date_of_Exit_Interview')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Notice_Fully_Served')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Reasons_For_Not_Serving_Notice')->textInput(['readonly' => true, 'disabled' => true]) ?>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <?php ActiveForm::end(); ?>
 
 
 
             </div>
         </div>
-    </div>
+        <!--end details card-->
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
+        <!--Medical Dependants -->
 
-
-
-
-                    <h3 class="card-title">Request No : <?= $model->Exit_No?></h3>
-
-
-
-                    <?php
-                    if(Yii::$app->session->hasFlash('success')){
-                        print ' <div class="alert alert-success alert-dismissable">
-                                 ';
-                        echo Yii::$app->session->getFlash('success');
-                        print '</div>';
-                    }else if(Yii::$app->session->hasFlash('error')){
-                        print ' <div class="alert alert-danger alert-dismissable">
-                                 ';
-                        echo Yii::$app->session->getFlash('error');
-                        print '</div>';
-                    }
-                    ?>
+        <div class="card" id="Medical_Dependants">
+            <div class="card-header">
+                <div class="card-title">
+                    Final Dues Calculations <?php Html::a('Add', ['dues/create', 'No' => $model->Exit_No], ['class' => 'add-line btn btn-sm btn-info']) ?>
                 </div>
-                <div class="card-body">
+            </div>
 
+            <div class="card-body">
 
-                    <?php $form = ActiveForm::begin(); ?>
-
-
-                    <div class="row">
-                        <div class=" row col-md-12">
-                            <div class="col-md-6">
-                                <?= $form->field($model, 'Exit_No')->textInput(['readonly'=> true]) ?>
-                                <?= $form->field($model, 'Employee_No')->textInput(['readonly' => true]) ?>
-                                <?= $form->field($model, 'Employee_Name')->textInput(['readonly' => true]) ?>
-                                <?= $form->field($model, 'Job_Title')->textInput(['readonly' => true]) ?>
-                                <?= $form->field($model, 'Key')->hiddenInput(['readonly'=> true])->label(false) ?>
-
-
-                            </div>
-                            <div class="col-md-6">
-                                <?= $form->field($model, 'Job_Description')->textInput(['readonly'=> true,'disabled'=> true]) ?>
-                                <?= $form->field($model, 'Payroll_Grade')->textInput(['readonly'=> true,'disabled'=> true]) ?>
-                                <?= $form->field($model, 'Global_Dimension_1_Code')->textInput(['readonly'=> true,'disabled'=> true]) ?>
-                                <?= $form->field($model, 'Status')->textInput(['readonly'=> true,'disabled'=> true]) ?>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <p class="text-muted lead">Exit Details</p>
-
-                    <div class="row">
-                        <div class=" row col-md-12">
-                            <div class="col-md-6">
-                                <?= $form->field($model, 'Date_of_Exit')->textInput(['readonly'=> true]) ?>
-                                <?php $form->field($model, 'Interview_Conducted_By')->textInput(['readonly' => true]) ?>
-                                <?= $form->field($model, 'Reason_For_Exit')->textInput(['readonly' => true]) ?>
-                                <?= $form->field($model, 'Reason_Description')->textInput(['readonly' => true]) ?>
-                                <?= $form->field($model, 'Notice_Period')->hiddenInput(['readonly'=> true])->label(false) ?>
-
-
-                            </div>
-                            <div class="col-md-6">
-                                <?= $form->field($model, 'Date_Of_Notice')->textInput(['readonly'=> true,'disabled'=> true]) ?>
-                                <?= $form->field($model, 'Expiry_of_Notice')->textInput(['readonly'=> true,'disabled'=> true]) ?>
-                                <?php $form->field($model, 'Date_of_Exit_Interview')->textInput(['readonly'=> true,'disabled'=> true]) ?>
-                                <?= $form->field($model, 'Notice_Fully_Served')->textInput(['readonly'=> true,'disabled'=> true]) ?>
-                                <?= $form->field($model, 'Reasons_For_Not_Serving_Notice')->textInput(['readonly'=> true,'disabled'=> true]) ?>
-
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
-                    <?php ActiveForm::end(); ?>
-
-
-
-                </div>
-            </div><!--end details card-->
-
-            <!--Medical Dependants -->
-
-            <div class="card" id="Medical_Dependants">
-                <div class="card-header">
-                    <div class="card-title">
-                        Final Dues Calculations <?php Html::a('Add',['dues/create','No' => $model->Exit_No],['class' => 'add-line btn btn-sm btn-info']) ?>
-                    </div>
-                </div>
-
-                <div class="card-body">
-
-                    <?php
-                    // Yii::$app->recruitment->printrr($model->dues);
-                    if(is_array($model->dues)){ //show Lines ?>
+                <?php
+                // Yii::$app->recruitment->printrr($model->dues);
+                if (is_array($model->dues)) { //show Lines 
+                ?>
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead>
-                            <tr>
-                                <td><b>Employee No</b></td>
-                                <td><b>Exit No</b></td>
-                                <td><b>Description</b></td>
-                                <td><b>Amount</b></td>
-                                
-
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php
-                            // print '<pre>'; print_r($model->getObjectives()); exit;
-                            foreach($model->dues as $obj):
-
-                                if(!empty($obj->Employee_No)){
-                                               
-                                ?>
                                 <tr>
-
-                                    <td><?= !empty($obj->Employee_No)?$obj->Employee_No:'Not Set' ?></td>
-                                    <td ><?= !empty($obj->Exit_No)?$obj->Exit_No:'Not Set' ?></td>
-                                    <td><?= !empty($obj->Description)?$obj->Description:'Not Set' ?></td>
-                                    <td><?= !empty($obj->Amount)?number_format($obj->Amount):'Not Set' ?></td>
-                                    
+                                    <td><b>Employee No</b></td>
+                                    <td><b>Exit No</b></td>
+                                    <td><b>Description</b></td>
+                                    <td><b>Amount</b></td>
 
 
                                 </tr>
-                            <?php
-                                } // End if condition for Line_No
-                             endforeach; ?>
+                            </thead>
+                            <tbody>
+                                <?php
+                                // print '<pre>'; print_r($model->getObjectives()); exit;
+                                foreach ($model->dues as $obj) :
+
+                                    if (!empty($obj->Employee_No)) {
+
+                                ?>
+                                        <tr>
+
+                                            <td><?= !empty($obj->Employee_No) ? $obj->Employee_No : 'Not Set' ?></td>
+                                            <td><?= !empty($obj->Exit_No) ? $obj->Exit_No : 'Not Set' ?></td>
+                                            <td><?= !empty($obj->Description) ? $obj->Description : 'Not Set' ?></td>
+                                            <td><?= !empty($obj->Amount) ? number_format($obj->Amount) : 'Not Set' ?></td>
+
+
+
+                                        </tr>
+                                <?php
+                                    } // End if condition for Line_No
+                                endforeach; ?>
                             </tbody>
                         </table>
                     </div>
 
-                    <?php } ?>
-                </div>
+                <?php } ?>
             </div>
+        </div>
 
 
-            <!--End Dues Lines -->
+        <!--End Dues Lines -->
 
     </div>
 
@@ -248,9 +254,9 @@ Yii::$app->session->set('isSupervisor',false);*/
     </div>
 
 
-<?php
+    <?php
 
-$script = <<<JS
+    $script = <<<JS
 
     $(function(){
       
@@ -462,9 +468,9 @@ $script = <<<JS
         
 JS;
 
-$this->registerJs($script);
+    $this->registerJs($script);
 
-$style = <<<CSS
+    $style = <<<CSS
     p span {
         margin-right: 50%;
         font-weight: bold;
@@ -502,4 +508,4 @@ $style = <<<CSS
     }
 CSS;
 
-$this->registerCss($style);
+    $this->registerCss($style);

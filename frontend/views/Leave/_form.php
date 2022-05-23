@@ -1,12 +1,15 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
  * Date: 2/24/2020
  * Time: 12:13 PM
  */
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+
 $absoluteUrl = \yii\helpers\Url::home(true);
 ?>
 
@@ -16,37 +19,51 @@ $absoluteUrl = \yii\helpers\Url::home(true);
             <div class="card-header">
                 <h3 class="card-title"><?= Html::encode($this->title) ?></h3>
 
-                <?php if(Yii::$app->session->hasFlash('success')): ?>
-                    <div class="alert alert-success"><?= Yii::$app->session->getFlash('success')?></div>
+                <?php if (Yii::$app->session->hasFlash('success')) : ?>
+                    <div class="alert alert-success"><?= Yii::$app->session->getFlash('success') ?></div>
                 <?php endif; ?>
 
-                <?php if(Yii::$app->session->hasFlash('error')): ?>
-                    <div class="alert alert-danger"><?= Yii::$app->session->getFlash('error')?></div>
+                <?php if (Yii::$app->session->hasFlash('error')) : ?>
+                    <div class="alert alert-danger"><?= Yii::$app->session->getFlash('error') ?></div>
                 <?php endif; ?>
             </div>
             <div class="card-body">
 
 
 
-        <?php
+                <?php
 
-            $form = ActiveForm::begin([
+                $form = ActiveForm::begin([
                     // 'id' => $model->formName()
-            ]); ?>
+                ]); ?>
 
 
 
 
-            <div class="row">
-                <div class="col-md-6">
-                    <?= '<p><span>Employee No</span> '.Html::a($model->Employee_No,'#'); '</p>' ?>
-                    <?= '<p><span>Employee Name</span> '.Html::a($model->Employee_Name,'#'); '</p>' ?>
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= '<p><span>Employee No</span> ' . Html::a($model->Employee_No, '#');
+                        '</p>' ?>
+                        <?= '<p><span>Employee Name</span> ' . Html::a($model->Employee_Name, '#');
+                        '</p>' ?>
+
+                        <?= '<p><span>E Mail Address</span> ' . Html::a($model->E_Mail_Address, '#');
+                        '</p>' ?>
+
+
+                    </div>
+                    <div class="col-md-6">
+
+                        <?= '<p><span>Program Code</span> ' . Html::a($model->_x003C_Global_Dimension_1_Code_x003E_, '#');
+                        '</p>' ?>
+                        <?= '<p><span>Department Code </span> ' . Html::a($model->Global_Dimension_2_Code, '#');
+                        '</p>' ?>
+                        <?= '<p><span>Appointment Date</span> ' . Html::a($model->Appointment_Date, '#');
+                        '</p>' ?>
+                        <?= '<p><span>Phone No</span> ' . Html::a($model->Phone_No, '#');
+                        '</p>' ?>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <?= '<p><span>Program Code</span> '.Html::a($model->_x003C_Global_Dimension_1_Code_x003E_,'#'); '</p>' ?>
-                    <?= '<p><span>Department Code </span> '.Html::a($model->Global_Dimension_2_Code,'#'); '</p>' ?>
-                </div>
-            </div>
 
 
                 <div class="row">
@@ -60,12 +77,21 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                             <?= $form->field($model, 'Employee_No')->hiddenInput()->label(false); ?>
                             <?= $form->field($model, 'Application_No')->hiddenInput()->label(false); ?>
 
-                            <?= $form->field($model, 'Leave_Code')->dropDownList($leavetypes,['prompt' => 'Select ..']) ?>
+                            <?= $form->field($model, 'Leave_Code')->dropDownList($leavetypes, ['prompt' => 'Select ..']) ?>
 
-                            <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date','required' => true]) ?>
-                            <?= $form->field($model, 'Days_To_Go_on_Leave')->textInput(['type' => 'number','required' =>  true,'min'=> 1]) ?>
-                            <?= $form->field($model, 'Reliever')->dropDownList($employees,['prompt' => 'Select ..','required'=> true]) ?>
-                            <?= $form->field($model, 'Comments')->textarea(['rows'=> 2,'maxlength' => 250]) ?>
+                            <div class="leave_attachment">
+                                <?= $form->field($model, 'attachment')->fileInput(['accept' => 'application/pdf']) ?>
+                            </div>
+
+                            <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date', 'required' => true]) ?>
+                            <?= $form->field($model, 'Days_To_Go_on_Leave')->textInput(['type' => 'number', 'required' =>  true, 'min' => 1]) ?>
+                            <?= $form->field($model, 'Leave_Entitlement')->textInput(['readonly' => true]); ?>
+                            <?= $form->field($model, 'Leave_Allowance_Payable')->dropDownList([
+                                'Yes' => 'Yes',
+                                'No' => 'No'
+                            ], ['prompt' => 'Select  ...']); ?>
+                            <?= $form->field($model, 'Reliever')->dropDownList($employees, ['prompt' => 'Select ..', 'required' => true]) ?>
+                            <?= $form->field($model, 'Comments')->textarea(['rows' => 2, 'maxlength' => 250]) ?>
 
 
 
@@ -78,21 +104,21 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                             <div class="row">
                                 <div class="col-md-6 col-sm-12">
 
-                                    <?= $form->field($model, 'End_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'Total_No_Of_Days')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'Leave_balance')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'Reliever_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                    <?= $form->field($model, 'End_Date')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                                    <?= $form->field($model, 'Total_No_Of_Days')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                                    <?= $form->field($model, 'Leave_balance')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                                    <?= $form->field($model, 'Reliever_Name')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                                    <?= $form->field($model, 'Status')->textInput(['readonly' => true, 'disabled' => true]) ?>
                                 </div>
                                 <div class="col-md-6 col-sm-12">
 
 
-                                    <?= $form->field($model, 'Holidays')->textInput(['readonly'=> true,'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'Weekend_Days')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'Balance_After')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'Reporting_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'Application_Date')->textInput(['required' => true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'Key')->hiddenInput(['required' => true, 'disabled'=>true])->label(false) ?>
+                                    <?= $form->field($model, 'Holidays')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                                    <?= $form->field($model, 'Weekend_Days')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                                    <?= $form->field($model, 'Balance_After')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                                    <?= $form->field($model, 'Reporting_Date')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                                    <?= $form->field($model, 'Application_Date')->textInput(['required' => true, 'disabled' => true]) ?>
+                                    <?= $form->field($model, 'Key')->hiddenInput(['required' => true, 'disabled' => true])->label(false) ?>
                                 </div>
                             </div>
 
@@ -101,10 +127,11 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                             <p class="parent"><span>+</span>
 
-                            <?= '<p><span>Approval_Entries</span> '.Html::a($model->Approval_Entries,'#'); '</p>' ?>
-                            <?= $form->field($model, 'Application_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                <?= '<p><span>Approval_Entries</span> ' . Html::a($model->Approval_Entries, '#');
+                                '</p>' ?>
+                                <?= $form->field($model, 'Application_No')->textInput(['readonly' => true, 'disabled' => true]) ?>
 
-                            <?= $form->field($model, 'User_ID')->textInput(['required' => true, 'disabled'=>true]) ?>
+                                <?= $form->field($model, 'User_ID')->textInput(['required' => true, 'disabled' => true]) ?>
 
                             </p>
 
@@ -128,7 +155,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                 <div class="row">
 
                     <div class="form-group">
-                        <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success','id' => 'submit']) ?>
+                        <?= Html::submitButton(($model->isNewRecord) ? 'Save' : 'Update', ['class' => 'btn btn-success', 'id' => 'submit']) ?>
                     </div>
 
 
@@ -137,22 +164,11 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
 
-                <!---Upload Leave Attachment File-->
 
-                <?php $atform = \yii\widgets\ActiveForm::begin(['id'=>'attachmentform'],['options' => ['enctype' => 'multipart/form-data']]); ?>
-                    <?= $atform->errorSummary($Attachmentmodel)?>
-                    <button class="btn btn-primary btn-file"><?= $Attachmentmodel->getPath($model->Application_No)?'<i class="fa fa-upload"></i>&nbsp;&nbsp;Update Leave Attachment':'<i class="fa fa-upload"></i>&nbsp;&nbsp;Upload Leave Attachment' ?>
-                        <?= $atform->field($Attachmentmodel,'attachmentfile')->fileInput(['id' => 'attachmentfile', 'name' => 'attachmentfile' ])->label(false);?>
-                    </button>
 
-                    <?= $atform->field($Attachmentmodel,'Document_No')->hiddenInput(['value' => $model->Application_No])->label(false);?>
-                    <?= Html::submitButton(($model->isNewRecord)?'':'', ['class' => '']) ?>
+                <?php if ($Attachmentmodel->getPath($model->Application_No)) {   ?>
 
-                <?php \yii\widgets\ActiveForm::end(); ?>
-
-                <?php if($Attachmentmodel->getPath($model->Application_No)){   ?>
-
-                <iframe src="data:application/pdf;base64,<?= $Attachmentmodel->readAttachment($model->Application_No); ?>" height="950px" width="100%"></iframe>
+                    <iframe src="data:application/pdf;base64,<?= $Attachmentmodel->readAttachment($model->Application_No); ?>" height="950px" width="100%"></iframe>
                 <?php }  ?>
             </div>
         </div>
@@ -164,32 +180,62 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
 
-    <!--My Bs Modal template  --->
+<!--My Bs Modal template  --->
 
-    <div class="modal fade bs-example-modal-lg bs-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
+<div class="modal fade bs-example-modal-lg bs-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
 
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel" style="position: absolute">Leave Management</h4>
-                </div>
-                <div class="modal-body">
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <!--<button type="button" class="btn btn-primary">Save changes</button>-->
-                </div>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel" style="position: absolute">Leave Management</h4>
+            </div>
+            <div class="modal-body">
 
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+            </div>
+
         </div>
     </div>
+</div>
+<input type="hidden" name="absolute" value="<?= $absoluteUrl ?>">
 <input type="hidden" name="url" value="<?= $absoluteUrl ?>">
 <?php
 $script = <<<JS
-    $('#attachmentform').hide();
+    $('.leave_attachment').hide();
+
+    requiresAttachment(); // Check state of leave attachment requirement on dom load
+
+    $('#leave-leave_code').change(function(e){
+         e.preventDefault();
+          const Leave_Code = e.target.value;
+          // Check if leave required an attachment or not
+            requiresAttachment();
+         
+     });
+
+    // Check if a leave type requires an attachment
+
+    function requiresAttachment() {
+        const Leave_Code = $('#leave-leave_code').val();
+        const Vurl = $('input[name=url]').val()+'leave/requiresattachment?Code='+Leave_Code;
+            $.post(Vurl).done(function(msg){
+                console.log(msg);
+                if(msg.Requires_Attachment){
+                    $('.leave_attachment').show();
+                }else{
+                    $('.leave_attachment').hide();
+                }
+            });
+     }
+
+    $('#leave-attachment').change(function(e){
+          globalUpload('DocumentAttachment','Leave','attachment','LeaveCard');
+    });
         // Set Leave Type
         
      $('#leave-leave_code').change(function(e){
@@ -350,6 +396,46 @@ $script = <<<JS
             
         }     
      });
+
+     $('#leave-leave_allowance_payable').change((e) => {
+        globalFieldUpdate('leave',false,'Leave_Allowance_Payable', e);
+    });
+
+     // Commit allowance Payable
+
+     $('#leave-leave_allowance_payablen').change(function(e){
+        const Reliever = e.target.value;
+        const No = $('#leave-application_no').val();
+        if(No.length){
+            
+            const url = $('input[name=url]').val()+'leave/setreliever';
+            $.post(url,{'Reliever': Reliever,'No': No}).done(function(msg){
+                   //populate empty form fields with new data
+                   
+                   $('#leave-reliever').val(msg.Reliever);  
+                   $('#leave-key').val(msg.Key);
+                   $('#leave-reliever_name').val(msg.Reliever_Name);
+
+                    console.log(typeof msg);
+                    console.table(msg);
+                    if((typeof msg) === 'string') { // A string is an error
+                        const parent = document.querySelector('.field-leave-reliever');
+                        const helpbBlock = parent.children[2];
+                        helpbBlock.innerText = msg;
+                        disableSubmit();
+                        
+                    }else{ // An object represents correct details
+                        const parent = document.querySelector('.field-leave-reliever');
+                        const helpbBlock = parent.children[2];
+                        helpbBlock.innerText = ''; 
+                        enableSubmit();
+                        
+                    }
+                    
+                },'json');
+            
+        }     
+     });
      
      
    
@@ -438,5 +524,3 @@ $style = <<<CSS
 CSS;
 
 $this->registerCss($style);
-
-

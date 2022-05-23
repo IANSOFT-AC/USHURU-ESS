@@ -259,7 +259,7 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
             <strong>Copyright &copy; AAS -  <?= Html::encode(Yii::$app->name) ?> 2014 - <?= date('Y') ?>   <a href="#"> KEMRI</a>.</strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
-                <b><?= Yii::signature() ?></b>
+                <b></b>
             </div>
         </footer>
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -25,7 +26,8 @@ use kartik\mpdf\Pdf;
 class P9Controller extends Controller
 {
 
-    public function beforeAction($action) {
+    public function beforeAction($action)
+    {
         $this->enableCsrfValidation = ($action->id !== "index"); // <-- here
         return parent::beforeAction($action);
     }
@@ -35,7 +37,7 @@ class P9Controller extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup','index'],
+                'only' => ['logout', 'signup', 'index'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -43,7 +45,7 @@ class P9Controller extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout','index'],
+                        'actions' => ['logout', 'index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -55,7 +57,7 @@ class P9Controller extends Controller
                     'logout' => ['post'],
                 ],
             ],
-            'contentNegotiator' =>[
+            'contentNegotiator' => [
                 'class' => ContentNegotiator::class,
                 'only' => ['getleaves'],
                 'formatParam' => '_format',
@@ -67,65 +69,61 @@ class P9Controller extends Controller
         ];
     }
 
-    public function actionIndex(){
+    public function actionIndex()
+    {
 
         $service = Yii::$app->params['ServiceName']['PortalReports'];
 
-        if(Yii::$app->request->post()){
+        if (Yii::$app->request->post()) {
             $data = [
                 'empNo' => Yii::$app->user->identity->{'Employee No_'},
-                'selectedYear' =>Yii::$app->request->post('p9year'),
-             ];
-            $path = Yii::$app->navhelper->PortalReports($service,$data,'IanGeneratep9');
-            if(!empty($path['return_value']) && is_file($path['return_value'])){
+                'selectedYear' => Yii::$app->request->post('p9year'),
+            ];
+            $path = Yii::$app->navhelper->PortalReports($service, $data, 'IanGeneratep9');
+            if (!empty($path['return_value']) && is_file($path['return_value'])) {
                 $binary = file_get_contents($path['return_value']); //fopen($path['return_value'],'rb');
                 $content = chunk_split(base64_encode($binary));
                 //delete the file after getting it's contents --> This is some house keeping
                 //unlink($path['return_value']);
                 //Yii::$app->recruitment->printrr($content);
-                return $this->render('index',[
+                return $this->render('index', [
                     'report' => true,
                     'content' => $content,
                     'p9years' =>  $this->getP9years()
                 ]);
             }
             // no report scenario
-            return $this->render('index',[
+            return $this->render('index', [
                 'report' => false,
                 'p9years' => $this->getP9years(),
                 'content' => null,
             ]);
         }
-        return $this->render('index',[
+        return $this->render('index', [
             'report' => false,
             'p9years' => $this->getP9years(),
             'content' => true,
         ]);
-
     }
 
-    public function getP9years(){
+    public function getP9years()
+    {
         $service = Yii::$app->params['ServiceName']['P9YEARS'];
 
         $periods = \Yii::$app->navhelper->getData($service);
-        if(is_array($periods)){
-            krsort( $periods);//sort  keys in descending order
+        if (is_array($periods)) {
+            krsort($periods); //sort  keys in descending order
 
             $res = [];
-            foreach($periods as $p){
+            foreach ($periods as $p) {
                 $res[] = [
                     'Year' => $p->Period_Year,
                     'desc' => $p->Period_Year
                 ];
             }
-            return ArrayHelper::map($res,'Year','desc');
-        }else{
+            return ArrayHelper::map($res, 'Year', 'desc');
+        } else {
             return [];
         }
-
-
     }
-
-
-
 }

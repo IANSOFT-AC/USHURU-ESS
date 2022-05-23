@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -25,7 +26,8 @@ use kartik\mpdf\Pdf;
 class LeavestatementController extends Controller
 {
 
-    public function beforeAction($action) {
+    public function beforeAction($action)
+    {
         $this->enableCsrfValidation = ($action->id !== "index"); // <-- here
         return parent::beforeAction($action);
     }
@@ -35,7 +37,7 @@ class LeavestatementController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup','index'],
+                'only' => ['logout', 'signup', 'index'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -43,7 +45,7 @@ class LeavestatementController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout','index'],
+                        'actions' => ['logout', 'index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -55,7 +57,7 @@ class LeavestatementController extends Controller
                     'logout' => ['post'],
                 ],
             ],
-            'contentNegotiator' =>[
+            'contentNegotiator' => [
                 'class' => ContentNegotiator::class,
                 'only' => ['getleaves'],
                 'formatParam' => '_format',
@@ -67,41 +69,36 @@ class LeavestatementController extends Controller
         ];
     }
 
-    public function actionIndex(){
+    public function actionIndex()
+    {
 
         $service = Yii::$app->params['ServiceName']['PortalReports'];
 
         //Yii::$app->recruitment->printrr(ArrayHelper::map($payrollperiods,'Date_Opened','desc'));
 
-            $data = [
-                'empNo' => Yii::$app->user->identity->{'Employee No_'}
-             ];
-            $path = Yii::$app->navhelper->PortalReports($service,$data,'IanGenerateLeaveStatement');
-            //Yii::$app->recruitment->printrr($path);
+        $data = [
+            'empNo' => Yii::$app->user->identity->{'Employee No_'}
+        ];
+        $path = Yii::$app->navhelper->PortalReports($service, $data, 'IanGenerateLeaveStatement');
+        //Yii::$app->recruitment->printrr($path);
 
-            if(!is_file($path['return_value'])){
-                //throw new HttpException(404,"Resouce Not Found: ".$path['return_value']);
-                return $this->render('index',[
-                    'report' => false,
-                    'message' => strlen($path['return_value'])?$path['return_value']: 'Report Cannot be Found.'
-                ]);
-            }
-
-            $binary = file_get_contents($path['return_value']);
-            $content = chunk_split(base64_encode($binary));
-            //delete the file after getting it's contents --> This is some house keeping
-            // unlink($path['return_value']);
-
-           // Yii::$app->recruitment->printrr($path);
-            return $this->render('index',[
-                'report' => true,
-                'content' => $content
+        if (!is_file($path['return_value'])) {
+            //throw new HttpException(404,"Resouce Not Found: ".$path['return_value']);
+            return $this->render('index', [
+                'report' => false,
+                'message' => strlen($path['return_value']) ? $path['return_value'] : 'Report Cannot be Found.'
             ]);
+        }
 
+        $binary = file_get_contents($path['return_value']);
+        $content = chunk_split(base64_encode($binary));
+        //delete the file after getting it's contents --> This is some house keeping
+        // unlink($path['return_value']);
+
+        // Yii::$app->recruitment->printrr($path);
+        return $this->render('index', [
+            'report' => true,
+            'content' => $content
+        ]);
     }
-
-
-
-
-
 }

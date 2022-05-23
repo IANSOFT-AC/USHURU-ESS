@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -45,7 +46,7 @@ class EmployeeController extends Controller
                     'logout' => ['post'],
                 ],
             ],
-            'contentNegotiator' =>[
+            'contentNegotiator' => [
                 'class' => ContentNegotiator::class,
                 'only' => ['list'],
                 'formatParam' => '_format',
@@ -57,69 +58,71 @@ class EmployeeController extends Controller
         ];
     }
 
-    public function actionIndex(){
+    public function actionIndex()
+    {
         $model = new Employee();
         $service = Yii::$app->params['ServiceName']['EmployeeCard'];
-        
+
         $filter = [
             'No' => Yii::$app->user->identity->{'Employee No_'},
         ];
-        $employee = \Yii::$app->navhelper->getData($service,$filter);
+        $employee = \Yii::$app->navhelper->getData($service, $filter);
         // Yii::$app->recruitment->printrr($employee);
-        $model = $this->loadtomodel($employee[0],$model);
+        $model = $this->loadtomodel($employee[0], $model);
 
-        $model->Period_To_Retirement = ($model->Period_To_Retirement == '0001-01-01')?'':$model->Period_To_Retirement;
-        $model->End_of_Probation_Period = ($model->End_of_Probation_Period == '0001-01-01')?'':$model->End_of_Probation_Period;
-        $model->New_Probation_Period_End_Date = ($model->New_Probation_Period_End_Date == '0001-01-01')?'':$model->New_Probation_Period_End_Date;
-        $model->Contract_Start_Date = ($model->Contract_Start_Date == '0001-01-01')?'':$model->Contract_Start_Date;
-        $model->Contract_End_Date = ($model->Contract_End_Date == '0001-01-01')?'':$model->Contract_End_Date;
-        $model->Date_of_joining_Medical_Scheme = ($model->Date_of_joining_Medical_Scheme == '0001-01-01')?'':$model->Date_of_joining_Medical_Scheme;
+        $model->Period_To_Retirement = ($model->Period_To_Retirement == '0001-01-01') ? '' : $model->Period_To_Retirement;
+        $model->End_of_Probation_Period = ($model->End_of_Probation_Period == '0001-01-01') ? '' : $model->End_of_Probation_Period;
+        $model->New_Probation_Period_End_Date = ($model->New_Probation_Period_End_Date == '0001-01-01') ? '' : $model->New_Probation_Period_End_Date;
+        $model->Contract_Start_Date = ($model->Contract_Start_Date == '0001-01-01') ? '' : $model->Contract_Start_Date;
+        $model->Contract_End_Date = ($model->Contract_End_Date == '0001-01-01') ? '' : $model->Contract_End_Date;
+        $model->Date_of_joining_Medical_Scheme = ($model->Date_of_joining_Medical_Scheme == '0001-01-01') ? '' : $model->Date_of_joining_Medical_Scheme;
 
-        return $this->render('index',[
+        return $this->render('index', [
             'model' => $model,
-            'dependants' =>[], //(property_exists($employee[0]->Employee_Dependants, 'Employee_Dependants'))?$employee[0]->Employee_Dependants->Employee_Dependants:[],
-            'beneficiaries' =>[], //(property_exists($employee[0]->Employee_Beneficiaries, 'Employee_Beneficiaries'))?$employee[0]->Employee_Beneficiaries->Employee_Beneficiaries:[],
-            'emergency' =>[], //(property_exists($employee[0]->Employee_Relatives, 'Employee_Relatives'))?$employee[0]->Employee_Relatives->Employee_Relatives:[],
-            'qualifications' =>[] //(property_exists($employee[0]->Employee_Qualifications, 'Employee_Qualifications'))?$employee[0]->Employee_Qualifications->Employee_Qualifications:[]
+            'dependants' => [], //(property_exists($employee[0]->Employee_Dependants, 'Employee_Dependants'))?$employee[0]->Employee_Dependants->Employee_Dependants:[],
+            'beneficiaries' => [], //(property_exists($employee[0]->Employee_Beneficiaries, 'Employee_Beneficiaries'))?$employee[0]->Employee_Beneficiaries->Employee_Beneficiaries:[],
+            'emergency' => [], //(property_exists($employee[0]->Employee_Relatives, 'Employee_Relatives'))?$employee[0]->Employee_Relatives->Employee_Relatives:[],
+            'qualifications' => [] //(property_exists($employee[0]->Employee_Qualifications, 'Employee_Qualifications'))?$employee[0]->Employee_Qualifications->Employee_Qualifications:[]
 
         ]);
     }
 
-    public function actionExpetriate(){
+    public function actionExpetriate()
+    {
         $model = new Employee();
         $service = Yii::$app->params['ServiceName']['ExpetriateCard'];
         //Yii::$app->recruitment->printrr(Yii::$app->user->identity);
         $filter = [
             'No' => Yii::$app->user->identity->{'Employee No_'},
         ];
-        $employee = \Yii::$app->navhelper->getData($service,$filter);
+        $employee = \Yii::$app->navhelper->getData($service, $filter);
         // Yii::$app->recruitment->printrr($employee);
-        $model = $this->loadtomodel($employee[0],$model);
+        $model = $this->loadtomodel($employee[0], $model);
 
 
-        return $this->render('expetriate',[
+        return $this->render('expetriate', [
             'model' => $model,
-            'dependants' => (property_exists($employee[0]->Employee_Dependants, 'Employee_Dependants'))?$employee[0]->Employee_Dependants->Employee_Dependants:[],
-            'beneficiaries' => (property_exists($employee[0]->Employee_Beneficiaries, 'Employee_Beneficiaries'))?$employee[0]->Employee_Beneficiaries->Employee_Beneficiaries:[],
-            'emergency' => (property_exists($employee[0]->Employee_Relatives, 'Employee_Relatives'))?$employee[0]->Employee_Relatives->Employee_Relatives:[],
-            'qualifications' => (property_exists($employee[0]->Employee_Qualifications, 'Employee_Qualifications'))?$employee[0]->Employee_Qualifications->Employee_Qualifications:[],
-            'permits' => (property_exists($employee[0]->Employee_Work_Permits, 'Employee_Work_Permits'))?$employee[0]->Employee_Work_Permits->Employee_Work_Permits:[]
+            'dependants' => (property_exists($employee[0]->Employee_Dependants, 'Employee_Dependants')) ? $employee[0]->Employee_Dependants->Employee_Dependants : [],
+            'beneficiaries' => (property_exists($employee[0]->Employee_Beneficiaries, 'Employee_Beneficiaries')) ? $employee[0]->Employee_Beneficiaries->Employee_Beneficiaries : [],
+            'emergency' => (property_exists($employee[0]->Employee_Relatives, 'Employee_Relatives')) ? $employee[0]->Employee_Relatives->Employee_Relatives : [],
+            'qualifications' => (property_exists($employee[0]->Employee_Qualifications, 'Employee_Qualifications')) ? $employee[0]->Employee_Qualifications->Employee_Qualifications : [],
+            'permits' => (property_exists($employee[0]->Employee_Work_Permits, 'Employee_Work_Permits')) ? $employee[0]->Employee_Work_Permits->Employee_Work_Permits : []
 
         ]);
     }
 
-    public function loadtomodel($obj,$model){
+    public function loadtomodel($obj, $model)
+    {
 
-        if(!is_object($obj)){
+        if (!is_object($obj)) {
             return false;
         }
-        $modeldata = (get_object_vars($obj)) ;
-        foreach($modeldata as $key => $val){
-            if(is_object($val)) continue;
+        $modeldata = (get_object_vars($obj));
+        foreach ($modeldata as $key => $val) {
+            if (is_object($val)) continue;
             $model->$key = $val;
         }
 
         return $model;
     }
-
 }

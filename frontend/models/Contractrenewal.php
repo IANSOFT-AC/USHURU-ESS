@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -7,6 +8,7 @@
  */
 
 namespace frontend\models;
+
 use common\models\User;
 use Yii;
 use yii\base\Model;
@@ -15,33 +17,32 @@ use yii\base\Model;
 class Contractrenewal extends Model
 {
 
-public $Key;
-public $No;
-public $Employee_No;
-public $Employee_Name;
-public $Approval_Entries;
-public $Approval_Status;
+    public $Key;
+    public $No;
+    public $Employee_No;
+    public $Employee_Name;
+    public $Approval_Entries;
+    public $Approval_Status;
 
-public $Craeted_By;
-public $isNewRecord;
+    public $Created_By;
+    public $isNewRecord;
 
 
 
     public function rules()
     {
         return [
-                ['Employee_No', 'required'],
+            ['Employee_No', 'required'],
         ];
     }
 
     public function attributeLabels()
     {
-        return [
-
-        ];
+        return [];
     }
 
-    public function getLines(){
+    public function getLines()
+    {
         $service = Yii::$app->params['ServiceName']['ContractRenewalLines'];
         $filter = [
             'Change_No' => $this->No,
@@ -49,11 +50,11 @@ public $isNewRecord;
 
         $lines = Yii::$app->navhelper->getData($service, $filter);
         return $lines;
-
     }
 
 
-    public function getDonorLine($Contract_Code,$Contract_Line_No) {
+    public function getDonorLine($Contract_Code, $Contract_Line_No)
+    {
         $service = Yii::$app->params['ServiceName']['NewEmployeeDonors'];
         $filter = [
             'Change_No' => $this->No,
@@ -65,7 +66,4 @@ public $isNewRecord;
         $lines = Yii::$app->navhelper->getData($service, $filter);
         return $lines;
     }
-
-
-
 }

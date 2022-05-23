@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
  * Date: 2/24/2020
  * Time: 12:13 PM
  */
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 ?>
@@ -19,29 +21,29 @@ use yii\widgets\ActiveForm;
 
 
 
-            <?php $form = ActiveForm::begin(); ?>
+                <?php $form = ActiveForm::begin(); ?>
                 <div class="row">
                     <div class="col-md-12">
 
 
 
-                            <table class="table">
-                                <tbody>
-
-                                   
-                                    <?= $form->field($model, 'KRA')->textarea(['rows' => 2,'maxlength' => 250, 'required' => true]) ?>
-                                    <?= ($model->isNewRecord)?$form->field($model, 'Employee_No')->hiddenInput(['value' => Yii::$app->user->identity->{'Employee No_'}])->label(false):'' ?>
-                                    <?= ($model->isNewRecord)?$form->field($model, 'Appraisal_No')->hiddenInput()->label(false):'' ?>
-
-                                   
-                                    <?= ((Yii::$app->session->get('Goal_Setting_Status') == 'New' || Yii::$app->session->get('MY_Appraisal_Status') == 'Appraisee_Level') && Yii::$app->session->get('isSupervisor') == false )?$form->field($model, 'Maximum_Weight')->textInput(['type'=> 'number', 'required' => true]):'' ?>
-
-                                    <?= $form->field($model, 'Key')->hiddenInput(['readonly'=> true])->label(false) ?>
+                        <table class="table">
+                            <tbody>
 
 
+                                <?= $form->field($model, 'KRA')->textarea(['rows' => 2, 'maxlength' => 250, 'required' => true]) ?>
+                                <?= ($model->isNewRecord) ? $form->field($model, 'Employee_No')->hiddenInput(['value' => Yii::$app->user->identity->{'Employee No_'}])->label(false) : '' ?>
+                                <?= ($model->isNewRecord) ? $form->field($model, 'Appraisal_No')->hiddenInput()->label(false) : '' ?>
 
-                                </tbody>
-                            </table>
+
+                                <?= ((Yii::$app->session->get('Goal_Setting_Status') == 'New' || Yii::$app->session->get('MY_Appraisal_Status') == 'Appraisee_Level') && Yii::$app->session->get('isSupervisor') == false) ? $form->field($model, 'Maximum_Weight')->textInput(['type' => 'number', 'required' => true]) : '' ?>
+
+                                <?= $form->field($model, 'Key')->hiddenInput(['readonly' => true])->label(false) ?>
+
+
+
+                            </tbody>
+                        </table>
 
 
 
@@ -52,7 +54,7 @@ use yii\widgets\ActiveForm;
                 <div class="row">
 
                     <div class="form-group">
-                        <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success']) ?>
+                        <?= Html::submitButton(($model->isNewRecord) ? 'Save' : 'Update', ['class' => 'btn btn-success']) ?>
                     </div>
 
 
@@ -80,4 +82,3 @@ $script = <<<JS
 JS;
 
 $this->registerJs($script);
-

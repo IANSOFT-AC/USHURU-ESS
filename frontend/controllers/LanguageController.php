@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -7,6 +8,7 @@
  */
 
 namespace frontend\controllers;
+
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\ContentNegotiator;
@@ -27,18 +29,18 @@ class LanguageController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup','index'],
+                'only' => ['logout', 'signup', 'index'],
                 'rules' => [
                     [
-                        'actions' => ['signup','index'],
+                        'actions' => ['signup', 'index'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout','index'],
+                        'actions' => ['logout', 'index'],
                         'allow' => true,
                         //'roles' => ['@'],
-                        'matchCallback' => function($rule,$action){
+                        'matchCallback' => function ($rule, $action) {
                             return (Yii::$app->session->has('HRUSER') || !Yii::$app->user->isGuest);
                         },
                     ],
@@ -50,7 +52,7 @@ class LanguageController extends Controller
                     'logout' => ['post'],
                 ],
             ],
-            'contentNegotiator' =>[
+            'contentNegotiator' => [
                 'class' => ContentNegotiator::class,
                 'only' => ['getlanguage'],
                 'formatParam' => '_format',
@@ -62,40 +64,38 @@ class LanguageController extends Controller
         ];
     }
 
-    public function actionIndex(){
-        if(Yii::$app->session->has('mode') && Yii::$app->session->get('mode') == 'external'){
+    public function actionIndex()
+    {
+        if (Yii::$app->session->has('mode') && Yii::$app->session->get('mode') == 'external') {
             $this->layout = 'external';
         }
         return $this->render('index');
-
     }
 
-    public function actionCreate(){
+    public function actionCreate()
+    {
 
         $model = new Language();
         $service = Yii::$app->params['ServiceName']['applicantLanguages'];
 
-        if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Language'],$model)){
+        if (Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Language'], $model)) {
 
             $model->Profile_No = Yii::$app->recruitment->getProfileID();
 
-            $result = Yii::$app->navhelper->postData($service,$model);
+            $result = Yii::$app->navhelper->postData($service, $model);
 
-            if(is_object($result)){
+            if (is_object($result)) {
 
-                Yii::$app->session->setFlash('success','Language Added Successfully',true);
+                Yii::$app->session->setFlash('success', 'Language Added Successfully', true);
                 return $this->redirect(['index']);
+            } else {
 
-            }else{
-
-                Yii::$app->session->setFlash('error','Error Adding Language: '.$result,true);
+                Yii::$app->session->setFlash('error', 'Error Adding Language: ' . $result, true);
                 return $this->redirect(['index']);
-
             }
+        } //End Saving experience
 
-        }//End Saving experience
-
-        if(Yii::$app->request->isAjax){
+        if (Yii::$app->request->isAjax) {
             return $this->renderAjax('create', [
                 'model' => $model,
 
@@ -103,7 +103,7 @@ class LanguageController extends Controller
             ]);
         }
 
-        return $this->render('create',[
+        return $this->render('create', [
 
             'model' => $model,
 
@@ -112,54 +112,56 @@ class LanguageController extends Controller
     }
 
 
-    public function actionUpdate(){
+    public function actionUpdate()
+    {
         $service = Yii::$app->params['ServiceName']['applicantLanguages'];
         $filter = [
             'Line_No' => Yii::$app->request->get('Line'),
         ];
-        $result = Yii::$app->navhelper->getData($service,$filter);
+        $result = Yii::$app->navhelper->getData($service, $filter);
         $Expmodel = new Language();
         //load nav result to model
-        $model = $this->loadtomodel($result[0],$Expmodel);
+        $model = $this->loadtomodel($result[0], $Expmodel);
 
-        if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Language'],$model)){
-            $result = Yii::$app->navhelper->updateData($service,$model);
-            if(!empty($result)){
-                Yii::$app->session->setFlash('success','Language Updated Successfully',true);
+        if (Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Language'], $model)) {
+            $result = Yii::$app->navhelper->updateData($service, $model);
+            if (!empty($result)) {
+                Yii::$app->session->setFlash('success', 'Language Updated Successfully', true);
                 return $this->redirect(['index']);
-            }else{
-                Yii::$app->session->setFlash('error','Error Updating Language: '.$result,true);
+            } else {
+                Yii::$app->session->setFlash('error', 'Error Updating Language: ' . $result, true);
                 return $this->redirect(['index']);
             }
-
         }
 
-        if(Yii::$app->request->isAjax){
+        if (Yii::$app->request->isAjax) {
             return $this->renderAjax('update', [
                 'model' => $model,
 
             ]);
         }
 
-        return $this->render('update',[
+        return $this->render('update', [
             'model' => $model,
 
         ]);
     }
 
-    public function actionDelete(){
+    public function actionDelete()
+    {
         $service = Yii::$app->params['ServiceName']['applicantLanguages'];
-        $result = Yii::$app->navhelper->deleteData($service,Yii::$app->request->get('Key'));
-        if(!is_string($result)){
-            Yii::$app->session->setFlash('success','Language Purged Successfully .',true);
+        $result = Yii::$app->navhelper->deleteData($service, Yii::$app->request->get('Key'));
+        if (!is_string($result)) {
+            Yii::$app->session->setFlash('success', 'Language Purged Successfully .', true);
             return $this->redirect(['index']);
-        }else{
-            Yii::$app->session->setFlash('error','Error Purging Language: '.$result,true);
+        } else {
+            Yii::$app->session->setFlash('error', 'Error Purging Language: ' . $result, true);
             return $this->redirect(['index']);
         }
     }
 
-    public function actionView($ApplicationNo){
+    public function actionView($ApplicationNo)
+    {
         $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
         $leaveTypes = $this->getLeaveTypes();
         $employees = $this->getEmployees();
@@ -172,73 +174,76 @@ class LanguageController extends Controller
 
         //load nav result to model
         $leaveModel = new Leave();
-        $model = $this->loadtomodel($leave[0],$leaveModel);
+        $model = $this->loadtomodel($leave[0], $leaveModel);
 
 
-        return $this->render('view',[
+        return $this->render('view', [
             'model' => $model,
-            'leaveTypes' => ArrayHelper::map($leaveTypes,'Code','Description'),
-            'relievers' => ArrayHelper::map($employees,'No','Full_Name'),
+            'leaveTypes' => ArrayHelper::map($leaveTypes, 'Code', 'Description'),
+            'relievers' => ArrayHelper::map($employees, 'No', 'Full_Name'),
         ]);
     }
 
 
-    public function actionApprovalRequest($app){
+    public function actionApprovalRequest($app)
+    {
         $service = Yii::$app->params['ServiceName']['Portal_Workflows'];
         $data = ['applicationNo' => $app];
 
         $request = Yii::$app->navhelper->SendLeaveApprovalRequest($service, $data);
 
-        if(is_array($request)){
-            Yii::$app->session->setFlash('success','Leave request sent for approval Successfully',true);
+        if (is_array($request)) {
+            Yii::$app->session->setFlash('success', 'Leave request sent for approval Successfully', true);
             return $this->redirect(['index']);
-        }else{
-            Yii::$app->session->setFlash('error','Error sending leave request for approval: '.$request,true);
+        } else {
+            Yii::$app->session->setFlash('error', 'Error sending leave request for approval: ' . $request, true);
             return $this->redirect(['index']);
         }
     }
 
-    public function actionCancelRequest($app){
+    public function actionCancelRequest($app)
+    {
         $service = Yii::$app->params['ServiceName']['Portal_Workflows'];
         $data = ['applicationNo' => $app];
 
         $request = Yii::$app->navhelper->CancelLeaveApprovalRequest($service, $data);
 
-        if(is_array($request)){
-            Yii::$app->session->setFlash('success','Leave Approval Request Cancelled Successfully',true);
+        if (is_array($request)) {
+            Yii::$app->session->setFlash('success', 'Leave Approval Request Cancelled Successfully', true);
             return $this->redirect(['index']);
-        }else{
-            Yii::$app->session->setFlash('error','Error Cancelling Leave Approval: '.$request,true);
+        } else {
+            Yii::$app->session->setFlash('error', 'Error Cancelling Leave Approval: ' . $request, true);
             return $this->redirect(['index']);
         }
     }
 
     /*Data access functions */
 
-    public function actionLeavebalances(){
+    public function actionLeavebalances()
+    {
 
         $balances = $this->Getleavebalance();
 
-        return $this->render('leavebalances',['balances' => $balances]);
-
+        return $this->render('leavebalances', ['balances' => $balances]);
     }
 
-    public function actionGetlanguage(){
+    public function actionGetlanguage()
+    {
         $service = Yii::$app->params['ServiceName']['applicantLanguages'];
         $filter = ['Profile_No' => \Yii::$app->recruitment->getProfileID()];
-        $languages = \Yii::$app->navhelper->getData($service,$filter);
+        $languages = \Yii::$app->navhelper->getData($service, $filter);
 
         $result = [];
         $count = 0;
-        foreach($languages as $lang){
+        foreach ($languages as $lang) {
 
             ++$count;
             $link = $updateLink =  '';
 
 
-            $updateLink = Html::a('<i class="fa fa-edit"></i>',['update','Line'=> $lang->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
+            $updateLink = Html::a('<i class="fa fa-edit"></i>', ['update', 'Line' => $lang->Line_No], ['class' => 'update btn btn-outline-info btn-xs']);
 
-            $link = Html::a('<i class="fa fa-trash"></i>',['delete','Key'=> $lang->Key ],['class'=>'btn btn-outline-warning btn-xs','data' => [
+            $link = Html::a('<i class="fa fa-trash"></i>', ['delete', 'Key' => $lang->Key], ['class' => 'btn btn-outline-warning btn-xs', 'data' => [
                 'confirm' => 'Are you sure you want to delete this record?',
                 'method' => 'post',
             ]]);
@@ -252,12 +257,12 @@ class LanguageController extends Controller
             $result['data'][] = [
                 'index' => $count,
                 'Key' => $lang->Key,
-                'Applicant_No' => !empty($lang->Profile_No)?$lang->Profile_No:'',
-                'Language_Description' => !empty($lang->Language)?$lang->Language:'',
+                'Applicant_No' => !empty($lang->Profile_No) ? $lang->Profile_No : '',
+                'Language_Description' => !empty($lang->Language) ? $lang->Language : '',
                 'Read' => $read,
                 'Write' => $write,
                 'Speak' => $speak,
-                'Action' => $updateLink.' | '.$link,
+                'Action' => $updateLink . ' | ' . $link,
                 //'Remove' => $link
             ];
         }
@@ -265,11 +270,12 @@ class LanguageController extends Controller
         return $result;
     }
 
-    public function actionReport(){
+    public function actionReport()
+    {
         $service = Yii::$app->params['ServiceName']['expApplicationList'];
         $leaves = \Yii::$app->navhelper->getData($service);
-        krsort( $leaves);//sort by keys in descending order
-        $content = $this->renderPartial('_historyreport',[
+        krsort($leaves); //sort by keys in descending order
+        $content = $this->renderPartial('_historyreport', [
             'leaves' => $leaves
         ]);
 
@@ -285,25 +291,27 @@ class LanguageController extends Controller
         return $content;
     }
 
-    public function actionReportview(){
-        return $this->render('_viewreport',[
-            'content'=>$this->actionReport()
+    public function actionReportview()
+    {
+        return $this->render('_viewreport', [
+            'content' => $this->actionReport()
         ]);
     }
 
-    public function Getleavebalance(){
+    public function Getleavebalance()
+    {
         $service = Yii::$app->params['ServiceName']['leaveBalance'];
         $filter = [
             'No' => Yii::$app->user->identity->{'Employee No_'},
         ];
 
-        $balances = \Yii::$app->navhelper->getData($service,$filter);
+        $balances = \Yii::$app->navhelper->getData($service, $filter);
         $result = [];
 
         //print '<pre>';
         // print_r($balances);exit;
 
-        foreach($balances as $b){
+        foreach ($balances as $b) {
             $result = [
                 'Key' => $b->Key,
                 'Annual_Leave_Bal' => $b->Annual_Leave_Bal,
@@ -316,29 +324,30 @@ class LanguageController extends Controller
         }
 
         return $result;
-
     }
 
 
 
-    public function getLeaveTypes($gender = 'Female'){
+    public function getLeaveTypes($gender = 'Female')
+    {
         $service = Yii::$app->params['ServiceName']['leaveTypes'];
         $filter = [
             'Gender' => $gender,
             'Gender' => 'Both'
         ];
 
-        $leavetypes = \Yii::$app->navhelper->getData($service,$filter);
+        $leavetypes = \Yii::$app->navhelper->getData($service, $filter);
         return $leavetypes;
     }
 
-    public function getCountries(){
+    public function getCountries()
+    {
         $service = Yii::$app->params['ServiceName']['Countries'];
 
         $res = [];
         $countries = \Yii::$app->navhelper->getData($service);
-        foreach($countries as $c){
-            if(!empty($c->Name))
+        foreach ($countries as $c) {
+            if (!empty($c->Name))
                 $res[] = [
                     'Code' => $c->Code,
                     'Name' => $c->Name
@@ -348,7 +357,8 @@ class LanguageController extends Controller
         return $res;
     }
 
-    public function getReligion(){
+    public function getReligion()
+    {
         $service = Yii::$app->params['ServiceName']['Religion'];
         $filter = [
             'Type' => 'Religion'
@@ -357,28 +367,30 @@ class LanguageController extends Controller
         return $religion;
     }
 
-    public function loadtomodel($obj,$model){//load an empty model with resource data
+    public function loadtomodel($obj, $model)
+    { //load an empty model with resource data
 
-        if(!is_object($obj)){
+        if (!is_object($obj)) {
             return false;
         }
-        $modeldata = (get_object_vars($obj)) ;
-        foreach($modeldata as $key => $val){
-            if(is_object($val)) continue;
+        $modeldata = (get_object_vars($obj));
+        foreach ($modeldata as $key => $val) {
+            if (is_object($val)) continue;
             $model->$key = $val;
         }
 
         return $model;
     }
 
-    public function loadpost($post,$model){ // load model with form data
+    public function loadpost($post, $model)
+    { // load model with form data
 
 
-        $modeldata = (get_object_vars($model)) ;
+        $modeldata = (get_object_vars($model));
 
-        foreach($post as $key => $val){
+        foreach ($post as $key => $val) {
 
-           $model->$key = $val;
+            $model->$key = $val;
         }
 
         return $model;

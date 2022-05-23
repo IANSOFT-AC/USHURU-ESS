@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -7,6 +8,7 @@
  */
 
 namespace frontend\controllers;
+
 use frontend\models\Employeeappraisalkra;
 use frontend\models\Experience;
 use frontend\models\Furtherdevelopmentareas;
@@ -30,15 +32,15 @@ class FurtherdevelopmentareaController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup','index'],
+                'only' => ['logout', 'signup', 'index'],
                 'rules' => [
                     [
-                        'actions' => ['signup','index'],
+                        'actions' => ['signup', 'index'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout','index'],
+                        'actions' => ['logout', 'index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -50,7 +52,7 @@ class FurtherdevelopmentareaController extends Controller
                     'logout' => ['post'],
                 ],
             ],
-            'contentNegotiator' =>[
+            'contentNegotiator' => [
                 'class' => ContentNegotiator::class,
                 'only' => [''],
                 'formatParam' => '_format',
@@ -62,50 +64,49 @@ class FurtherdevelopmentareaController extends Controller
         ];
     }
 
-    public function actionIndex(){
+    public function actionIndex()
+    {
 
         return $this->render('index');
-
     }
 
-    public function actionCreate($Appraisal_No,$Employee_No){
+    public function actionCreate($Appraisal_No, $Employee_No)
+    {
 
-        $model = new Furtherdevelopmentareas() ;
+        $model = new Furtherdevelopmentareas();
         $model->Employee_No = Yii::$app->user->identity->{'Employee No_'};
         $service = Yii::$app->params['ServiceName']['FurtherDevAreas'];
 
 
-        if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Furtherdevelopmentareas'],$model)  ){
+        if (Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Furtherdevelopmentareas'], $model)) {
 
 
-            $result = Yii::$app->navhelper->postData($service,$model);
+            $result = Yii::$app->navhelper->postData($service, $model);
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            if(!is_string($result)){
+            if (!is_string($result)) {
 
-                return ['note' => '<div class="alert alert-success">Further Development Line Added Successfully</div>' ];
+                return ['note' => '<div class="alert alert-success">Further Development Line Added Successfully</div>'];
+            } else {
 
-            }else{
-
-                return ['note' => '<div class="alert alert-danger">Error Adding Further Development Line: '.$result.'</div>' ];
-
+                return ['note' => '<div class="alert alert-danger">Error Adding Further Development Line: ' . $result . '</div>'];
             }
+        } //End Saving experience
 
-        }//End Saving experience
-
-        if(Yii::$app->request->isAjax){
+        if (Yii::$app->request->isAjax) {
             return $this->renderAjax('create', [
                 'model' => $model,
             ]);
         }
 
-        return $this->render('create',[
+        return $this->render('create', [
             'model' => $model,
         ]);
     }
 
 
-    public function actionUpdate(){
-        $model = new Furtherdevelopmentareas() ;
+    public function actionUpdate()
+    {
+        $model = new Furtherdevelopmentareas();
         $model->isNewRecord = false;
         $service = Yii::$app->params['ServiceName']['FurtherDevAreas'];
         $filter = [
@@ -113,57 +114,58 @@ class FurtherdevelopmentareaController extends Controller
             'Employee_No' => Yii::$app->request->get('Employee_No'),
             'Appraisal_No' => Yii::$app->request->get('Appraisal_No')
         ];
-        $result = Yii::$app->navhelper->getData($service,$filter);
+        $result = Yii::$app->navhelper->getData($service, $filter);
 
-        if(is_array($result)){
+        if (is_array($result)) {
             //load nav result to model
-            $model = Yii::$app->navhelper->loadmodel($result[0],$model) ;//$this->loadtomodeEmployee_Nol($result[0],$Expmodel);
-            
-        }else{
+            $model = Yii::$app->navhelper->loadmodel($result[0], $model); //$this->loadtomodeEmployee_Nol($result[0],$Expmodel);
+
+        } else {
             Yii::$app->recruitment->printrr($result);
         }
 
 
-        if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Furtherdevelopmentareas'],$model) ){
-            $result = Yii::$app->navhelper->updateData($service,$model);
+        if (Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Furtherdevelopmentareas'], $model)) {
+            $result = Yii::$app->navhelper->updateData($service, $model);
 
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            if(!is_string($result)){
+            if (!is_string($result)) {
 
                 return ['note' => '<div class="alert alert-success">Further Devement Area Line Updated Successfully. </div>'];
-            }else{
+            } else {
 
-                return ['note' => '<div class="alert alert-danger">Error Updating Further Devement Area  Line: '.$result.'</div>'];
+                return ['note' => '<div class="alert alert-danger">Error Updating Further Devement Area  Line: ' . $result . '</div>'];
             }
-
         }
 
-        if(Yii::$app->request->isAjax){
+        if (Yii::$app->request->isAjax) {
             return $this->renderAjax('update', [
                 'model' => $model,
 
             ]);
         }
 
-        return $this->render('update',[
+        return $this->render('update', [
             'model' => $model,
         ]);
     }
 
-    public function actionDelete(){
+    public function actionDelete()
+    {
         $service = Yii::$app->params['ServiceName']['FurtherDevAreas'];
-        $result = Yii::$app->navhelper->deleteData($service,Yii::$app->request->get('Key'));
-        if(!is_string($result)){
-            Yii::$app->session->setFlash('success','Work Experience Purged Successfully .',true);
+        $result = Yii::$app->navhelper->deleteData($service, Yii::$app->request->get('Key'));
+        if (!is_string($result)) {
+            Yii::$app->session->setFlash('success', 'Work Experience Purged Successfully .', true);
             return $this->redirect(['index']);
-        }else{
-            Yii::$app->session->setFlash('error','Error Purging Work Experience: '.$result,true);
+        } else {
+            Yii::$app->session->setFlash('error', 'Error Purging Work Experience: ' . $result, true);
             return $this->redirect(['index']);
         }
     }
 
-    public function actionView($ApplicationNo){
+    public function actionView($ApplicationNo)
+    {
         $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
         $leaveTypes = $this->getLeaveTypes();
         $employees = $this->getEmployees();
@@ -176,26 +178,27 @@ class FurtherdevelopmentareaController extends Controller
 
         //load nav result to model
         $leaveModel = new Leave();
-        $model = $this->loadtomodel($leave[0],$leaveModel);
+        $model = $this->loadtomodel($leave[0], $leaveModel);
 
 
-        return $this->render('view',[
+        return $this->render('view', [
             'model' => $model,
-            'leaveTypes' => ArrayHelper::map($leaveTypes,'Code','Description'),
-            'relievers' => ArrayHelper::map($employees,'No','Full_Name'),
+            'leaveTypes' => ArrayHelper::map($leaveTypes, 'Code', 'Description'),
+            'relievers' => ArrayHelper::map($employees, 'No', 'Full_Name'),
         ]);
     }
 
 
 
-    public function loadtomodel($obj,$model){
+    public function loadtomodel($obj, $model)
+    {
 
-        if(!is_object($obj)){
+        if (!is_object($obj)) {
             return false;
         }
-        $modeldata = (get_object_vars($obj)) ;
-        foreach($modeldata as $key => $val){
-            if(is_object($val)) continue;
+        $modeldata = (get_object_vars($obj));
+        foreach ($modeldata as $key => $val) {
+            if (is_object($val)) continue;
             $model->$key = $val;
         }
 

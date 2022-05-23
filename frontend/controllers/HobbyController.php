@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -7,6 +8,7 @@
  */
 
 namespace frontend\controllers;
+
 use frontend\models\Hobby;
 use Yii;
 use yii\filters\AccessControl;
@@ -28,7 +30,7 @@ class HobbyController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup','index'],
+                'only' => ['logout', 'signup', 'index'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -36,7 +38,7 @@ class HobbyController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout','index'],
+                        'actions' => ['logout', 'index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -48,7 +50,7 @@ class HobbyController extends Controller
                     'logout' => ['post'],
                 ],
             ],
-            'contentNegotiator' =>[
+            'contentNegotiator' => [
                 'class' => ContentNegotiator::class,
                 'only' => ['gethobby'],
                 'formatParam' => '_format',
@@ -60,38 +62,36 @@ class HobbyController extends Controller
         ];
     }
 
-    public function actionIndex(){
+    public function actionIndex()
+    {
 
         return $this->render('index');
-
     }
 
-    public function actionCreate(){
+    public function actionCreate()
+    {
 
         $model = new Hobby();
         $service = Yii::$app->params['ServiceName']['hobbies'];
 
-        if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Hobby'],$model)){
+        if (Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Hobby'], $model)) {
 
             $model->Job_Application_No = Yii::$app->recruitment->getProfileID();
 
-            $result = Yii::$app->navhelper->postData($service,$model);
+            $result = Yii::$app->navhelper->postData($service, $model);
 
-            if(is_object($result)){
+            if (is_object($result)) {
 
-                Yii::$app->session->setFlash('success','Hobby Added Successfully',true);
+                Yii::$app->session->setFlash('success', 'Hobby Added Successfully', true);
                 return $this->redirect(['index']);
+            } else {
 
-            }else{
-
-                Yii::$app->session->setFlash('error','Error Adding Hobby: '.$result,true);
+                Yii::$app->session->setFlash('error', 'Error Adding Hobby: ' . $result, true);
                 return $this->redirect(['index']);
-
             }
+        } //End Saving experience
 
-        }//End Saving experience
-
-        if(Yii::$app->request->isAjax){
+        if (Yii::$app->request->isAjax) {
             return $this->renderAjax('create', [
                 'model' => $model,
 
@@ -99,7 +99,7 @@ class HobbyController extends Controller
             ]);
         }
 
-        return $this->render('create',[
+        return $this->render('create', [
 
             'model' => $model,
 
@@ -107,55 +107,57 @@ class HobbyController extends Controller
         ]);
     }
 
-    public function actionUpdate(){
+    public function actionUpdate()
+    {
         $service = Yii::$app->params['ServiceName']['hobbies'];
         $filter = [
             'Line_No' => Yii::$app->request->get('Line'),
         ];
-        $result = Yii::$app->navhelper->getData($service,$filter);
+        $result = Yii::$app->navhelper->getData($service, $filter);
         $Expmodel = new Hobby();
         //load nav result to model
-        $model = $this->loadtomodel($result[0],$Expmodel);
+        $model = $this->loadtomodel($result[0], $Expmodel);
 
-        if(Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Hobby'],$model)){
-            $result = Yii::$app->navhelper->updateData($service,$model);
-            if(!empty($result)){
-                Yii::$app->session->setFlash('success','Hobby Updated Successfully',true);
+        if (Yii::$app->request->post() && $this->loadpost(Yii::$app->request->post()['Hobby'], $model)) {
+            $result = Yii::$app->navhelper->updateData($service, $model);
+            if (!empty($result)) {
+                Yii::$app->session->setFlash('success', 'Hobby Updated Successfully', true);
                 return $this->redirect(['index']);
-            }else{
-                Yii::$app->session->setFlash('error','Error Updating Hobby : '.$result,true);
+            } else {
+                Yii::$app->session->setFlash('error', 'Error Updating Hobby : ' . $result, true);
                 return $this->redirect(['index']);
             }
-
         }
 
-        if(Yii::$app->request->isAjax){
+        if (Yii::$app->request->isAjax) {
             return $this->renderAjax('update', [
                 'model' => $model,
 
             ]);
         }
 
-        return $this->render('update',[
+        return $this->render('update', [
             'model' => $model,
 
         ]);
     }
 
-    public function actionDelete(){
+    public function actionDelete()
+    {
         $service = Yii::$app->params['ServiceName']['hobbies'];
-        $result = Yii::$app->navhelper->deleteData($service,Yii::$app->request->get('Key'));
-        if(!is_string($result)){
-            Yii::$app->session->setFlash('success','Hobby Purged Successfully .',true);
+        $result = Yii::$app->navhelper->deleteData($service, Yii::$app->request->get('Key'));
+        if (!is_string($result)) {
+            Yii::$app->session->setFlash('success', 'Hobby Purged Successfully .', true);
             return $this->redirect(['index']);
-        }else{
-            Yii::$app->session->setFlash('error','Error Purging Hobby: '.$result,true);
+        } else {
+            Yii::$app->session->setFlash('error', 'Error Purging Hobby: ' . $result, true);
             return $this->redirect(['index']);
         }
     }
 
 
-    public function actionView($ApplicationNo){
+    public function actionView($ApplicationNo)
+    {
         $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
         $leaveTypes = $this->getLeaveTypes();
         $employees = $this->getEmployees();
@@ -168,71 +170,74 @@ class HobbyController extends Controller
 
         //load nav result to model
         $leaveModel = new Leave();
-        $model = $this->loadtomodel($leave[0],$leaveModel);
+        $model = $this->loadtomodel($leave[0], $leaveModel);
 
 
-        return $this->render('view',[
+        return $this->render('view', [
             'model' => $model,
-            'leaveTypes' => ArrayHelper::map($leaveTypes,'Code','Description'),
-            'relievers' => ArrayHelper::map($employees,'No','Full_Name'),
+            'leaveTypes' => ArrayHelper::map($leaveTypes, 'Code', 'Description'),
+            'relievers' => ArrayHelper::map($employees, 'No', 'Full_Name'),
         ]);
     }
 
 
-    public function actionApprovalRequest($app){
+    public function actionApprovalRequest($app)
+    {
         $service = Yii::$app->params['ServiceName']['Portal_Workflows'];
         $data = ['applicationNo' => $app];
 
         $request = Yii::$app->navhelper->SendLeaveApprovalRequest($service, $data);
 
-        if(is_array($request)){
-            Yii::$app->session->setFlash('success','Leave request sent for approval Successfully',true);
+        if (is_array($request)) {
+            Yii::$app->session->setFlash('success', 'Leave request sent for approval Successfully', true);
             return $this->redirect(['index']);
-        }else{
-            Yii::$app->session->setFlash('error','Error sending leave request for approval: '.$request,true);
+        } else {
+            Yii::$app->session->setFlash('error', 'Error sending leave request for approval: ' . $request, true);
             return $this->redirect(['index']);
         }
     }
 
-    public function actionCancelRequest($app){
+    public function actionCancelRequest($app)
+    {
         $service = Yii::$app->params['ServiceName']['Portal_Workflows'];
         $data = ['applicationNo' => $app];
 
         $request = Yii::$app->navhelper->CancelLeaveApprovalRequest($service, $data);
 
-        if(is_array($request)){
-            Yii::$app->session->setFlash('success','Leave Approval Request Cancelled Successfully',true);
+        if (is_array($request)) {
+            Yii::$app->session->setFlash('success', 'Leave Approval Request Cancelled Successfully', true);
             return $this->redirect(['index']);
-        }else{
-            Yii::$app->session->setFlash('error','Error Cancelling Leave Approval: '.$request,true);
+        } else {
+            Yii::$app->session->setFlash('error', 'Error Cancelling Leave Approval: ' . $request, true);
             return $this->redirect(['index']);
         }
     }
 
     /*Data access functions */
 
-    public function actionLeavebalances(){
+    public function actionLeavebalances()
+    {
 
         $balances = $this->Getleavebalance();
 
-        return $this->render('leavebalances',['balances' => $balances]);
-
+        return $this->render('leavebalances', ['balances' => $balances]);
     }
 
-    public function actionGethobby(){
+    public function actionGethobby()
+    {
         $service = Yii::$app->params['ServiceName']['hobbies'];
         $hobbies = \Yii::$app->navhelper->getData($service);
 
         $result = [];
         $count = 0;
-        foreach($hobbies as $hobby){
+        foreach ($hobbies as $hobby) {
 
             ++$count;
             $link = $updateLink =  '';
 
 
-            $updateLink = Html::a('Update Hobby',['update','Line'=> $hobby->Line_No ],['class'=>'update btn btn-outline-info btn-xs']);
-            $link = Html::a('Remove Hobby',['delete','Key'=> $hobby->Key ],['class'=>'btn btn-outline-warning btn-xs']);
+            $updateLink = Html::a('Update Hobby', ['update', 'Line' => $hobby->Line_No], ['class' => 'update btn btn-outline-info btn-xs']);
+            $link = Html::a('Remove Hobby', ['delete', 'Key' => $hobby->Key], ['class' => 'btn btn-outline-warning btn-xs']);
 
 
 
@@ -240,8 +245,8 @@ class HobbyController extends Controller
             $result['data'][] = [
                 'index' => $count,
                 'Key' => $hobby->Key,
-                'Job_Application_No' => !empty($hobby->Job_Application_No)?$hobby->Job_Application_No:'',
-                'Hobby_Description' => !empty($hobby->Hobby_Description)?$hobby->Hobby_Description:'',
+                'Job_Application_No' => !empty($hobby->Job_Application_No) ? $hobby->Job_Application_No : '',
+                'Hobby_Description' => !empty($hobby->Hobby_Description) ? $hobby->Hobby_Description : '',
                 'Update_Action' => $updateLink,
                 'Remove' => $link
             ];
@@ -250,11 +255,12 @@ class HobbyController extends Controller
         return $result;
     }
 
-    public function actionReport(){
+    public function actionReport()
+    {
         $service = Yii::$app->params['ServiceName']['expApplicationList'];
         $leaves = \Yii::$app->navhelper->getData($service);
-        krsort( $leaves);//sort by keys in descending order
-        $content = $this->renderPartial('_historyreport',[
+        krsort($leaves); //sort by keys in descending order
+        $content = $this->renderPartial('_historyreport', [
             'leaves' => $leaves
         ]);
 
@@ -270,25 +276,27 @@ class HobbyController extends Controller
         return $content;
     }
 
-    public function actionReportview(){
-        return $this->render('_viewreport',[
-            'content'=>$this->actionReport()
+    public function actionReportview()
+    {
+        return $this->render('_viewreport', [
+            'content' => $this->actionReport()
         ]);
     }
 
-    public function Getleavebalance(){
+    public function Getleavebalance()
+    {
         $service = Yii::$app->params['ServiceName']['leaveBalance'];
         $filter = [
             'No' => Yii::$app->user->identity->{'Employee No_'},
         ];
 
-        $balances = \Yii::$app->navhelper->getData($service,$filter);
+        $balances = \Yii::$app->navhelper->getData($service, $filter);
         $result = [];
 
         //print '<pre>';
         // print_r($balances);exit;
 
-        foreach($balances as $b){
+        foreach ($balances as $b) {
             $result = [
                 'Key' => $b->Key,
                 'Annual_Leave_Bal' => $b->Annual_Leave_Bal,
@@ -301,29 +309,30 @@ class HobbyController extends Controller
         }
 
         return $result;
-
     }
 
 
 
-    public function getLeaveTypes($gender = 'Female'){
+    public function getLeaveTypes($gender = 'Female')
+    {
         $service = Yii::$app->params['ServiceName']['leaveTypes'];
         $filter = [
             'Gender' => $gender,
             'Gender' => 'Both'
         ];
 
-        $leavetypes = \Yii::$app->navhelper->getData($service,$filter);
+        $leavetypes = \Yii::$app->navhelper->getData($service, $filter);
         return $leavetypes;
     }
 
-    public function getCountries(){
+    public function getCountries()
+    {
         $service = Yii::$app->params['ServiceName']['Countries'];
 
         $res = [];
         $countries = \Yii::$app->navhelper->getData($service);
-        foreach($countries as $c){
-            if(!empty($c->Name))
+        foreach ($countries as $c) {
+            if (!empty($c->Name))
                 $res[] = [
                     'Code' => $c->Code,
                     'Name' => $c->Name
@@ -333,7 +342,8 @@ class HobbyController extends Controller
         return $res;
     }
 
-    public function getReligion(){
+    public function getReligion()
+    {
         $service = Yii::$app->params['ServiceName']['Religion'];
         $filter = [
             'Type' => 'Religion'
@@ -342,26 +352,28 @@ class HobbyController extends Controller
         return $religion;
     }
 
-    public function loadtomodel($obj,$model){
+    public function loadtomodel($obj, $model)
+    {
 
-        if(!is_object($obj)){
+        if (!is_object($obj)) {
             return false;
         }
-        $modeldata = (get_object_vars($obj)) ;
-        foreach($modeldata as $key => $val){
-            if(is_object($val)) continue;
+        $modeldata = (get_object_vars($obj));
+        foreach ($modeldata as $key => $val) {
+            if (is_object($val)) continue;
             $model->$key = $val;
         }
 
         return $model;
     }
 
-    public function loadpost($post,$model){ // load model with form data
+    public function loadpost($post, $model)
+    { // load model with form data
 
 
-        $modeldata = (get_object_vars($model)) ;
+        $modeldata = (get_object_vars($model));
 
-        foreach($post as $key => $val){
+        foreach ($post as $key => $val) {
 
             $model->$key = $val;
         }

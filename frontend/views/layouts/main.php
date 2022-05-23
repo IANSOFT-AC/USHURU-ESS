@@ -425,41 +425,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                             </li>
 
                         <?php endif; ?>
-                        <!-- Overtime -->
 
-
-                        <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('overtime') ? 'menu-open' : '' ?>">
-                            <a href="#" title="Overtime Management" class="nav-link <?= Yii::$app->recruitment->currentCtrl('overtime') ? 'active' : '' ?>">
-                                <i class="nav-icon fa fa-clock"></i>
-                                <p>
-                                    Overtime Management
-                                    <i class="fas fa-angle-left right"></i>
-                                    <!--<span class="badge badge-info right">6</span>-->
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>overtime/create" class="nav-link <?= Yii::$app->recruitment->currentaction('overtime', 'create') ? 'active' : '' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> New Requisition</p>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a href="<?= $absoluteUrl ?>overtime" class="nav-link <?= Yii::$app->recruitment->currentaction('overtime', 'index') ? 'active' : '' ?>">
-                                        <i class="fa fa-check-square nav-icon"></i>
-                                        <p> Overtime List</p>
-                                    </a>
-                                </li>
-
-
-                            </ul>
-
-                        </li>
-
-                        <!--/Overtime -->
 
 
                         <!--Recruitment-->
@@ -1350,7 +1316,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
             <strong>Copyright &copy; <?= Yii::$app->params['generalTitle'] ?> - 2014 - <?= date('Y') ?> <a href="#"> <?= strtoupper(Yii::$app->params['demoCompany']) ?></a>.</strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
-                <b><?= Yii::signature() ?></b>
+                <b></b>
             </div>
         </footer>
 

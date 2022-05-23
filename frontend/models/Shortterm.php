@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -7,6 +8,7 @@
  */
 
 namespace frontend\models;
+
 use common\models\User;
 use Yii;
 use yii\base\Model;
@@ -15,35 +17,33 @@ use yii\base\Model;
 class Shortterm extends Model
 {
 
-public $Key;
-public $Appraisal_No;
-public $Employee_No;
-public $Employee_Name;
-public $Employee_User_Id;
-public $Level_Grade;
-public $Job_Title;
-public $Goal_Setting_Status;
-public $Appraisal_Status;
-public $Supervisor_No;
-public $Supervisor_Name;
-public $Supervisor_User_Id;
-public $Overview_Manager;
-public $Overview_Manager_Name;
-public $Overview_Manager_UserID;
-public $Over_View_Manager_Comments;
-public $Supervisor_Overall_Comments;
-public $Overall_Score;
-public $Probation_End_date;
-public $Probation_Start_Date;
-public $Overview_Rejection_Comments;
-public $Supervisor_Rejection_Comments;
-public $Appraisal_Period;
+    public $Key;
+    public $Appraisal_No;
+    public $Employee_No;
+    public $Employee_Name;
+    public $Employee_User_Id;
+    public $Level_Grade;
+    public $Job_Title;
+    public $Goal_Setting_Status;
+    public $Appraisal_Status;
+    public $Supervisor_No;
+    public $Supervisor_Name;
+    public $Supervisor_User_Id;
+    public $Overview_Manager;
+    public $Overview_Manager_Name;
+    public $Overview_Manager_UserID;
+    public $Over_View_Manager_Comments;
+    public $Supervisor_Overall_Comments;
+    public $Overall_Score;
+    public $Probation_End_date;
+    public $Probation_Start_Date;
+    public $Overview_Rejection_Comments;
+    public $Supervisor_Rejection_Comments;
+    public $Appraisal_Period;
 
     public function rules()
     {
-        return [
-
-        ];
+        return [];
     }
 
     public function attributeLabels()
@@ -53,13 +53,14 @@ public $Appraisal_Period;
             'Supervisor_Overall_Comments' => 'Line Mgr. General Comments',
             'Probation_Start_Date' => 'Appraisal Start Date',
             'Probation_End_date' => 'Appraisal End Date',
-            
+
 
 
         ];
     }
 
-    public function getObjectives(){
+    public function getObjectives()
+    {
         $service = Yii::$app->params['ServiceName']['ProbationKRAs'];
         $filter = [
             'Appraisal_No' => $this->Appraisal_No,
@@ -69,10 +70,11 @@ public $Appraisal_Period;
         return $objectives;
     }
 
-    public function getKpi($KRA_Line_No){
+    public function getKpi($KRA_Line_No)
+    {
         $service = Yii::$app->params['ServiceName']['ProbationKPIs'];
         $filter = [
-            'Appraisal_No'=> $this->Appraisal_No,
+            'Appraisal_No' => $this->Appraisal_No,
             'KRA_Line_No' => $KRA_Line_No,
         ];
 
@@ -83,7 +85,8 @@ public $Appraisal_Period;
 
     /*Get Competencies*/
 
-     public function getCompetencies(){
+    public function getCompetencies()
+    {
         $service = Yii::$app->params['ServiceName']['StEmployeeAppraisalCompetence'];
         $filter = [
             'Appraisal_Code' => $this->Appraisal_No,
@@ -95,7 +98,8 @@ public $Appraisal_Period;
 
     /*Get Behaviours*/
 
-     public function getBehaviours($Category_Id,$Appraisal_No){
+    public function getBehaviours($Category_Id, $Appraisal_No)
+    {
         $service = Yii::$app->params['ServiceName']['EmployeeAppraisalBehaviours'];
         $filter = [
             'Category_Line_No' => $Category_Id,
@@ -114,21 +118,16 @@ public $Appraisal_Period;
     {
 
         return (Yii::$app->user->identity->{'Employee No_'} == $this->Supervisor_No);
-
     }
 
     public function isOverview()
     {
 
         return (Yii::$app->user->identity->{'Employee No_'} == $this->Overview_Manager);
-
     }
 
     public function isAppraisee()
     {
         return (Yii::$app->user->identity->{'Employee No_'} == $this->Employee_No);
     }
-
-
-
 }

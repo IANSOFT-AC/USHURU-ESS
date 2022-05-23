@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -24,7 +25,8 @@ use kartik\mpdf\Pdf;
 class PayslipController extends Controller
 {
 
-    public function beforeAction($action) {
+    public function beforeAction($action)
+    {
         $this->enableCsrfValidation = ($action->id !== "index"); // <-- here
         return parent::beforeAction($action);
     }
@@ -34,7 +36,7 @@ class PayslipController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup','index'],
+                'only' => ['logout', 'signup', 'index'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -42,7 +44,7 @@ class PayslipController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout','index'],
+                        'actions' => ['logout', 'index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -54,7 +56,7 @@ class PayslipController extends Controller
                     'logout' => ['post'],
                 ],
             ],
-            'contentNegotiator' =>[
+            'contentNegotiator' => [
                 'class' => ContentNegotiator::class,
                 'only' => ['getleaves'],
                 'formatParam' => '_format',
@@ -66,41 +68,39 @@ class PayslipController extends Controller
         ];
     }
 
-    public function actionIndex(){
+    public function actionIndex()
+    {
 
         $service = Yii::$app->params['ServiceName']['PortalReports'];
 
         //Yii::$app->recruitment->printrr(ArrayHelper::map($payrollperiods,'Date_Opened','desc'));
-        if(Yii::$app->request->post() && Yii::$app->request->post('payperiods')){
+        if (Yii::$app->request->post() && Yii::$app->request->post('payperiods')) {
             //Yii::$app->recruitment->printrr(Yii::$app->request->post('payperiods'));
             $data = [
-                'selectedPeriod' =>Yii::$app->request->post('payperiods'),
+                'selectedPeriod' => Yii::$app->request->post('payperiods'),
                 'empNo' => Yii::$app->user->identity->{'Employee No_'}
-             ];
-            $path = Yii::$app->navhelper->PortalReports($service,$data,'IanGeneratePayslip');
+            ];
+            $path = Yii::$app->navhelper->PortalReports($service, $data, 'IanGeneratePayslip');
             //Yii::$app->recruitment->printrr($path);
-            if(is_file($path['return_value']))
-            {
+            if (is_file($path['return_value'])) {
                 $binary = file_get_contents($path['return_value']);
                 $content = chunk_split(base64_encode($binary));
                 //delete the file after getting it's contents --> This is some house keeping
                 //unlink($path['return_value']);
 
 
-                return $this->render('index',[
+                return $this->render('index', [
                     'report' => true,
                     'content' => $content,
                     'pperiods' => $this->getPayrollperiods()
                 ]);
             }
-
         }
 
-        return $this->render('index',[
+        return $this->render('index', [
             'report' => false,
             'pperiods' => $this->getPayrollperiods()
         ]);
-
     }
 
 
@@ -108,40 +108,40 @@ class PayslipController extends Controller
 
 
 
-    public function getPayrollperiods(){
+    public function getPayrollperiods()
+    {
         $service = Yii::$app->params['ServiceName']['Payrollperiods'];
 
         $filter = ['Status' => 'Approved'];
         $periods = \Yii::$app->navhelper->getData($service, $filter);
 
-        if(is_array($periods)){
-            krsort( $periods);//sort  keys in descending order
+        if (is_array($periods)) {
+            krsort($periods); //sort  keys in descending order
             $res = [];
-            foreach($periods as $p){
+            foreach ($periods as $p) {
                 $res[] = [
                     'Date_Opened' => $p->Start_Date,
-                    'desc' => $p->Start_Date.' - '.$p->Period_Name
+                    'desc' => $p->Start_Date . ' - ' . $p->Period_Name
                 ];
             }
-            return ArrayHelper::map($res,'Date_Opened','desc');
-        }else{
+            return ArrayHelper::map($res, 'Date_Opened', 'desc');
+        } else {
             return [];
         }
-
     }
 
-    public function loadtomodel($obj,$model){
+    public function loadtomodel($obj, $model)
+    {
 
-        if(!is_object($obj)){
+        if (!is_object($obj)) {
             return false;
         }
-        $modeldata = (get_object_vars($obj)) ;
-        foreach($modeldata as $key => $val){
-            if(is_object($val)) continue;
+        $modeldata = (get_object_vars($obj));
+        foreach ($modeldata as $key => $val) {
+            if (is_object($val)) continue;
             $model->$key = $val;
         }
 
         return $model;
     }
-
 }

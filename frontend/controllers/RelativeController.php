@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -7,6 +8,7 @@
  */
 
 namespace frontend\controllers;
+
 use frontend\models\Employeeappraisalkra;
 use frontend\models\Experience;
 use frontend\models\Relative;
@@ -29,15 +31,15 @@ class RelativeController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup','index'],
+                'only' => ['logout', 'signup', 'index'],
                 'rules' => [
                     [
-                        'actions' => ['signup','index'],
+                        'actions' => ['signup', 'index'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout','index','create','update','delete'],
+                        'actions' => ['logout', 'index', 'create', 'update', 'delete'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -49,7 +51,7 @@ class RelativeController extends Controller
                     'logout' => ['post'],
                 ],
             ],
-            'contentNegotiator' =>[
+            'contentNegotiator' => [
                 'class' => ContentNegotiator::class,
                 'only' => [''],
                 'formatParam' => '_format',
@@ -61,57 +63,56 @@ class RelativeController extends Controller
         ];
     }
 
-    public function actionIndex(){
+    public function actionIndex()
+    {
 
         return $this->render('index');
-
     }
 
-    public function actionCreate($Change_No){
+    public function actionCreate($Change_No)
+    {
 
         $model = new Relative();
         $service = Yii::$app->params['ServiceName']['EmployeeRelativesChange'];
         $model->Action = 'New_Addition';
         $model->Change_No = $Change_No;
         $model->Employee_No = Yii::$app->user->identity->{'Employee No_'};
-       
+
         $model->isNewRecord = true;
 
-        if(Yii::$app->request->post() && $model->load(Yii::$app->request->post()['Relative'],'')  && $model->validate() ){
+        if (Yii::$app->request->post() && $model->load(Yii::$app->request->post()['Relative'], '')  && $model->validate()) {
 
             Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Relative'], $model); // my fall back in case yii model loader fails
-            $result = Yii::$app->navhelper->postData($service,$model);
+            $result = Yii::$app->navhelper->postData($service, $model);
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            if(is_object($result)){
+            if (is_object($result)) {
 
                 return ['note' => '<div class="alert alert-success">Record Added Successfully. </div>'];
+            } else {
 
-            }else{
-
-                return ['note' => '<div class="alert alert-danger">Error Adding Record : '.$result.'</div>' ];
-
+                return ['note' => '<div class="alert alert-danger">Error Adding Record : ' . $result . '</div>'];
             }
+        } //End Saving experience
 
-        }//End Saving experience
-
-        if(Yii::$app->request->isAjax){
+        if (Yii::$app->request->isAjax) {
             return $this->renderAjax('create', [
                 'model' => $model,
                 'relations' => $this->getRelation()
-                
+
             ]);
         }
 
-        return $this->render('create',[
+        return $this->render('create', [
             'model' => $model,
             'relations' => $this->getRelation()
-           
+
         ]);
     }
 
 
-    public function actionUpdate(){
-        $model = new Employeeappraisalkpi() ;
+    public function actionUpdate()
+    {
+        $model = new Employeeappraisalkpi();
         $model->isNewRecord = false;
         $service = Yii::$app->params['ServiceName']['EmployeeAppraisalKPI'];
         $filter = [
@@ -120,31 +121,30 @@ class RelativeController extends Controller
             'Appraisal_No' => Yii::$app->request->get('Appraisal_No'),
             'Line_No' => Yii::$app->request->get('Line_No'),
         ];
-        $result = Yii::$app->navhelper->getData($service,$filter);
+        $result = Yii::$app->navhelper->getData($service, $filter);
 
-        if(is_array($result)){
+        if (is_array($result)) {
             //load nav result to model
-            $model = Yii::$app->navhelper->loadmodel($result[0],$model) ;
-        }else{
+            $model = Yii::$app->navhelper->loadmodel($result[0], $model);
+        } else {
             Yii::$app->recruitment->printrr($result);
         }
 
 
-        if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Employeeappraisalkpi'],$model) && $model->validate() ){
-            $result = Yii::$app->navhelper->updateData($service,$model);
+        if (Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Employeeappraisalkpi'], $model) && $model->validate()) {
+            $result = Yii::$app->navhelper->updateData($service, $model);
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            if(!is_string($result)){
+            if (!is_string($result)) {
 
-                return ['note' => '<div class="alert alert-success">Employee Objective/ KPI Updated Successfully. </div>' ];
-            }else{
+                return ['note' => '<div class="alert alert-success">Employee Objective/ KPI Updated Successfully. </div>'];
+            } else {
 
-                return ['note' => '<div class="alert alert-danger">Error Updating Employee Objective/ KPI: '.$result.'</div>'];
+                return ['note' => '<div class="alert alert-danger">Error Updating Employee Objective/ KPI: ' . $result . '</div>'];
             }
-
         }
 
-        if(Yii::$app->request->isAjax){
+        if (Yii::$app->request->isAjax) {
             return $this->renderAjax('update', [
                 'model' => $model,
                 'ratings' => $this->getRatings(),
@@ -152,10 +152,10 @@ class RelativeController extends Controller
             ]);
         }
 
-        return $this->render('update',[
+        return $this->render('update', [
             'model' => $model,
             'ratings' => $this->getRatings(),
-            'assessments' => $this->getPerformancelevels() ,
+            'assessments' => $this->getPerformancelevels(),
         ]);
     }
 
@@ -167,21 +167,23 @@ class RelativeController extends Controller
 
         $result = Yii::$app->navhelper->getData($service, []);
 
-        return Yii::$app->navhelper->refactorArray($result,'Line_Nos','Perfomace_Level');
+        return Yii::$app->navhelper->refactorArray($result, 'Line_Nos', 'Perfomace_Level');
     }
 
-    public function actionDelete(){
+    public function actionDelete()
+    {
         $service = Yii::$app->params['ServiceName']['EmployeeAppraisalKPI'];
-        $result = Yii::$app->navhelper->deleteData($service,Yii::$app->request->get('Key'));
+        $result = Yii::$app->navhelper->deleteData($service, Yii::$app->request->get('Key'));
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        if(!is_string($result)){
+        if (!is_string($result)) {
             return ['note' => '<div class="alert alert-success">Record Purged Successfully</div>'];
-        }else{
-            return ['note' => '<div class="alert alert-danger">Error Purging Record: '.$result.'</div>' ];
+        } else {
+            return ['note' => '<div class="alert alert-danger">Error Purging Record: ' . $result . '</div>'];
         }
     }
 
-    public function actionView($ApplicationNo){
+    public function actionView($ApplicationNo)
+    {
         $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
         $leaveTypes = $this->getLeaveTypes();
         $employees = $this->getEmployees();
@@ -194,13 +196,13 @@ class RelativeController extends Controller
 
         //load nav result to model
         $leaveModel = new Leave();
-        $model = $this->loadtomodel($leave[0],$leaveModel);
+        $model = $this->loadtomodel($leave[0], $leaveModel);
 
 
-        return $this->render('view',[
+        return $this->render('view', [
             'model' => $model,
-            'leaveTypes' => ArrayHelper::map($leaveTypes,'Code','Description'),
-            'relievers' => ArrayHelper::map($employees,'No','Full_Name'),
+            'leaveTypes' => ArrayHelper::map($leaveTypes, 'Code', 'Description'),
+            'relievers' => ArrayHelper::map($employees, 'No', 'Full_Name'),
         ]);
     }
 
@@ -209,10 +211,10 @@ class RelativeController extends Controller
 
     public function getRatings()
     {
-          $service = Yii::$app->params['ServiceName']['AppraisalRating'];
-          $data = Yii::$app->navhelper->getData($service, []);
-          $result = Yii::$app->navhelper->refactorArray($data,'Rating','Rating_Description');
-          return $result;
+        $service = Yii::$app->params['ServiceName']['AppraisalRating'];
+        $data = Yii::$app->navhelper->getData($service, []);
+        $result = Yii::$app->navhelper->refactorArray($data, 'Rating', 'Rating_Description');
+        return $result;
     }
 
     public function getRelation()
@@ -221,7 +223,7 @@ class RelativeController extends Controller
 
         $result = Yii::$app->navhelper->getData($service, []);
 
-        return Yii::$app->navhelper->refactorArray($result,'Code','Description');
+        return Yii::$app->navhelper->refactorArray($result, 'Code', 'Description');
     }
 
 
@@ -235,14 +237,15 @@ class RelativeController extends Controller
 
 
 
-    public function loadtomodel($obj,$model){
+    public function loadtomodel($obj, $model)
+    {
 
-        if(!is_object($obj)){
+        if (!is_object($obj)) {
             return false;
         }
-        $modeldata = (get_object_vars($obj)) ;
-        foreach($modeldata as $key => $val){
-            if(is_object($val)) continue;
+        $modeldata = (get_object_vars($obj));
+        foreach ($modeldata as $key => $val) {
+            if (is_object($val)) continue;
             $model->$key = $val;
         }
 

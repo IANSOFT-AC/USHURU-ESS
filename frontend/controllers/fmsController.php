@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -7,6 +8,7 @@
  */
 
 namespace frontend\controllers;
+
 use frontend\models\Employeeappraisalkra;
 use frontend\models\Experience;
 use frontend\models\Misc;
@@ -29,15 +31,15 @@ class FmsController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup','index'],
+                'only' => ['logout', 'signup', 'index'],
                 'rules' => [
                     [
-                        'actions' => ['signup','index','syncactivities'],
+                        'actions' => ['signup', 'index', 'syncactivities'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout','create','update','delete'],
+                        'actions' => ['logout', 'create', 'update', 'delete'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -49,9 +51,9 @@ class FmsController extends Controller
                     'logout' => ['post'],
                 ],
             ],
-            'contentNegotiator' =>[
+            'contentNegotiator' => [
                 'class' => ContentNegotiator::class,
-                'only' => ['syncactivities','index'],
+                'only' => ['syncactivities', 'index'],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -61,32 +63,26 @@ class FmsController extends Controller
         ];
     }
 
-    public function actionIndex(){
+    public function actionIndex()
+    {
 
-         $fmsGrants = $this->getGrants();
+        $fmsGrants = $this->getGrants();
 
-         // Yii::$app->recruitment->printrr($fmsGrants);  
+        // Yii::$app->recruitment->printrr($fmsGrants);  
 
-         //Yii::$app->recruitment->printrr($this->actionEssGrantCodes());
+        //Yii::$app->recruitment->printrr($this->actionEssGrantCodes());
 
-         
-        
-        if(is_array($fmsGrants))
-		{
-			foreach($fmsGrants as $grant)
-			 {
-				if(!in_array($grant->No,$this->actionEssGrantCodes()))
-				{
-					$result = $this->postToEss($grant);
-					$this->GrantLogger($result);					
-					return $result;
- 
-				}
-	  
-			 }
-		}
-         
 
+
+        if (is_array($fmsGrants)) {
+            foreach ($fmsGrants as $grant) {
+                if (!in_array($grant->No, $this->actionEssGrantCodes())) {
+                    $result = $this->postToEss($grant);
+                    $this->GrantLogger($result);
+                    return $result;
+                }
+            }
+        }
     }
 
     public function actionTest()
@@ -94,51 +90,50 @@ class FmsController extends Controller
         return 'Hallo Francis, what are you doing? ';
     }
 
-    public function actionCreate($Change_No){
+    public function actionCreate($Change_No)
+    {
 
         $model = new Misc();
         $service = Yii::$app->params['ServiceName']['Miscinformation'];
         $model->Action = 'New_Addition';
         $model->Change_No = $Change_No;
         $model->Employee_No = Yii::$app->user->identity->{'Employee No_'};
-       
+
         $model->isNewRecord = true;
 
-        if(Yii::$app->request->post() && $model->load(Yii::$app->request->post()['Misc'],'')  && $model->validate() ){
+        if (Yii::$app->request->post() && $model->load(Yii::$app->request->post()['Misc'], '')  && $model->validate()) {
 
-           
-            $result = Yii::$app->navhelper->postData($service,$model);
+
+            $result = Yii::$app->navhelper->postData($service, $model);
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            if(is_object($result)){
+            if (is_object($result)) {
 
                 return ['note' => '<div class="alert alert-success">Record Added Successfully. </div>'];
+            } else {
 
-            }else{
-
-                return ['note' => '<div class="alert alert-danger">Error Adding Record : '.$result.'</div>' ];
-
+                return ['note' => '<div class="alert alert-danger">Error Adding Record : ' . $result . '</div>'];
             }
+        } //End Saving experience
 
-        }//End Saving experience
-
-        if(Yii::$app->request->isAjax){
+        if (Yii::$app->request->isAjax) {
             return $this->renderAjax('create', [
                 'model' => $model,
                 'articles' => $this->getMiscArticles(),
-                
+
             ]);
         }
 
-        return $this->render('create',[
+        return $this->render('create', [
             'model' => $model,
             'articles' => $this->getMiscArticles(),
-           
+
         ]);
     }
 
 
-    public function actionUpdate(){
-        $model = new Employeeappraisalkpi() ;
+    public function actionUpdate()
+    {
+        $model = new Employeeappraisalkpi();
         $model->isNewRecord = false;
         $service = Yii::$app->params['ServiceName']['EmployeeAppraisalKPI'];
         $filter = [
@@ -147,31 +142,30 @@ class FmsController extends Controller
             'Appraisal_No' => Yii::$app->request->get('Appraisal_No'),
             'Line_No' => Yii::$app->request->get('Line_No'),
         ];
-        $result = Yii::$app->navhelper->getData($service,$filter);
+        $result = Yii::$app->navhelper->getData($service, $filter);
 
-        if(is_array($result)){
+        if (is_array($result)) {
             //load nav result to model
-            $model = Yii::$app->navhelper->loadmodel($result[0],$model) ;
-        }else{
+            $model = Yii::$app->navhelper->loadmodel($result[0], $model);
+        } else {
             Yii::$app->recruitment->printrr($result);
         }
 
 
-        if(Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Employeeappraisalkpi'],$model) && $model->validate() ){
-            $result = Yii::$app->navhelper->updateData($service,$model);
+        if (Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Employeeappraisalkpi'], $model) && $model->validate()) {
+            $result = Yii::$app->navhelper->updateData($service, $model);
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-            if(!is_string($result)){
+            if (!is_string($result)) {
 
-                return ['note' => '<div class="alert alert-success">Employee Objective/ KPI Updated Successfully. </div>' ];
-            }else{
+                return ['note' => '<div class="alert alert-success">Employee Objective/ KPI Updated Successfully. </div>'];
+            } else {
 
-                return ['note' => '<div class="alert alert-danger">Error Updating Employee Objective/ KPI: '.$result.'</div>'];
+                return ['note' => '<div class="alert alert-danger">Error Updating Employee Objective/ KPI: ' . $result . '</div>'];
             }
-
         }
 
-        if(Yii::$app->request->isAjax){
+        if (Yii::$app->request->isAjax) {
             return $this->renderAjax('update', [
                 'model' => $model,
                 'ratings' => $this->getRatings(),
@@ -179,27 +173,29 @@ class FmsController extends Controller
             ]);
         }
 
-        return $this->render('update',[
+        return $this->render('update', [
             'model' => $model,
             'ratings' => $this->getRatings(),
-            'assessments' => $this->getPerformancelevels() ,
+            'assessments' => $this->getPerformancelevels(),
         ]);
     }
 
 
 
-    public function actionDelete(){
+    public function actionDelete()
+    {
         $service = Yii::$app->params['ServiceName']['EmployeeAppraisalKPI'];
-        $result = Yii::$app->navhelper->deleteData($service,Yii::$app->request->get('Key'));
+        $result = Yii::$app->navhelper->deleteData($service, Yii::$app->request->get('Key'));
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        if(!is_string($result)){
+        if (!is_string($result)) {
             return ['note' => '<div class="alert alert-success">Record Purged Successfully</div>'];
-        }else{
-            return ['note' => '<div class="alert alert-danger">Error Purging Record: '.$result.'</div>' ];
+        } else {
+            return ['note' => '<div class="alert alert-danger">Error Purging Record: ' . $result . '</div>'];
         }
     }
 
-    public function actionView($ApplicationNo){
+    public function actionView($ApplicationNo)
+    {
         $service = Yii::$app->params['ServiceName']['leaveApplicationCard'];
         $leaveTypes = $this->getLeaveTypes();
         $employees = $this->getEmployees();
@@ -212,13 +208,13 @@ class FmsController extends Controller
 
         //load nav result to model
         $leaveModel = new Leave();
-        $model = $this->loadtomodel($leave[0],$leaveModel);
+        $model = $this->loadtomodel($leave[0], $leaveModel);
 
 
-        return $this->render('view',[
+        return $this->render('view', [
             'model' => $model,
-            'leaveTypes' => ArrayHelper::map($leaveTypes,'Code','Description'),
-            'relievers' => ArrayHelper::map($employees,'No','Full_Name'),
+            'leaveTypes' => ArrayHelper::map($leaveTypes, 'Code', 'Description'),
+            'relievers' => ArrayHelper::map($employees, 'No', 'Full_Name'),
         ]);
     }
 
@@ -227,19 +223,19 @@ class FmsController extends Controller
 
     public function getGrants()
     {
-          $service = Yii::$app->params['FMS-ServiceName']['FMSGrants'];
-          $data = Yii::$app->fms->getData($service, []);
-          return $data;
+        $service = Yii::$app->params['FMS-ServiceName']['FMSGrants'];
+        $data = Yii::$app->fms->getData($service, []);
+        return $data;
     }
 
 
-     public function actionEssGrants()
+    public function actionEssGrants()
     {
-          $service = Yii::$app->params['ServiceName']['GrantList'];
-          $data = Yii::$app->navhelper->getData($service, []);
-          // return $data;
+        $service = Yii::$app->params['ServiceName']['GrantList'];
+        $data = Yii::$app->navhelper->getData($service, []);
+        // return $data;
 
-          Yii::$app->recruitment->printrr($data);
+        Yii::$app->recruitment->printrr($data);
     }
 
     public function postToEss($grant)
@@ -248,14 +244,14 @@ class FmsController extends Controller
         $service = Yii::$app->params['ServiceName']['GrantList'];
 
         $args = [
-            'Donor_Code' => !empty($grant->No)?$grant->No:'',
-            'Donor_Name' => !empty($grant->Name)?$grant->Name:'',
-            'Status' => ($grant->Blocked == '_blank_')?'Active':'Inactive',
+            'Donor_Code' => !empty($grant->No) ? $grant->No : '',
+            'Donor_Name' => !empty($grant->Name) ? $grant->Name : '',
+            'Status' => ($grant->Blocked == '_blank_') ? 'Active' : 'Inactive',
             'Grant_Activity' => '',
-            'Grant_Type' => !empty($grant->Class)?$grant->Class:'' ,
-            'Grant_Start_Date' => !empty($grant->Start_Date)?$grant->Start_Date: date('Y-m-d'),
-            'Grant_End_Date' => !empty($grant->End_Date)?$grant->End_Date: date('Y-m-d'),
-            'Grant_Accountant' => !empty($grant->Grant_Accountant)?$grant->Grant_Accountant: date('Y-m-d'),
+            'Grant_Type' => !empty($grant->Class) ? $grant->Class : '',
+            'Grant_Start_Date' => !empty($grant->Start_Date) ? $grant->Start_Date : date('Y-m-d'),
+            'Grant_End_Date' => !empty($grant->End_Date) ? $grant->End_Date : date('Y-m-d'),
+            'Grant_Accountant' => !empty($grant->Grant_Accountant) ? $grant->Grant_Accountant : date('Y-m-d'),
         ];
 
         // Post to ESS
@@ -264,9 +260,6 @@ class FmsController extends Controller
         $result = Yii::$app->navhelper->postData($service, $args);
 
         print_r($result);
-
-       
-        
     }
 
     public function updateGrant($grant)
@@ -275,70 +268,64 @@ class FmsController extends Controller
         $service = Yii::$app->params['ServiceName']['GrantList'];
 
         $args = [
-            'Donor_Code' => $grant->No ,
+            'Donor_Code' => $grant->No,
         ];
 
         $result = Yii::$app->navhelper->getData($service, $args);
 
-       
 
 
-        if(is_array($result))
-        {
-             $data = [
-                    
-                    
-                    'Key' => $result[0]->Key
-                ];
+
+        if (is_array($result)) {
+            $data = [
 
 
-                // Post to ESS
+                'Key' => $result[0]->Key
+            ];
 
-                $res = Yii::$app->navhelper->updateData($service, $data);
+
+            // Post to ESS
+
+            $res = Yii::$app->navhelper->updateData($service, $data);
 
 
-                print '<br>';
-                print_r($res);
-                exit(true);
+            print '<br>';
+            print_r($res);
+            exit(true);
         }
-        
-
-       
     }
 
 
     public function actionEssGrantCodes()
     {
-          $service = Yii::$app->params['ServiceName']['GrantList'];
-          $data = Yii::$app->navhelper->getData($service, []);
+        $service = Yii::$app->params['ServiceName']['GrantList'];
+        $data = Yii::$app->navhelper->getData($service, []);
 
-           
 
-          $codes = [];
 
-          foreach($data as $d)
-          {
-            if(isset($d->Donor_Code)){
-                 array_push($codes, $d->Donor_Code);
+        $codes = [];
+
+        foreach ($data as $d) {
+            if (isset($d->Donor_Code)) {
+                array_push($codes, $d->Donor_Code);
             }
-           
-          }
+        }
 
-          return $codes;
+        return $codes;
 
-         // Yii::$app->recruitment->printrr($codes);
+        // Yii::$app->recruitment->printrr($codes);
     }
 
 
     /*Get FMS Grant Codes*/
 
-     public function actionFmsactivities()
+    public function actionFmsactivities()
     {
-          $service = Yii::$app->params['FMS-ServiceName']['FMSActivities'];
-          $data = Yii::$app->fms->getData($service, []);
+        $service = Yii::$app->params['FMS-ServiceName']['FMSActivities'];
+        $data = Yii::$app->fms->getData($service, []);
 
-          //Yii::$app->recruitment->printrr($data);
-          return $data;
+        //Yii::$app->recruitment->printrr($data);
+        return $data;
     }
 
 
@@ -347,33 +334,29 @@ class FmsController extends Controller
 
     public function actionEssactivities()
     {
-          $service = Yii::$app->params['ServiceName']['GrantActivities'];
-          $data = Yii::$app->navhelper->getData($service, []);
+        $service = Yii::$app->params['ServiceName']['GrantActivities'];
+        $data = Yii::$app->navhelper->getData($service, []);
 
-          //Yii::$app->recruitment->printrr($data);
-          return $data;
+        //Yii::$app->recruitment->printrr($data);
+        return $data;
     }
 
-     public function actionEssactivitycodes()
+    public function actionEssactivitycodes()
     {
-          $service = Yii::$app->params['ServiceName']['GrantActivities'];
-          $data = Yii::$app->navhelper->getData($service, []);
+        $service = Yii::$app->params['ServiceName']['GrantActivities'];
+        $data = Yii::$app->navhelper->getData($service, []);
 
-           
 
-          $codes = [];
 
-          foreach($data as $d)
-          {
-            if(isset($d->Grant_Activity)){
-                 array_push($codes, $d->Grant_Activity);
+        $codes = [];
+
+        foreach ($data as $d) {
+            if (isset($d->Grant_Activity)) {
+                array_push($codes, $d->Grant_Activity);
             }
-           
-          }
-           //Yii::$app->recruitment->printrr($codes);
-          return $codes;
-
-         
+        }
+        //Yii::$app->recruitment->printrr($codes);
+        return $codes;
     }
 
 
@@ -385,50 +368,44 @@ class FmsController extends Controller
         $essActivities = $this->ActionEssactivities();
         $essactivitycodes = $this->ActionEssactivitycodes();
 
-        if(is_array($fmsActivities))
-        {
-            foreach($fmsActivities as $ac)
-            {
-                if(!in_array($ac->Code, $essactivitycodes)):
+        if (is_array($fmsActivities)) {
+            foreach ($fmsActivities as $ac) {
+                if (!in_array($ac->Code, $essactivitycodes)) :
                     $data = [
-                        'Grant_Activity' => $ac->Code ,
-                        'Activity_Name' => $ac->Name ,
-                        'Blocked' => $ac->Blocked ,
+                        'Grant_Activity' => $ac->Code,
+                        'Activity_Name' => $ac->Name,
+                        'Blocked' => $ac->Blocked,
                     ];
 
                     $result = Yii::$app->navhelper->postData($service, $data);
-					$this->ActivityLogger($result);
+                    $this->ActivityLogger($result);
                     return $result;
                 endif;
-            //exit;
+                //exit;
             }
-        }else{
+        } else {
             return ['Message' => 'No Grant Activities To Synchronize.'];
         }
-
     }
-	
-	
-	private function GrantLogger($message)
-	{
-		$filename = 'log/grant.txt';
-		$req_dump = print_r($message, TRUE);
-		$fp = fopen($filename, 'a');
-		fwrite($fp, $req_dump);
-		fclose($fp);
-		exit;
-	}
-	
-	private function ActivityLogger($message)
-	{
-		$filename = 'log/activity.txt';
-		$req_dump = print_r($message, TRUE);
-		$fp = fopen($filename, 'a');
-		fwrite($fp, $req_dump);
-		fclose($fp);
-		exit;
-	}
 
 
+    private function GrantLogger($message)
+    {
+        $filename = 'log/grant.txt';
+        $req_dump = print_r($message, TRUE);
+        $fp = fopen($filename, 'a');
+        fwrite($fp, $req_dump);
+        fclose($fp);
+        exit;
+    }
 
+    private function ActivityLogger($message)
+    {
+        $filename = 'log/activity.txt';
+        $req_dump = print_r($message, TRUE);
+        $fp = fopen($filename, 'a');
+        fwrite($fp, $req_dump);
+        fclose($fp);
+        exit;
+    }
 }

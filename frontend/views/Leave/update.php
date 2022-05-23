@@ -16,8 +16,8 @@ $this->params['breadcrumbs'][] = ['label' => 'Leaves', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => 'Update Request', 'url' => ['update']];
 
 $model->isNewRecord = false;
-/*$now = date('m-d-Y');
-$model->Start_Date = date('m-d-Y', strtotime($now.' + 2 days'));*/
+$model->Start_Date = date('m-d-Y');
+/*$model->Start_Date = date('m-d-Y', strtotime($now.' + 2 days'));*/
 ?>
 <div class="agenda-document-update">
 
