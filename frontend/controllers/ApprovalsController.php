@@ -422,34 +422,16 @@ class ApprovalsController extends Controller
 
 
 
-    public function actionApproveRequest($app, $empNo, $docType = "")
+    public function actionApproveRequest($recordID)
     {
         $service = Yii::$app->params['ServiceName']['PortalFactory'];
 
         $data = [
-            'applicationNo' => $app,
-            'emplN' => $empNo
+            'recordID' => $recordID
         ];
 
-        if ($docType == 'Requisition_Header') {
-            $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'ApproveRequisitionHeader');
-        } elseif (in_array($docType, $this->leaveWorkflows)) {
-            $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'ApproveLeavePlan');
-        } elseif ($docType == 'Leave_Reimbursement') {
-            $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'IanApproveLeave');
-        } elseif ($docType == 'Contract_Renewal') {
-            $result = Yii::$app->navhelper->PortalWorkFlows($service, ['applicationNo' => $app], 'IanApproveChangeRequest');
-        } elseif ($docType == 'Overtime_Application') {
-            $result = Yii::$app->navhelper->PortalWorkFlows($service, ['applicationNo' => $app], 'IanApproveOverTime');
-        } elseif ($docType == 'Employee_Exit') {
-            $result = Yii::$app->navhelper->PortalWorkFlows($service, ['applicationNo' => $app], 'IanApproveEmployeeExit');
-        } elseif ($docType == 'Change_Request') {
-            $result = Yii::$app->navhelper->PortalWorkFlows($service, ['applicationNo' => $app], 'IanApproveChangeRequest');
-        } elseif ($docType == 'Training_Application') {
-            $result = Yii::$app->navhelper->PortalWorkFlows($service, ['applicationNo' => $app], 'IanApproveTraining');
-        } else {
-            $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'IanApproveImprest');
-        }
+
+        $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'SendDocumentApproval');
 
 
         if (!is_string($result)) {
@@ -461,7 +443,7 @@ class ApprovalsController extends Controller
         }
     }
 
-    public function actionRejectRequest($docType = "")
+    public function actionRejectRequest($recordID)
     {
         $service = Yii::$app->params['ServiceName']['PortalFactory'];
         $Commentservice = Yii::$app->params['ServiceName']['ApprovalCommentsWeb'];
@@ -482,7 +464,7 @@ class ApprovalsController extends Controller
 
 
             $data = [
-                'applicationNo' => $documentno,
+                'recordID' => $recordID
             ];
             //save comment
             $Commentrequest = Yii::$app->navhelper->postData($Commentservice, $commentData);
@@ -493,23 +475,8 @@ class ApprovalsController extends Controller
                 return ['note' => '<div class="alert alert-danger">Error Rejecting Request: ' . $Commentrequest . '</div>'];
             }
 
-            if ($docType == 'Requisition_Header') {
-                $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'IanRejectRequisitionHeader');
-            } elseif ($docType == 'Leave_Reimbursement') {
-                $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'IanRejectLeave');
-            } elseif ($docType == 'Contract_Renewal') {
-                $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'IanRejectChangeRequest');
-            } elseif ($docType == 'Overtime_Application') {
-                $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'IanRejectOverTime');
-            } elseif ($docType == 'Employee_Exit') {
-                $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'IanRejectEmployeeExit');
-            } elseif ($docType == 'Change_Request') {
-                $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'IanRejectChangeRequest');
-            } elseif ($docType == 'Training_Application') {
-                $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'IanRejectTraining');
-            } else {
-                $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'IanRejectLeave');
-            }
+            $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'RejectDocumentApproval');
+
 
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;

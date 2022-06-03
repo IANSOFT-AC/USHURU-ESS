@@ -1,14 +1,49 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
  * Date: 2/24/2020
  * Time: 12:13 PM
  */
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+
 $absoluteUrl = \yii\helpers\Url::home(true);
 ?>
+
+<div class="row">
+    <div class="col-md-4">
+
+        <?= ($model->Status == 'Open') ? Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req', ['send-for-approval'], [
+            'class' => 'btn btn-app submitforapproval',
+            'data' => [
+                'confirm' => 'Are you sure you want to send this document for approval?',
+                'params' => [
+                    'recordID' => $recordID,
+                ],
+                'method' => 'get',
+            ],
+            'title' => 'Submit Leave Approval'
+
+        ]) : '' ?>
+
+
+        <?php ($model->Status == 'Pending_Approval') ? Html::a('<i class="fas fa-times"></i> Cancel Approval Req.', ['cancel-request'], [
+            'class' => 'btn btn-app submitforapproval',
+            'data' => [
+                'confirm' => 'Are you sure you want to cancel this document approval request?',
+                'params' => [
+                    'recordID' => $recordID,
+                ],
+                'method' => 'get',
+            ],
+            'title' => 'Cancel Leave Approval Request'
+
+        ]) : '' ?>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-md-12">
@@ -21,32 +56,32 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
 
-        <?php
+                <?php
 
-            $form = ActiveForm::begin([
+                $form = ActiveForm::begin([
                     'id' => $model->formName()
-            ]);
+                ]);
 
 
 
-        if(Yii::$app->session->hasFlash('success')){
-            print ' <div class="alert alert-success alert-dismissable">
+                if (Yii::$app->session->hasFlash('success')) {
+                    print ' <div class="alert alert-success alert-dismissable">
                              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                                     <h5><i class="icon fas fa-check"></i> Success!</h5>
  ';
-            echo Yii::$app->session->getFlash('success');
-            print '</div>';
-        }else if(Yii::$app->session->hasFlash('error')){
-            print ' <div class="alert alert-danger alert-dismissable">
+                    echo Yii::$app->session->getFlash('success');
+                    print '</div>';
+                } else if (Yii::$app->session->hasFlash('error')) {
+                    print ' <div class="alert alert-danger alert-dismissable">
                                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                                     <h5><i class="icon fas fa-check"></i> Error!</h5>
                                 ';
-            echo Yii::$app->session->getFlash('error');
-            print '</div>';
-        }
+                    echo Yii::$app->session->getFlash('error');
+                    print '</div>';
+                }
 
 
-            ?>
+                ?>
                 <div class="row">
                     <div class="row col-md-12">
 
@@ -54,42 +89,43 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                         <div class="col-md-6">
 
-                            <?= $form->field($model, 'No')->textInput(['readonly'=> true]) ?>
+                            <?= $form->field($model, 'No')->textInput(['readonly' => true]) ?>
                             <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
 
-                            <?= $form->field($model, 'Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Purpose_Code')->dropDownList($purpose,['required' => true, 'prompt' => 'Select ...']) ?>
-                            <?= '<p><span>Employee Balance</span> '.Html::a($model->Employee_Balance,'#'); '</p>' ?>
+                            <?= $form->field($model, 'Employee_No')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Employee_Name')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Purpose_Code')->dropDownList($purpose, ['required' => true, 'prompt' => 'Select ...']) ?>
+                            <?= '<p><span>Employee Balance</span> ' . Html::a($model->Employee_Balance, '#');
+                            '</p>' ?>
 
-                            <?= $form->field($model, 'Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Global_Dimension_1_Code')->dropDownList($programs,['prompt' => 'Select ..','readonly'=> true]) ?>
-                            <?= $form->field($model, 'Global_Dimension_2_Code')->dropDownList($departments, ['prompt' => 'select ...','readonly'=> true]) ?>
-                            <?= $form->field($model, 'Loan_Type')->dropDownList($loans, ['prompt' => 'select ...','required' => true,'readonly'=> true]) ?>
+                            <?= $form->field($model, 'Status')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Global_Dimension_1_Code')->dropDownList($programs, ['prompt' => 'Select ..', 'readonly' => true]) ?>
+                            <?= $form->field($model, 'Global_Dimension_2_Code')->dropDownList($departments, ['prompt' => 'select ...', 'readonly' => true]) ?>
+                            <?= $form->field($model, 'Loan_Type')->dropDownList($loans, ['prompt' => 'select ...', 'required' => true, 'readonly' => true]) ?>
 
 
                         </div>
 
                         <div class="col-md-6">
-                            
-                            <?= $form->field($model, 'Basic_Pay', ['inputOptions' => ['value' => Yii::$app->formatter->asDecimal($model->Basic_Pay)]])->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, '_x0031__3_of_Basic',['inputOptions' => ['value' => Yii::$app->formatter->asDecimal($model->_x0031__3_of_Basic)]])->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Current_Net_Pay',['inputOptions' => ['value' => Yii::$app->formatter->asDecimal($model->Current_Net_Pay)]])->textInput(['readonly'=> true, 'disabled'=>true]) ?>
 
-                            <?= $form->field($model, 'Take_Home', ['inputOptions' => ['value' => Yii::$app->formatter->asDecimal($model->Take_Home)]])->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Amount_Requested')->textInput(['required'=> true]) ?>
-                           
-                            <?= $form->field($model, 'Repayment_Period')->textInput(['readonly'=> true]) ?>
-                            <?= $form->field($model, 'Months_Paid')->textInput(['readonly'=> true,'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Instalments')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                            <?= $form->field($model, 'Basic_Pay', ['inputOptions' => ['value' => Yii::$app->formatter->asDecimal($model->Basic_Pay)]])->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, '_x0031__3_of_Basic', ['inputOptions' => ['value' => Yii::$app->formatter->asDecimal($model->_x0031__3_of_Basic)]])->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Current_Net_Pay', ['inputOptions' => ['value' => Yii::$app->formatter->asDecimal($model->Current_Net_Pay)]])->textInput(['readonly' => true, 'disabled' => true]) ?>
 
+                            <?= $form->field($model, 'Take_Home', ['inputOptions' => ['value' => Yii::$app->formatter->asDecimal($model->Take_Home)]])->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Amount_Requested')->textInput(['required' => true]) ?>
 
+                            <?= $form->field($model, 'Repayment_Period')->textInput(['readonly' => true]) ?>
+                            <?= $form->field($model, 'Months_Paid')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Instalments')->textInput(['readonly' => true, 'disabled' => true]) ?>
 
 
 
 
 
-<!--                            <p class="parent"><span>+</span>-->
+
+
+                            <!--                            <p class="parent"><span>+</span>-->
 
 
 
@@ -122,7 +158,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                 <div class="row">
 
                     <div class="form-group">
-                        <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success','id' => 'submit']) ?>
+                        <?= Html::submitButton(($model->isNewRecord) ? 'Save' : 'Update', ['class' => 'btn btn-success', 'id' => 'submit']) ?>
                     </div>
 
 
@@ -133,22 +169,22 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                 <!---Upload Leave Attachment File-->
 
-                <?php $atform = \yii\widgets\ActiveForm::begin(['id'=>'attachmentform'],['options' => ['enctype' => 'multipart/form-data']]); ?>
-                    <?= $atform->errorSummary($Attachmentmodel)?>
-                    <button class="btn btn-primary btn-file"><?= $Attachmentmodel->getPath($model->No)?'<i class="fa fa-upload"></i>&nbsp;&nbsp;Update Attachment':'<i class="fa fa-upload"></i>&nbsp;&nbsp;Upload Attachment' ?>
-                        <?= $atform->field($Attachmentmodel,'attachmentfile')->fileInput(['id' => 'attachmentfile', 'name' => 'attachmentfile' ])->label(false);?>
-                    </button>
+                <?php $atform = \yii\widgets\ActiveForm::begin(['id' => 'attachmentform'], ['options' => ['enctype' => 'multipart/form-data']]); ?>
+                <?= $atform->errorSummary($Attachmentmodel) ?>
+                <button class="btn btn-primary btn-file"><?= $Attachmentmodel->getPath($model->No) ? '<i class="fa fa-upload"></i>&nbsp;&nbsp;Update Attachment' : '<i class="fa fa-upload"></i>&nbsp;&nbsp;Upload Attachment' ?>
+                    <?= $atform->field($Attachmentmodel, 'attachmentfile')->fileInput(['id' => 'attachmentfile', 'name' => 'attachmentfile'])->label(false); ?>
+                </button>
 
-                    <?= $atform->field($Attachmentmodel,'Document_No')->hiddenInput(['value' => $model->No])->label(false);?>
-                    <?= Html::submitButton(($model->isNewRecord)?'':'', ['class' => '']) ?>
+                <?= $atform->field($Attachmentmodel, 'Document_No')->hiddenInput(['value' => $model->No])->label(false); ?>
+                <?= Html::submitButton(($model->isNewRecord) ? '' : '', ['class' => '']) ?>
 
                 <?php \yii\widgets\ActiveForm::end(); ?>
 
                 <!-- End File Upload form -->
 
-                <?php if($Attachmentmodel->getPath($model->No)){   ?>
+                <?php if ($Attachmentmodel->getPath($model->No)) {   ?>
 
-                <iframe src="data:application/pdf;base64,<?= $Attachmentmodel->readAttachment($model->No); ?>" height="950px" width="100%"></iframe>
+                    <iframe src="data:application/pdf;base64,<?= $Attachmentmodel->readAttachment($model->No); ?>" height="950px" width="100%"></iframe>
                 <?php }  ?>
 
 
@@ -165,28 +201,28 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
 
-    <!--My Bs Modal template  --->
+<!--My Bs Modal template  --->
 
-    <div class="modal fade bs-example-modal-lg bs-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
+<div class="modal fade bs-example-modal-lg bs-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
 
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel" style="position: absolute">Salary Advance Management</h4>
-                </div>
-                <div class="modal-body">
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <!--<button type="button" class="btn btn-primary">Save changes</button>-->
-                </div>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel" style="position: absolute">Salary Advance Management</h4>
+            </div>
+            <div class="modal-body">
 
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+            </div>
+
         </div>
     </div>
+</div>
 <input type="hidden" name="url" value="<?= $absoluteUrl ?>">
 <?php
 $script = <<<JS

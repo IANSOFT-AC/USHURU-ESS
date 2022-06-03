@@ -29,26 +29,25 @@ Yii::$app->session->set('isSupervisor',false);*/
             'data' => [
                 'confirm' => 'Are you sure you want to send this document for approval?',
                 'params' => [
-                    'Plan_No' => $model->Plan_No,
-                    'employeeNo' => Yii::$app->user->identity->{'Employee No_'},
+                    'recordID' => $recordID,
                 ],
                 'method' => 'get',
             ],
-            'title' => 'Submit Leave Plan Approval'
+            'title' => 'Submit Leave Approval'
 
         ]) : '' ?>
 
 
-        <?= ($model->Status == 'Pending_Approval' && !Yii::$app->request->get('Approval')) ? Html::a('<i class="fas fa-times"></i> Cancel Approval Req.', ['cancel-request'], [
+        <?php ($model->Status == 'Pending_Approval') ? Html::a('<i class="fas fa-times"></i> Cancel Approval Req.', ['cancel-request'], [
             'class' => 'btn btn-app submitforapproval',
             'data' => [
-                'confirm' => 'Are you sure you want to cancel imprest approval request?',
+                'confirm' => 'Are you sure you want to cancel this document approval request?',
                 'params' => [
-                    'No' => $model->Plan_No,
+                    'recordID' => $recordID,
                 ],
                 'method' => 'get',
             ],
-            'title' => 'Cancel Leave Plan Approval Request'
+            'title' => 'Cancel Leave Approval Request'
 
         ]) : '' ?>
     </div>

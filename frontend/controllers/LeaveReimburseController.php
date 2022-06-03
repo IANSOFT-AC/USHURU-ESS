@@ -92,22 +92,9 @@ class LeaveReimburseController extends Controller
             //Yii::$app->recruitment->printrr($request);
             if (is_object($request)) {
                 Yii::$app->navhelper->loadmodel($request, $model);
+                return $this->redirect(['update', 'No' => $model->Application_No]);
             } else {
                 Yii::$app->session->setFlash('error', 'Error : ' . $request, true);
-                return $this->redirect(['index']);
-            }
-        }
-
-        if (Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['LeaveReimburse'], $model)) {
-
-
-            $result = Yii::$app->navhelper->updateData($service, $model);
-            if (!is_string($result)) {
-
-                Yii::$app->session->setFlash('success', 'Leave Reimbursement Document Created Successfully.');
-                return $this->redirect(['index']);
-            } else {
-                Yii::$app->session->setFlash('error', 'Error Creating Leave Reimbursement ' . $result);
                 return $this->redirect(['index']);
             }
         }
@@ -166,18 +153,21 @@ class LeaveReimburseController extends Controller
             }
         }
 
+        $recordID = $this->getRecordID($service, $model->Key);
+
 
         // Yii::$app->recruitment->printrr($model);
         if (Yii::$app->request->isAjax) {
             return $this->renderAjax('update', [
                 'model' => $model,
+                'recordID' => $recordID
 
             ]);
         }
 
         return $this->render('update', [
             'model' => $model,
-
+            'recordID' => $recordID
         ]);
     }
 
@@ -207,15 +197,19 @@ class LeaveReimburseController extends Controller
 
         //load nav result to model
         $model = $this->loadtomodel($result, $model);
-
-        //Yii::$app->recruitment->printrr($model);
+        $recordID = $this->getRecordID($service, $model->Key);
 
         return $this->render('view', [
             'model' => $model,
+            'recordID' => $recordID
         ]);
     }
 
 
+    public function getRecordID($service, $Key)
+    {
+        return Yii::$app->navhelper->getRecordID($service, $Key);
+    }
 
     // Get imprest list
 
@@ -233,14 +227,14 @@ class LeaveReimburseController extends Controller
             if (empty($item->Application_No)) {
                 continue;
             }
-
+            $recordID = $this->getRecordID($service, $item->Key);
             $link = $updateLink = $deleteLink =  '';
             $Viewlink = Html::a('<i class="fas fa-eye"></i>', ['view', 'No' => $item->Application_No], ['class' => 'btn btn-outline-primary btn-xs']);
             if ($item->Status == 'New') {
-                $link = Html::a('<i class="fas fa-paper-plane"></i>', ['send-for-approval', 'No' => $item->Application_No], ['title' => 'Send Approval Request', 'class' => 'btn btn-primary btn-xs']);
+                $link = Html::a('<i class="fas fa-paper-plane"></i>', ['send-for-approval', 'recordID' => $recordID], ['title' => 'Send Approval Request', 'class' => 'btn btn-primary btn-xs']);
                 $updateLink = Html::a('<i class="far fa-edit"></i>', ['update', 'No' => $item->Application_No], ['class' => 'btn btn-info btn-xs']);
             } else if ($item->Status == 'Pending_Approval') {
-                $link = Html::a('<i class="fas fa-times"></i>', ['cancel-request', 'No' => $item->Application_No], ['title' => 'Cancel Approval Request', 'class' => 'btn btn-warning btn-xs']);
+                $link = Html::a('<i class="fas fa-times"></i>', ['cancel-request', 'recordID' => $recordID], ['title' => 'Cancel Approval Request', 'class' => 'btn btn-warning btn-xs']);
             }
 
             $result['data'][] = [
@@ -363,8 +357,9 @@ class LeaveReimburseController extends Controller
             $model->Key = $request[0]->Key;
             $model->Days_To_Reimburse = Yii::$app->request->post('Days_To_Reimburse');
         } else {
-            print_r($result);
-            exit;
+            return [
+                $request
+            ];
         }
 
         $result = Yii::$app->navhelper->updateData($service, $model);
@@ -398,31 +393,7 @@ class LeaveReimburseController extends Controller
         return $result;
     }
 
-    /* Set Imprest Type */
 
-    public function actionSetimpresttype()
-    {
-        $model = new Imprestcard();
-        $service = Yii::$app->params['ServiceName']['ImprestRequestCardPortal'];
-
-        $filter = [
-            'No' => Yii::$app->request->post('No')
-        ];
-        $request = Yii::$app->navhelper->getData($service, $filter);
-
-        if (is_array($request)) {
-            Yii::$app->navhelper->loadmodel($request[0], $model);
-            $model->Key = $request[0]->Key;
-            $model->Imprest_Type = Yii::$app->request->post('Imprest_Type');
-        }
-
-
-        $result = Yii::$app->navhelper->updateData($service, $model, ['Amount_LCY']);
-
-        Yii::$app->response->format = \yii\web\response::FORMAT_JSON;
-
-        return $result;
-    }
 
     /*Set Imprest to Surrend*/
 
@@ -465,43 +436,40 @@ class LeaveReimburseController extends Controller
         return $model;
     }
 
-    /* Call Approval Workflow Methods */
-
-    public function actionSendForApproval($No)
+    public function actionSendForApproval($recordID)
     {
         $service = Yii::$app->params['ServiceName']['PortalFactory'];
 
         $data = [
-            'applicationNo' => $No,
-            'sendMail' => true,
-            'approvalUrl' => '',
+            'recordID' => $recordID
         ];
 
 
-        $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'IanSendLeaveForApproval');
+        $result = Yii::$app->navhelper->codeunit($service, $data, 'SendDocumentApproval');
 
         if (!is_string($result)) {
-            Yii::$app->session->setFlash('success', 'Request Sent to Supervisor Successfully.', true);
+            Yii::$app->session->setFlash('success', 'Document Sent for Approval Successfully.', true);
+            //return $this->redirect(['view','No' => $No]);
             return $this->redirect(['index']);
         } else {
 
             Yii::$app->session->setFlash('error', 'Error Sending Request for Approval  : ' . $result);
+            // return $this->redirect(['view','No' => $No]);
             return $this->redirect(['index']);
         }
     }
 
     /*Cancel Approval Request */
 
-    public function actionCancelRequest($No)
+    public function actionCancelRequest($recordID)
     {
         $service = Yii::$app->params['ServiceName']['PortalFactory'];
 
         $data = [
-            'applicationNo' => $No,
+            'recordID' => $recordID
         ];
 
-
-        $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'IanCancelLeaveApprovalRequest');
+        $result = Yii::$app->navhelper->codeunit($service, $data, 'CancelDocumentApproval');
 
         if (!is_string($result)) {
             Yii::$app->session->setFlash('success', 'Approval Request Cancelled Successfully.', true);

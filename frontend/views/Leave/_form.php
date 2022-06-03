@@ -12,7 +12,37 @@ use yii\widgets\ActiveForm;
 
 $absoluteUrl = \yii\helpers\Url::home(true);
 ?>
+<div class="row">
+    <div class="col-md-4">
 
+        <?= ($model->Status == 'New') ? Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req', ['send-for-approval'], [
+            'class' => 'btn btn-app submitforapproval',
+            'data' => [
+                'confirm' => 'Are you sure you want to send this document for approval?',
+                'params' => [
+                    'recordID' => $recordID,
+                ],
+                'method' => 'get',
+            ],
+            'title' => 'Submit Leave Approval'
+
+        ]) : '' ?>
+
+
+        <?php ($model->Status == 'Pending_Approval') ? Html::a('<i class="fas fa-times"></i> Cancel Approval Req.', ['cancel-request'], [
+            'class' => 'btn btn-app submitforapproval',
+            'data' => [
+                'confirm' => 'Are you sure you want to cancel this document approval request?',
+                'params' => [
+                    'recordID' => $recordID,
+                ],
+                'method' => 'get',
+            ],
+            'title' => 'Cancel Leave Approval Request'
+
+        ]) : '' ?>
+    </div>
+</div>
 <div class="row">
     <div class="col-md-12">
         <div class="card">
@@ -166,10 +196,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
 
-                <?php if ($Attachmentmodel->getPath($model->Application_No)) {   ?>
 
-                    <iframe src="data:application/pdf;base64,<?= $Attachmentmodel->readAttachment($model->Application_No); ?>" height="950px" width="100%"></iframe>
-                <?php }  ?>
             </div>
         </div>
 

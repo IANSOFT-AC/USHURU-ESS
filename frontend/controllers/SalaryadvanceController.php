@@ -91,17 +91,10 @@ class SalaryadvanceController extends Controller
             $request = Yii::$app->navhelper->postData($service, $model);
             if (is_object($request)) {
                 Yii::$app->navhelper->loadmodel($request, $model);
+                return $this->redirect(['update', 'No' => $model->No]);
             } else if (is_string($request)) {
                 Yii::$app->session->setFlash('error', $request);
-                return $this->render('create', [
-                    'model' => $model,
-                    'employees' => $this->getEmployees(),
-                    'programs' => $this->getPrograms(),
-                    'departments' => $this->getDepartments(),
-                    'currencies' => $this->getCurrencies(),
-                    'loans' => $this->getLoans(),
-                    'purpose' => $this->getPurpose(),
-                ]);
+                return $this->redirect(['index']);
             }
         }
 
@@ -201,7 +194,7 @@ class SalaryadvanceController extends Controller
                 'programs' => $this->getPrograms(),
                 'departments' => $this->getDepartments(),
                 'currencies' => $this->getCurrencies(),
-                'loans' => $this->getLoans(),
+                'loans' => [], // $this->getLoans(),
                 'purpose' => $this->getPurpose(),
             ]);
         }
@@ -281,7 +274,7 @@ class SalaryadvanceController extends Controller
         }
 
 
-
+        $recordID = $this->getRecordID($service, $model->Key);
 
 
 
@@ -306,6 +299,7 @@ class SalaryadvanceController extends Controller
             'currencies' => $this->getCurrencies(),
             'loans' => $this->getLoans(),
             'purpose' => $this->getPurpose(),
+            'recordID' => $recordID
         ]);
     }
 
@@ -340,13 +334,19 @@ class SalaryadvanceController extends Controller
 
         //load nav result to model
         $model = $this->loadtomodel($result[0], $model);
-
+        $recordID = $this->getRecordID($service, $model->Key);
         //Yii::$app->recruitment->printrr($model);
         $model->_x0031__3_of_Basic = number_format($model->_x0031__3_of_Basic);
         return $this->render('view', [
             'model' => $model,
             'Attachmentmodel' => new \frontend\models\Leaveattachment(),
+            'recordID' => $recordID
         ]);
+    }
+
+    public function getRecordID($service, $Key)
+    {
+        return Yii::$app->navhelper->getRecordID($service, $Key);
     }
 
     /*Imprest surrender card view*/
@@ -386,13 +386,14 @@ class SalaryadvanceController extends Controller
 
         if (is_array($results)) {
             foreach ($results as $item) {
+                $recordID = $this->getRecordID($service, $item->Key);
                 $link = $updateLink = $deleteLink =  '';
                 $Viewlink = Html::a('<i class="fas fa-eye"></i>', ['view', 'No' => $item->No], ['class' => 'btn btn-outline-primary btn-xs']);
                 if ($item->Status == 'New') {
-                    $link = Html::a('<i class="fas fa-paper-plane"></i>', ['send-for-approval', 'No' => $item->No], ['title' => 'Send Approval Request', 'class' => 'btn btn-primary btn-xs']);
+                    $link = Html::a('<i class="fas fa-paper-plane"></i>', ['send-for-approval', 'recordID' => $recordID], ['title' => 'Send Approval Request', 'class' => 'btn btn-primary btn-xs']);
                     $updateLink = Html::a('<i class="far fa-edit"></i>', ['update', 'No' => $item->No], ['class' => 'btn btn-info btn-xs']);
                 } else if ($item->Status == 'Pending_Approval') {
-                    $link = Html::a('<i class="fas fa-times"></i>', ['cancel-request', 'No' => $item->No], ['title' => 'Cancel Approval Request', 'class' => 'btn btn-warning btn-xs']);
+                    $link = Html::a('<i class="fas fa-times"></i>', ['cancel-request', 'recordID' => $recordID], ['title' => 'Cancel Approval Request', 'class' => 'btn btn-warning btn-xs']);
                 }
 
                 $result['data'][] = [

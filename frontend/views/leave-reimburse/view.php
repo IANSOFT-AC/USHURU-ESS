@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -9,9 +10,9 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$this->title = 'Leave Reimbursement - '.$model->Application_No;
+$this->title = 'Leave Reimbursement - ' . $model->Application_No;
 $this->params['breadcrumbs'][] = ['label' => 'Leave Reimbursements', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => 'Leave Reimbursement Card', 'url' => ['view','No'=> $model->Application_No]];
+$this->params['breadcrumbs'][] = ['label' => 'Leave Reimbursement Card', 'url' => ['view', 'No' => $model->Application_No]];
 /** Status Sessions */
 
 
@@ -23,130 +24,169 @@ Yii::$app->session->set('isSupervisor',false);*/
 <div class="row">
     <div class="col-md-4">
 
-        <?= ($model->Status == 'New')?Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req',['send-for-approval'],['class' => 'btn btn-app submitforapproval',
+        <?= ($model->Status == 'Open') ? Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req', ['send-for-approval'], [
+            'class' => 'btn btn-app submitforapproval',
             'data' => [
                 'confirm' => 'Are you sure you want to send this document for approval?',
-                'params'=>[
-                    'No'=> $model->Application_No,
-                    'employeeNo' => $model->Employee_No,
+                'params' => [
+                    'recordID' => $recordID,
                 ],
                 'method' => 'get',
-        ],
-            'title' => 'Submit Leave Approval'
-
-        ]):'' ?>
-
-
-        <?= ($model->Status == 'Pending_Approval')?Html::a('<i class="fas fa-times"></i> Cancel Approval Req.',['cancel-request'],['class' => 'btn btn-app submitforapproval',
-            'data' => [
-            'confirm' => 'Are you sure you want to cancel imprest approval request?',
-            'params'=>[
-                'No'=> $model->Application_No,
             ],
-            'method' => 'get',
-        ],
-            'title' => 'Cancel Leave Approval Request'
+            'title' => 'Submit Document Approval'
 
-        ]):'' ?>
+        ]) : '' ?>
+
+
+        <?php ($model->Status == 'Pending_Approval') ? Html::a('<i class="fas fa-times"></i> Cancel Approval Req.', ['cancel-request'], [
+            'class' => 'btn btn-app submitforapproval',
+            'data' => [
+                'confirm' => 'Are you sure you want to cancel this document approval request?',
+                'params' => [
+                    'recordID' => $recordID,
+                ],
+                'method' => 'get',
+            ],
+            'title' => 'Cancel Document Approval Request'
+
+        ]) : '' ?>
     </div>
 </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card-info">
-                <div class="card-header">
-                    <h3>Leave Reimbursement Application Card </h3>
+<div class="row">
+    <div class="col-md-4">
+
+        <?= ($model->Status == 'New') ? Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req', ['send-for-approval'], [
+            'class' => 'btn btn-app submitforapproval',
+            'data' => [
+                'confirm' => 'Are you sure you want to send this document for approval?',
+                'params' => [
+                    'No' => $model->Application_No,
+                    'employeeNo' => $model->Employee_No,
+                ],
+                'method' => 'get',
+            ],
+            'title' => 'Submit Leave Approval'
+
+        ]) : '' ?>
+
+
+        <?= ($model->Status == 'Pending_Approval') ? Html::a('<i class="fas fa-times"></i> Cancel Approval Req.', ['cancel-request'], [
+            'class' => 'btn btn-app submitforapproval',
+            'data' => [
+                'confirm' => 'Are you sure you want to cancel imprest approval request?',
+                'params' => [
+                    'No' => $model->Application_No,
+                ],
+                'method' => 'get',
+            ],
+            'title' => 'Cancel Leave Approval Request'
+
+        ]) : '' ?>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card-info">
+            <div class="card-header">
+                <h3>Leave Reimbursement Application Card </h3>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+
+
+
+
+                <h3 class="card-title">Leave Recall Document : <?= $model->Application_No ?></h3>
+
+
+
+                <?php
+                if (Yii::$app->session->hasFlash('success')) {
+                    print ' <div class="alert alert-success alert-dismissable">
+                                 ';
+                    echo Yii::$app->session->getFlash('success');
+                    print '</div>';
+                } else if (Yii::$app->session->hasFlash('error')) {
+                    print ' <div class="alert alert-danger alert-dismissable">
+                                 ';
+                    echo Yii::$app->session->getFlash('error');
+                    print '</div>';
+                }
+                ?>
+            </div>
+            <div class="card-body">
+
+
+                <?php $form = ActiveForm::begin(); ?>
+
+
+                <div class="row">
+                    <div class=" row col-md-12">
+                        <div class="col-md-6">
+                            <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
+                            <?= $form->field($model, 'Employee_No')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= '<p><span>Employee Name</span> ' . Html::a($model->Employee_Name, '#');
+                            '</p>' ?>
+
+                            <?= '<p><span>Program Code</span> ' . Html::a($model->_x003C_Global_Dimension_1_Code_x003E_, '#');
+                            '</p>' ?>
+                            <?= '<p><span>Department Code</span> ' . Html::a($model->Global_Dimension_2_Code, '#');
+                            '</p>' ?>
+
+
+                            <?= $form->field($model, 'Application_No')->textInput(['required' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Application_Date')->textInput(['required' => true, 'disabled' => true]) ?>
+
+                            <?= $form->field($model, 'User_ID')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Leave_Code')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Leave_Type_Decription')->textInput(['readonly' => true, 'disabled' => true]) ?>
+
+
+                        </div>
+                        <div class="col-md-6">
+                            <?= $form->field($model, 'Days_To_Reimburse')->textInput(['type' => 'number', 'required' => true, 'readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Leave_balance')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Balance_After')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Comments')->textArea(['rows' => 2, 'required' => true, 'readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Phone_No')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'E_Mail_Address')->textInput(['type' => 'email', 'readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Grade')->textInput(['type' => 'email', 'readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Status')->textInput(['readonly' => true, 'disabled' => true]) ?>
+
+                            <?= '<p><span>Approval_Entries</span> ' . Html::a($model->Approval_Entries, '#');
+                            '</p>' ?>
+
+
+
+
+                        </div>
+                    </div>
                 </div>
+
+
+
+
+                <?php ActiveForm::end(); ?>
 
 
 
             </div>
         </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
+        <!--end details card-->
 
 
-
-
-                    <h3 class="card-title">Leave Recall Document : <?= $model->Application_No?></h3>
-
-
-
-                    <?php
-                    if(Yii::$app->session->hasFlash('success')){
-                        print ' <div class="alert alert-success alert-dismissable">
-                                 ';
-                        echo Yii::$app->session->getFlash('success');
-                        print '</div>';
-                    }else if(Yii::$app->session->hasFlash('error')){
-                        print ' <div class="alert alert-danger alert-dismissable">
-                                 ';
-                        echo Yii::$app->session->getFlash('error');
-                        print '</div>';
-                    }
-                    ?>
-                </div>
-                <div class="card-body">
-
-
-                    <?php $form = ActiveForm::begin(); ?>
-
-
-                    <div class="row">
-                        <div class=" row col-md-12">
-                            <div class="col-md-6">
-                                <?= $form->field($model, 'Key')->hiddenInput()->label(false) ?>
-                            <?= $form->field($model, 'Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= '<p><span>Employee Name</span> '.Html::a($model->Employee_Name,'#'); '</p>' ?>
-                            
-                            <?= '<p><span>Program Code</span> '.Html::a($model->_x003C_Global_Dimension_1_Code_x003E_,'#'); '</p>' ?>
-                            <?= '<p><span>Department Code</span> '.Html::a($model->Global_Dimension_2_Code,'#'); '</p>' ?>
-
-
-                            <?= $form->field($model, 'Application_No')->textInput(['required' => true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Application_Date')->textInput(['required' => true, 'disabled'=>true]) ?>
-                            
-                            <?= $form->field($model, 'User_ID')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Leave_Code')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Leave_Type_Decription')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-
-
-                            </div>
-                            <div class="col-md-6">
-                                <?= $form->field($model, 'Days_To_Reimburse')->textInput(['type'=> 'number','required' => true, 'readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Leave_balance')->textInput(['readonly'=> true,'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Balance_After')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Comments')->textArea(['rows'=> 2, 'required'=>true, 'readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Phone_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'E_Mail_Address')->textInput(['type' => 'email','readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Grade')->textInput(['type' => 'email','readonly'=> true, 'disabled'=>true]) ?>
-                            <?= $form->field($model, 'Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-
-                            <?= '<p><span>Approval_Entries</span> '.Html::a($model->Approval_Entries,'#'); '</p>' ?>
-
-
-
-
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
-                    <?php ActiveForm::end(); ?>
-
-
-
-                </div>
-            </div><!--end details card-->
-
-
-            <!--Objectives card -->
+        <!--Objectives card -->
 
 
 
@@ -176,9 +216,9 @@ Yii::$app->session->set('isSupervisor',false);*/
     </div>
 
 
-<?php
+    <?php
 
-$script = <<<JS
+    $script = <<<JS
 
     $(function(){
       
@@ -390,9 +430,9 @@ $script = <<<JS
         
 JS;
 
-$this->registerJs($script);
+    $this->registerJs($script);
 
-$style = <<<CSS
+    $style = <<<CSS
     p span {
         margin-right: 50%;
         font-weight: bold;
@@ -430,4 +470,4 @@ $style = <<<CSS
     }
 CSS;
 
-$this->registerCss($style);
+    $this->registerCss($style);

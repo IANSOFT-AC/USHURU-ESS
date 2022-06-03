@@ -144,18 +144,13 @@ class StaffClaimController extends Controller
             return $this->redirect(['index']);
         }
 
-        // Yii::$app->recruitment->printrr($model);
-        if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('update', [
-                'model' => $model,
-                'document' => $result
+        $recordID = $this->getRecordID($service, $model->Key);
 
-            ]);
-        }
 
         return $this->render('update', [
             'model' => $model,
-            'document' => $result
+            'document' => $result,
+            'recordID' => $recordID
         ]);
     }
 
@@ -185,77 +180,24 @@ class StaffClaimController extends Controller
 
         //load nav result to model
         $model = $this->loadtomodel($result, $model);
+        $recordID = $this->getRecordID($service, $model->Key);
 
         //Yii::$app->recruitment->printrr($model);
 
         return $this->render('view', [
             'model' => $model,
             'document' => $result,
-            'attachments' => [] //Yii::$app->navhelper->getData(Yii::$app->params['ServiceName']['LeaveAttachments'], ['Document_No' => $model->No]),
+            'attachments' => [],
+            'recordID' => $recordID
         ]);
     }
 
-    /*Imprest surrender card view*/
-
-    public function actionViewSurrender($No)
+    public function getRecordID($service, $Key)
     {
-        $service = Yii::$app->params['ServiceName']['ImprestSurrenderCard'];
-
-        $filter = [
-            'No' => $No
-        ];
-
-        $result = Yii::$app->navhelper->getData($service, $filter);
-        //load nav result to model
-        $model = $this->loadtomodel($result[0], new Imprestsurrendercard());
-
-        return $this->render('viewsurrender', [
-            'model' => $model,
-            'employees' => $this->getEmployees(),
-            'programs' => $this->getPrograms(),
-            'departments' => $this->getDepartments(),
-            'currencies' => Yii::$app->navhelper->dropdown('Currencies', 'Code', 'Description')
-        ]);
+        return Yii::$app->navhelper->getRecordID($service, $Key);
     }
 
-    // Get imprest list
 
-    public function actionGetimprests()
-    {
-        $service = Yii::$app->params['ServiceName']['ImprestRequestListPortal'];
-        $filter = [
-            'Employee_No' => Yii::$app->user->identity->Employee[0]->No,
-        ];
-        //Yii::$app->recruitment->printrr( );
-        $results = \Yii::$app->navhelper->getData($service, $filter);
-        $result = [];
-        foreach ($results as $item) {
-            $link = $updateLink = $deleteLink =  '';
-            $Viewlink = Html::a('<i class="fas fa-eye"></i>', ['view', 'No' => $item->No], ['class' => 'btn btn-outline-primary btn-xs']);
-            if ($item->Status == 'New') {
-                $link = Html::a('<i class="fas fa-paper-plane"></i>', ['send-for-approval', 'No' => $item->No], ['title' => 'Send Approval Request', 'class' => 'btn btn-primary btn-xs']);
-
-                $updateLink = Html::a('<i class="far fa-edit"></i>', ['update', 'No' => $item->No], ['class' => 'btn btn-info btn-xs']);
-            } else if ($item->Status == 'Pending_Approval') {
-                $link = Html::a('<i class="fas fa-times"></i>', ['cancel-request', 'No' => $item->No], ['title' => 'Cancel Approval Request', 'class' => 'btn btn-warning btn-xs']);
-            }
-
-            $result['data'][] = [
-                'Key' => $item->Key,
-                'No' => $item->No,
-                'Employee_No' => !empty($item->Employee_No) ? $item->Employee_No : '',
-                'Employee_Name' => !empty($item->Employee_Name) ? $item->Employee_Name : '',
-                'Purpose' => !empty($item->Purpose) ? $item->Purpose : '',
-                'Imprest_Amount' => !empty($item->Imprest_Amount) ? $item->Imprest_Amount : '',
-                'Status' => $item->Status,
-                'Action' => $link,
-                'Update_Action' => $updateLink,
-                'view' => $Viewlink
-            ];
-        }
-
-        return $result;
-    }
 
     // Get Fund Request list
 
@@ -276,15 +218,15 @@ class StaffClaimController extends Controller
                 if (empty($item->No)) {
                     continue;
                 }
-
+                $recordID = $this->getRecordID($service, $item->Key);
                 $link = $updateLink = $deleteLink =  '';
                 $Viewlink = Html::a('<i class="fas fa-eye"></i>', ['view', 'Key' => $item->Key], ['class' => 'btn btn-outline-primary btn-xs mx-1', 'title' => 'View Card']);
                 if ($item->Status == 'Open') {
-                    $link = Html::a('<i class="fas fa-paper-plane"></i>', ['send-for-approval', 'No' => $item->No], ['title' => 'Send Approval Request', 'class' => 'mx-1 btn btn-primary btn-xs', 'title' => 'Make approval request.']);
+                    $link = Html::a('<i class="fas fa-paper-plane"></i>', ['send-for-approval', 'recordID' => $recordID], ['title' => 'Send Approval Request', 'class' => 'mx-1 btn btn-primary btn-xs', 'title' => 'Make approval request.']);
 
                     $updateLink = Html::a('<i class="far fa-edit"></i>', ['update', 'Key' => $item->Key], ['class' => 'mx-1 btn btn-info btn-xs', 'title' => 'Update Document']);
                 } else if ($item->Status == 'Pending_Approval') {
-                    $link = Html::a('<i class="fas fa-times"></i>', ['cancel-request', 'Key' => $item->Key], ['title' => 'Cancel Approval Request', 'class' => 'mx-1 btn btn-warning btn-xs', 'title' => 'Cancel Approval Request.']);
+                    $link = Html::a('<i class="fas fa-times"></i>', ['cancel-request', 'recordID' => $recordID], ['title' => 'Cancel Approval Request', 'class' => 'mx-1 btn btn-warning btn-xs', 'title' => 'Cancel Approval Request.']);
                 }
 
 
@@ -598,49 +540,48 @@ class StaffClaimController extends Controller
 
     /* Call Approval Workflow Methods */
 
-    public function actionSendForApproval($No)
+    public function actionSendForApproval($recordID)
     {
         $service = Yii::$app->params['ServiceName']['PortalFactory'];
 
         $data = [
-            'applicationNo' => $No,
-            'sendMail' => 1,
-            'approvalUrl' => '',
+            'recordID' => $recordID
         ];
 
 
-        $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'IanSendImprestForApproval');
+        $result = Yii::$app->navhelper->codeunit($service, $data, 'SendDocumentApproval');
 
         if (!is_string($result)) {
-            Yii::$app->session->setFlash('success', 'Approval Request Sent to Supervisor Successfully.', true);
-            return $this->redirect(['view', 'No' => $No]);
+            Yii::$app->session->setFlash('success', 'Document Sent for Approval Successfully.', true);
+            //return $this->redirect(['view','No' => $No]);
+            return $this->redirect(['index']);
         } else {
 
-            Yii::$app->session->setFlash('error', 'Error Sending Approval Request for Approval  : ' . $result);
-            return $this->redirect(['view', 'No' => $No]);
+            Yii::$app->session->setFlash('error', 'Error Sending Request for Approval  : ' . $result);
+            // return $this->redirect(['view','No' => $No]);
+            return $this->redirect(['index']);
         }
     }
 
     /*Cancel Approval Request */
 
-    public function actionCancelRequest($No)
+    public function actionCancelRequest($recordID)
     {
         $service = Yii::$app->params['ServiceName']['PortalFactory'];
 
         $data = [
-            'applicationNo' => $No,
+            'recordID' => $recordID
         ];
 
-
-        $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'IanCancelImprestForApproval');
+        $result = Yii::$app->navhelper->codeunit($service, $data, 'CancelDocumentApproval');
 
         if (!is_string($result)) {
-            Yii::$app->session->setFlash('success', 'Imprest Request Cancelled Successfully.', true);
-            return $this->redirect(['view', 'No' => $No]);
+            Yii::$app->session->setFlash('success', 'Approval Request Cancelled Successfully.', true);
+            return $this->redirect(['index']);
         } else {
 
-            Yii::$app->session->setFlash('error', 'Error Cancelling Imprest Approval Request.  : ' . $result);
-            return $this->redirect(['view', 'No' => $No]);
+            Yii::$app->session->setFlash('error', 'Error Cancelling Approval Request.  : ' . $result);
+            return $this->redirect(['index']);
         }
     }
 

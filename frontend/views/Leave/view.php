@@ -30,8 +30,7 @@ $Attachmentmodel = new \frontend\models\Leaveattachment()
             'data' => [
                 'confirm' => 'Are you sure you want to send this document for approval?',
                 'params' => [
-                    'No' => $_GET['No'],
-                    'employeeNo' => Yii::$app->user->identity->{'Employee No_'},
+                    'recordID' => $recordID,
                 ],
                 'method' => 'get',
             ],
@@ -45,7 +44,7 @@ $Attachmentmodel = new \frontend\models\Leaveattachment()
             'data' => [
                 'confirm' => 'Are you sure you want to cancel imprest approval request?',
                 'params' => [
-                    'No' => $_GET['No'],
+                    'recordID' => $recordID,
                 ],
                 'method' => 'get',
             ],
@@ -158,12 +157,7 @@ $Attachmentmodel = new \frontend\models\Leaveattachment()
                 <?php ActiveForm::end(); ?>
 
 
-                <?php if ($Attachmentmodel->getPath($model->Application_No)) {   ?>
 
-                    <iframe src="data:application/pdf;base64,<?= $Attachmentmodel->readAttachment($model->Application_No); ?>" height="950px" width="100%"></iframe>
-
-
-                <?php }  ?>
 
             </div>
         </div>

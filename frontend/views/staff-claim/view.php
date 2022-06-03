@@ -18,6 +18,39 @@ $this->params['breadcrumbs'][] = ['label' => ' Staff Claim Card', 'url' => ['vie
 
 ?>
 
+
+<div class="row">
+    <div class="col-md-4">
+
+        <?= ($model->Status == 'Open') ? Html::a('<i class="fas fa-paper-plane"></i> Send Approval Req', ['send-for-approval'], [
+            'class' => 'btn btn-app submitforapproval',
+            'data' => [
+                'confirm' => 'Are you sure you want to send this document for approval?',
+                'params' => [
+                    'recordID' => $recordID,
+                ],
+                'method' => 'get',
+            ],
+            'title' => 'Submit Leave Approval'
+
+        ]) : '' ?>
+
+
+        <?php ($model->Status == 'Pending_Approval') ? Html::a('<i class="fas fa-times"></i> Cancel Approval Req.', ['cancel-request'], [
+            'class' => 'btn btn-app submitforapproval',
+            'data' => [
+                'confirm' => 'Are you sure you want to cancel this document approval request?',
+                'params' => [
+                    'recordID' => $recordID,
+                ],
+                'method' => 'get',
+            ],
+            'title' => 'Cancel Leave Approval Request'
+
+        ]) : '' ?>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-md-4">
 

@@ -111,7 +111,7 @@ $script = <<<JS
         
        //Hidding some 
        var table = $('#table').DataTable();
-      // table.columns([0,6]).visible(false);
+       table.columns([0,5,8,9,10,12,13]).visible(false);
     
     /*End Data tables*/
         $('#table').on('click','tr', function(){

@@ -90,11 +90,10 @@ class LeaveplanController extends Controller
             $request = Yii::$app->navhelper->postData($service, $model);
             if (!is_string($request)) {
                 Yii::$app->navhelper->loadmodel($request, $model);
+                return $this->redirect(['update', 'Plan_No' => $model->Plan_No]);
             } else {
                 Yii::$app->session->setFlash('error', $request);
-                return $this->render('create', [
-                    'model' => $model,
-                ]);
+                return $this->redirect(['index']);
             }
         }
 
@@ -170,19 +169,18 @@ class LeaveplanController extends Controller
             }
         }
 
-
+        $recordID = $this->getRecordID($service, $model->Key);
         // Yii::$app->recruitment->printrr($model);
         if (Yii::$app->request->isAjax) {
             return $this->renderAjax('update', [
                 'model' => $model,
-
-
+                'recordID' => $recordID
             ]);
         }
 
         return $this->render('update', [
             'model' => $model,
-
+            'recordID' => $recordID
         ]);
     }
 
@@ -212,12 +210,19 @@ class LeaveplanController extends Controller
 
         //load nav result to model
         $model = $this->loadtomodel($result[0], $model);
-
+        $recordID = $this->getRecordID($service, $model->Key);
         //Yii::$app->recruitment->printrr($model);
 
         return $this->render('view', [
             'model' => $model,
+            'recordID' => $recordID
         ]);
+    }
+
+
+    public function getRecordID($service, $Key)
+    {
+        return Yii::$app->navhelper->getRecordID($service, $Key);
     }
 
     // Get imprest list
@@ -232,13 +237,14 @@ class LeaveplanController extends Controller
         $results = \Yii::$app->navhelper->getData($service, $filter);
         $result = [];
         foreach ($results as $item) {
+            $recordID = $this->getRecordID($service, $item->Key);
             $link = $updateLink = $deleteLink =  '';
             $Viewlink = Html::a('<i class="fas fa-eye"></i>', ['view', 'Plan_No' => $item->Plan_No], ['class' => 'btn btn-outline-primary btn-xs']);
             if ($item->Status == 'Open') {
-                $link = Html::a('<i class="fas fa-paper-plane"></i>', ['send-for-approval', 'Plan_No' => $item->Plan_No], ['title' => 'Send Approval Request', 'class' => 'btn btn-primary btn-xs']);
+                $link = Html::a('<i class="fas fa-paper-plane"></i>', ['send-for-approval', 'recordID' => $recordID], ['title' => 'Send Approval Request', 'class' => 'btn btn-primary btn-xs']);
                 $updateLink = Html::a('<i class="far fa-edit"></i>', ['update', 'Plan_No' => $item->Plan_No], ['class' => 'btn btn-info btn-xs']);
             } else if ($item->Status == 'Pending_Approval') {
-                $link = Html::a('<i class="fas fa-times"></i>', ['cancel-request', 'Plan_No' => $item->Plan_No], ['title' => 'Cancel Approval Request', 'class' => 'btn btn-warning btn-xs']);
+                $link = Html::a('<i class="fas fa-times"></i>', ['cancel-request', 'recordID' => $recordID], ['title' => 'Cancel Approval Request', 'class' => 'btn btn-warning btn-xs']);
             }
 
             $result['data'][] = [
@@ -403,49 +409,48 @@ class LeaveplanController extends Controller
 
     /* Call Approval Workflow Methods */
 
-    public function actionSendForApproval($Plan_No)
+    public function actionSendForApproval($recordID)
     {
         $service = Yii::$app->params['ServiceName']['PortalFactory'];
 
         $data = [
-            'applicationNo' => $Plan_No,
-            'sendMail' => true,
-            'approvalUrl' => '',
+            'recordID' => $recordID
         ];
 
 
-        $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'IanSendLeavePlanForApproval');
+        $result = Yii::$app->navhelper->codeunit($service, $data, 'SendDocumentApproval');
 
         if (!is_string($result)) {
-            Yii::$app->session->setFlash('success', 'Request Sent to Supervisor Successfully.', true);
-            return $this->redirect(['view', 'Plan_No' => $Plan_No]);
+            Yii::$app->session->setFlash('success', 'Document Sent for Approval Successfully.', true);
+            //return $this->redirect(['view','No' => $No]);
+            return $this->redirect(['index']);
         } else {
 
-            Yii::$app->session->setFlash('error', 'Error Sending  Request for Approval  : ' . $result);
-            return $this->redirect(['view', 'Plan_No' => $Plan_No]);
+            Yii::$app->session->setFlash('error', 'Error Sending Request for Approval  : ' . $result);
+            // return $this->redirect(['view','No' => $No]);
+            return $this->redirect(['index']);
         }
     }
 
     /*Cancel Approval Request */
 
-    public function actionCancelRequest($Plan_No)
+    public function actionCancelRequest($recordID)
     {
         $service = Yii::$app->params['ServiceName']['PortalFactory'];
 
         $data = [
-            'applicationPlan_No' => $Plan_No,
+            'recordID' => $recordID
         ];
 
-
-        $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'IanCancelLeavePlanApprovalRequest');
+        $result = Yii::$app->navhelper->codeunit($service, $data, 'CancelDocumentApproval');
 
         if (!is_string($result)) {
-            Yii::$app->session->setFlash('success', 'Request Cancelled Successfully.', true);
-            return $this->redirect(['view', 'Plan_No' => $Plan_No]);
+            Yii::$app->session->setFlash('success', 'Approval Request Cancelled Successfully.', true);
+            return $this->redirect(['index']);
         } else {
 
             Yii::$app->session->setFlash('error', 'Error Cancelling Approval Request.  : ' . $result);
-            return $this->redirect(['view', 'Plan_No' => $Plan_No]);
+            return $this->redirect(['index']);
         }
     }
 }

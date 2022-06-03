@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -14,16 +15,17 @@ use yii\helpers\Html;
 
 $this->title = 'Update Leave Plan Line.';
 
-$model->Start_Date = (date('Y',strtotime($model->Start_Date)) == '0001')?$model->Start_Date = date('Y-m-d'):$model->Start_Date;
-$model->End_Date = (date('Y',strtotime($model->End_Date)) == '0001')?$model->End_Date = date('Y-m-d'):$model->End_Date;
+$model->Start_Date = (date('Y', strtotime($model->Start_Date)) == '0001') ? $model->Start_Date = date('Y-m-d') : $model->Start_Date;
+$model->End_Date = (date('Y', strtotime($model->End_Date)) == '0001') ? $model->End_Date = date('Y-m-d') : $model->End_Date;
 
 ?>
 <div class="agenda-document-update">
 
     <!--<h1><?= Html::encode($this->title) ?></h1>-->
 
-    <?= $this->render('_form',[
+    <?= $this->render('_form', [
         'model' => $model,
+        'recordID' => $recordID
     ]) ?>
 
 </div>

@@ -22,7 +22,8 @@ $this->title = 'Update Fund Requisition Header.';
 
     <?= $this->render('_form', [
         'model' => $model,
-        'document' => $document
+        'document' => $document,
+        'recordID' => $recordID
     ]) ?>
 
 </div>

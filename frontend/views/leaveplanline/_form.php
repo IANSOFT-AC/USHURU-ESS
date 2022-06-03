@@ -1,12 +1,15 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
  * Date: 2/24/2020
  * Time: 12:13 PM
  */
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+
 $absoluteUrl = \yii\helpers\Url::home(true);
 ?>
 
@@ -20,43 +23,43 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
 
-                    <?php
+                <?php
 
 
 
 
-                    $form = ActiveForm::begin(); ?>
+                $form = ActiveForm::begin(); ?>
                 <div class="row">
 
 
 
 
-                            <table class="table">
-                                <tbody>
+                    <table class="table">
+                        <tbody>
 
 
 
 
-                                    <?= $form->field($model, 'Line_No')->hiddenInput(['hidden' => true])->label(false) ?>
+                            <?= $form->field($model, 'Line_No')->hiddenInput(['hidden' => true])->label(false) ?>
 
-                                    <?= $form->field($model, 'Employee_Code')->hiddenInput(['readonly' => true])->label(false) ?>
-                                    <?= $form->field($model, 'Leave_Code')->hiddenInput(['readonly' => true])->label(false) ?>
+                            <?= $form->field($model, 'Employee_Code')->hiddenInput(['readonly' => true])->label(false) ?>
+                            <?= $form->field($model, 'Leave_Code')->hiddenInput(['readonly' => true])->label(false) ?>
                             <div class="col-md-6">
-                                    <?= $form->field($model, 'Plan_No')->hiddenInput(['readonly' => true])->label(false) ?>
-                                    <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date']) ?>
+                                <?= $form->field($model, 'Plan_No')->hiddenInput(['readonly' => true])->label(false) ?>
+                                <?= $form->field($model, 'Start_Date')->textInput(['type' => 'date']) ?>
 
-                                    <?= $form->field($model, 'End_Date')->textInput(['type' => 'date']) ?>
+                                <?= $form->field($model, 'End_Date')->textInput(['type' => 'date']) ?>
                             </div>
 
                             <div class="col-md-6">
-                                    <?= $form->field($model, 'Days_Planned')->textInput(['readonly' => true]) ?>
-                                    <?= $form->field($model, 'Holidays')->textInput(['readonly' => true]) ?>
-                                    <?= $form->field($model, 'Weekend_Days')->textInput(['readonly' => true]) ?>
-                                    <?= $form->field($model, 'Total_No_Of_Days')->textInput(['readonly' => true]) ?>
+                                <?= $form->field($model, 'Days_Planned')->textInput(['readonly' => true]) ?>
+                                <?= $form->field($model, 'Holidays')->textInput(['readonly' => true]) ?>
+                                <?= $form->field($model, 'Weekend_Days')->textInput(['readonly' => true]) ?>
+                                <?= $form->field($model, 'Total_No_Of_Days')->textInput(['readonly' => true]) ?>
                             </div>
 
 
-                                    <?= $form->field($model, 'Key')->hiddenInput(['readonly'=> true])->label(false) ?>
+                            <?= $form->field($model, 'Key')->hiddenInput(['readonly' => true])->label(false) ?>
 
 
 
@@ -68,8 +71,8 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
 
-                                </tbody>
-                            </table>
+                        </tbody>
+                    </table>
 
 
 
@@ -94,7 +97,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                 <div class="row">
 
                     <div class="form-group">
-                        <?= Html::submitButton(($model->isNewRecord)?'Save':'Update', ['class' => 'btn btn-success','id'=>'submit']) ?>
+                        <?= Html::submitButton(($model->isNewRecord) ? 'Save' : 'Update', ['class' => 'btn btn-success', 'id' => 'submit']) ?>
                     </div>
 
 

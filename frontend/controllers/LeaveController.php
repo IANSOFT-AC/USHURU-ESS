@@ -338,26 +338,7 @@ class LeaveController extends Controller
             Yii::$app->recruitment->printrr($result);
         }
 
-        // Upload Attachment File
-        if (!empty($_FILES)) {
-            //  Yii::$app->recruitment->printrr($_FILES);
-            $Attachmentmodel = new Leaveattachment();
-            $Attachmentmodel->Document_No =  Yii::$app->request->post()['Leaveattachment']['Document_No'];
-            $Attachmentmodel->attachmentfile = UploadedFile::getInstanceByName('attachmentfile');
-            $result = $Attachmentmodel->Upload($Attachmentmodel->Document_No);
-            if (!is_string($result) || $result == true) {
-                Yii::$app->session->setFlash('success', 'Leave Attachement Saved Successfully. ', true);
-            } else {
-                Yii::$app->session->setFlash('error', 'Could not save attachment.' . $result, true);
-            }
 
-            return $this->render('update', [
-                'model' => $model,
-                'leavetypes' => $this->getLeaveTypes(),
-                'employees' => $this->getEmployees(),
-
-            ]);
-        }
 
         if (Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Leave'], $model)) {
             $filter = [
@@ -388,18 +369,16 @@ class LeaveController extends Controller
                 'model' => $model,
                 'leavetypes' => $this->getLeaveTypes(),
                 'employees' => $this->getEmployees(),
-
-
             ]);
         }
 
-
+        $recordID = $this->getRecordID($service, $model->Key);
 
         return $this->render('update', [
             'model' => $model,
             'leavetypes' => $this->getLeaveTypes(),
             'employees' => $this->getEmployees(),
-
+            'recordID' => $recordID
         ]);
     }
 
@@ -435,12 +414,19 @@ class LeaveController extends Controller
 
         //load nav result to model
         $model = $this->loadtomodel($result[0], $model);
+        $recordID = $this->getRecordID($service, $model->Key);
 
-        //Yii::$app->recruitment->printrr($model);
+        //Yii::$app->recruitment->printrr($recordID);
 
         return $this->render('view', [
             'model' => $model,
+            'recordID' => $recordID
         ]);
+    }
+
+    public function getRecordID($service, $Key)
+    {
+        return Yii::$app->navhelper->getRecordID($service, $Key);
     }
 
 
@@ -460,6 +446,7 @@ class LeaveController extends Controller
             if (empty($item->Application_No)) {
                 continue;
             }
+            $recordID = $this->getRecordID($service, $item->Key);
             $link = $updateLink = $deleteLink =  '';
             $Viewlink = Html::a('<i class="fas fa-eye"></i>', ['view'], [
                 'class' => 'btn btn-outline-primary btn-xs',
@@ -472,7 +459,7 @@ class LeaveController extends Controller
 
             ]);
             if ($item->Status == 'New') {
-                $link = Html::a('<i class="fas fa-paper-plane"></i>', ['send-for-approval', 'No' => $item->Application_No], ['title' => 'Send Approval Request', 'class' => 'btn btn-primary btn-xs']);
+                $link = Html::a('<i class="fas fa-paper-plane"></i>', ['send-for-approval', 'recordID' => $recordID], ['title' => 'Send Approval Request', 'class' => 'btn btn-primary btn-xs']);
                 $updateLink = Html::a('<i class="far fa-edit"></i>', ['update'], [
                     'class' => 'btn btn-info btn-xs',
                     'data' => [
@@ -483,7 +470,7 @@ class LeaveController extends Controller
                     ]
                 ]);
             } else if ($item->Status == 'Pending_Approval') {
-                $link = Html::a('<i class="fas fa-times"></i>', ['cancel-request', 'No' => $item->Application_No], ['title' => 'Cancel Approval Request', 'class' => 'btn btn-warning btn-xs']);
+                $link = Html::a('<i class="fas fa-times"></i>', ['cancel-request', 'recordID' => $recordID], ['title' => 'Cancel Approval Request', 'class' => 'btn btn-warning btn-xs']);
             }
 
             $result['data'][] = [
@@ -954,22 +941,19 @@ class LeaveController extends Controller
 
     /* Call Approval Workflow Methods */
 
-    public function actionSendForApproval($No)
+    public function actionSendForApproval($recordID)
     {
         $service = Yii::$app->params['ServiceName']['PortalFactory'];
 
         $data = [
-            'applicationNo' => $No,
-            'sendMail' => 1,
-            'approvalUrl' => '',
+            'recordID' => $recordID
         ];
 
 
-        // $result = Yii::$app->navhelper->PortalWorkFlows($service,$data,'SendLeaveForApproval');
-        $result = Yii::$app->navhelper->codeunit($service, $data, 'SendLeaveForApproval');
+        $result = Yii::$app->navhelper->codeunit($service, $data, 'SendDocumentApproval');
 
         if (!is_string($result)) {
-            Yii::$app->session->setFlash('success', 'Request Sent to Supervisor for Approval Successfully.', true);
+            Yii::$app->session->setFlash('success', 'Document Sent for Approval Successfully.', true);
             //return $this->redirect(['view','No' => $No]);
             return $this->redirect(['index']);
         } else {
@@ -982,27 +966,23 @@ class LeaveController extends Controller
 
     /*Cancel Approval Request */
 
-    public function actionCancelRequest($No)
+    public function actionCancelRequest($recordID)
     {
         $service = Yii::$app->params['ServiceName']['PortalFactory'];
 
         $data = [
-            'applicationNo' => $No,
+            'recordID' => $recordID
         ];
 
-        //Yii::$app->recruitment->printrr($data);
-
-
-        $result = Yii::$app->navhelper->codeunit($service, $data, 'CancelLeaveApprovalRequest');
-        //Yii::$app->recruitment->printrr($result);
+        $result = Yii::$app->navhelper->codeunit($service, $data, 'CancelDocumentApproval');
 
         if (!is_string($result)) {
             Yii::$app->session->setFlash('success', 'Approval Request Cancelled Successfully.', true);
-            return $this->redirect(['view', 'No' => $No]);
+            return $this->redirect(['index']);
         } else {
 
             Yii::$app->session->setFlash('error', 'Error Cancelling Approval Request.  : ' . $result);
-            return $this->redirect(['view', 'No' => $No]);
+            return $this->redirect(['index']);
         }
     }
 }
