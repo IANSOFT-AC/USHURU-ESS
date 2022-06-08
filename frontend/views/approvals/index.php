@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -13,95 +14,94 @@
 $this->title = 'HRMIS - Approval Requests';
 $this->params['breadcrumbs'][] = ['label' => 'Approval Management', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => 'Approvals List', 'url' => ['index']];
+$url = \yii\helpers\Url::home(true);
 ?>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Approval Requests</h3>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Approval Requests</h3>
 
 
-                    <?php
-                    if(Yii::$app->session->hasFlash('success')){
-                        print ' <div class="alert alert-success alert-dismissable">
+                <?php
+                if (Yii::$app->session->hasFlash('success')) {
+                    print ' <div class="alert alert-success alert-dismissable">
                                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                                     <h5><i class="icon fas fa-check"></i> Success!</h5>
  ';
-                        echo Yii::$app->session->getFlash('success');
-                        print '</div>';
-                    }else if(Yii::$app->session->hasFlash('error')){
-                        print ' <div class="alert alert-danger alert-dismissable">
+                    echo Yii::$app->session->getFlash('success');
+                    print '</div>';
+                } else if (Yii::$app->session->hasFlash('error')) {
+                    print ' <div class="alert alert-danger alert-dismissable">
                                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                                     <h5><i class="icon fas fa-check"></i> Error!</h5>
                                 ';
-                        echo Yii::$app->session->getFlash('error');
-                        print '</div>';
-                    }
-                    ?>
+                    echo Yii::$app->session->getFlash('error');
+                    print '</div>';
+                }
+                ?>
 
 
 
-                </div>
-                <div class="card-body">
-                    <table class="table table-bordered dt-responsive table-hover" id="approvals">
-                    </table>
-                </div>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered dt-responsive table-hover" id="approvals">
+                </table>
             </div>
         </div>
     </div>
+</div>
 
 
-    <!--My Bs Modal template  --->
+<!--My Bs Modal template  --->
 
-    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
 
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel" style="position: absolute">Approval Rejection Comment</h4>
-                </div>
-                <div class="modal-body">
-                    <form id="approval-comment">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel" style="position: absolute">Approval Rejection Comment</h4>
+            </div>
+            <div class="modal-body">
+                <form id="approval-comment">
 
-                        <div class="card">
-                            <div class="card-body">
-                                <textarea class="form-control" name="comment" rows="4" placeholder="Enter your approval comment here.."></textarea>
-                                <br>
-                                <input type="hidden" name="documentNo" class="form-control">
-                                <input type="hidden" name="Record_ID_to_Approve" class="form-control">
-                                <input type="hidden" name="Table_ID" class="form-control">
-                            </div>
-                            <div class="card-footer">
-                                <div class="input-group">
-                                     <input type="submit" class="btn btn-outline-primary" value="Save & Reject Approval">
-                                </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <textarea class="form-control" name="comment" rows="4" placeholder="Enter your approval comment here.."></textarea>
+                            <br>
+                            <input type="text" name="documentNo" class="form-control">
+                            <input type="text" name="Record_ID_to_Approve" class="form-control">
+                            <input type="text" name="Table_ID" class="form-control">
+                        </div>
+                        <div class="card-footer">
+                            <div class="input-group">
+                                <input type="submit" class="btn btn-outline-primary" value="Save & Reject Approval">
                             </div>
                         </div>
+                    </div>
 
 
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <!--<button type="button" class="btn btn-primary">Save changes</button>-->
-                </div>
-
+                </form>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+            </div>
+
         </div>
     </div>
+</div>
+<input type="hidden" value="<?= $url ?>" id="url" />
 
 <?php
-$absoluteUrl = \yii\helpers\Url::home(true);
-
-print '<input type="hidden" id="ab" value="'.$absoluteUrl.'" />';
 $script = <<<JS
 
     $(function(){
          /*Data Tables*/
          
-         var absolute = $('#ab').val(); 
+         const url = $('#url').val();
          
          $.fn.dataTable.ext.errMode = 'throw';
         
@@ -109,7 +109,7 @@ $script = <<<JS
           $('#approvals').DataTable({
            
             //serverSide: true,  
-            ajax: absolute +'approvals/getapprovals',
+            ajax: url +'approvals/getapprovals',
             paging: true,
             columns: [
                 { title: 'Entry_No' ,data: 'Entry_No'},
@@ -121,6 +121,7 @@ $script = <<<JS
                 { title: 'Details' ,data: 'Details'},
 
                 { title: 'Approve' ,data: 'Approvelink'},
+                { title: 'Delegate ' ,data: 'Delegatelink'},
                 { title: 'Reject' ,data: 'Rejectlink'},
                 { title: 'Action' ,data: 'details'},
                 
@@ -136,7 +137,7 @@ $script = <<<JS
         
        //Hidding some 
        var table = $('#approvals').DataTable();
-       table.columns([1,5,2,0]).visible(false);
+       table.columns([1,3,5,2,0]).visible(false);
     
     /*End Data tables*/
     
@@ -200,9 +201,3 @@ $script = <<<JS
 JS;
 
 $this->registerJs($script);
-
-
-
-
-
-

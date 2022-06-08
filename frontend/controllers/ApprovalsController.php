@@ -65,6 +65,20 @@ class ApprovalsController extends Controller
         ];
     }
 
+    public function beforeAction($action)
+    {
+
+        $ExceptedActions = [
+            'reject-request'
+        ];
+
+        if (in_array($action->id, $ExceptedActions)) {
+            $this->enableCsrfValidation = false;
+        }
+
+        return parent::beforeAction($action);
+    }
+
     public function actionIndex()
     {
 
@@ -240,14 +254,15 @@ class ApprovalsController extends Controller
     public function actionGetapprovals()
     {
         $service = Yii::$app->params['ServiceName']['RequestsTo_ApprovePortal'];
-        //Yii::$app->recruitment->printrr(Yii::$app->user->identity);
-        $filter = [
 
+        $filter = [
             'Approver_ID' => Yii::$app->user->identity->{'User ID'},
             'Status' => 'Open'
         ];
-        $approvals = \Yii::$app->navhelper->getData($service, $filter);
 
+
+        $approvals = \Yii::$app->navhelper->getData($service, $filter);
+        //Yii::$app->recruitment->printrr($filter);
 
         $result = [];
 
@@ -257,115 +272,17 @@ class ApprovalsController extends Controller
         if (!is_object($approvals)) {
             foreach ($approvals as $app) {
 
+                $Approvelink = Html::a('<i class="fas fa-paper-plane"></i>', ['approve-request', 'recordID' => $app->Record_ID_to_Approve], ['title' => 'Approve Request', 'class' => 'btn btn-success btn-xs']);
+                $Delegatelink = Html::a('<i class="fas fa-paper-plane"></i> Delegate', ['delegate-request', 'recordID' => $app->Record_ID_to_Approve], ['title' => 'Delegate Request', 'class' => 'btn btn-info btn-xs']);
 
-                if (in_array($app->Document_Type, $leaveWorkflows)) {
-                    $Approvelink = ($app->Status == 'Open') ? Html::a('Approve Leave', ['approve-request', 'app' => $app->Document_No], ['class' => 'btn btn-success btn-xs', 'data' => [
-                        'confirm' => 'Are you sure you want to Approve this request?',
-                        'method' => 'post',
-                    ]]) : '';
-
-                    $Rejectlink = ($app->Status == 'Open') ? Html::a('Reject Request', ['reject-request', 'docType' => $app->Document_Type], [
-                        'class' => 'btn btn-warning reject btn-xs',
-                        'rel' => $app->Document_No,
-                        'rev' => $app->Record_ID_to_Approve,
-                        'name' => $app->Table_ID
-                    ]) : "";
-                } elseif ($app->Document_Type == 'Leave_Recall') {
-                    $Approvelink = ($app->Status == 'Open') ? Html::a('Approve Leave Recall', ['approve-recall', 'app' => $app->Document_No], ['class' => 'btn btn-success btn-xs', 'data' => [
-                        'confirm' => 'Are you sure you want to Approve this request?',
-                        'method' => 'post',
-                    ]]) : '';
-
-                    $Rejectlink = ($app->Status == 'Open') ? Html::a('Reject Request', ['reject-request', 'docType' => 'Leave_Recall'], [
-                        'class' => 'btn btn-warning reject btn-xs',
-                        'rel' => $app->Document_No,
-                        'rev' => $app->Record_ID_to_Approve,
-                        'name' => $app->Table_ID
-                    ]) : "";
-                } elseif ($app->Document_Type == 'Leave_Plan') {
-                    $Approvelink = ($app->Status == 'Open') ? Html::a('Approve Leave Plan', ['approve-leave-plan', 'app' => $app->Document_No], ['class' => 'btn btn-success btn-xs', 'data' => [
-                        'confirm' => 'Are you sure you want to Approve this request?',
-                        'method' => 'post',
-                    ]]) : '';
-
-
-                    $Rejectlink = ($app->Status == 'Open') ? Html::a('Reject Request', ['reject-request', 'docType' => 'Leave_Plan'], [
-                        'class' => 'btn btn-warning reject btn-xs',
-                        'rel' => $app->Document_No,
-                        'rev' => $app->Record_ID_to_Approve,
-                        'name' => $app->Table_ID
-                    ]) : "";
-                } elseif ($app->Document_Type == 'Requisition_Header') // Purchase Requisition
-                {
-                    $Approvelink = ($app->Status == 'Open') ? Html::a('Approve Request', ['approve-request', 'app' => $app->Document_No, 'empNo' => $app->Approver_No, 'docType' => 'Requisition_Header'], ['class' => 'btn btn-success btn-xs', 'data' => [
-                        'confirm' => 'Are you sure you want to Approve this request?',
-                        'method' => 'post',
-                    ]]) : '';
-
-                    $Rejectlink = ($app->Status == 'Open') ? Html::a('Reject Request', ['reject-request', 'docType' => 'Requisition_Header'], [
-                        'class' => 'btn btn-warning reject btn-xs',
-                        'rel' => $app->Document_No,
-                        'rev' => $app->Record_ID_to_Approve,
-                        'name' => $app->Table_ID
-                    ]) : "";
-                } elseif ($app->Document_Type == 'Contract_Renewal') // Contract Renewal
-                {
-                    $Approvelink = ($app->Status == 'Open') ? Html::a('Approve Request', ['approve-request', 'app' => $app->Document_No, 'empNo' => $app->Approver_No, 'docType' => $app->Document_Type], ['class' => 'btn btn-success btn-xs', 'data' => [
-                        'confirm' => 'Are you sure you want to Approve this request?',
-                        'method' => 'post',
-                    ]]) : '';
-
-                    $Rejectlink = ($app->Status == 'Open') ? Html::a('Reject Request', ['reject-request', 'docType' => $app->Document_Type], [
-                        'class' => 'btn btn-warning reject btn-xs',
-                        'rel' => $app->Document_No,
-                        'rev' => $app->Record_ID_to_Approve,
-                        'name' => $app->Table_ID
-                    ]) : "";
-                } elseif ($app->Document_Type == 'Change_Request') // Contract Renewal
-                {
-                    $Approvelink = ($app->Status == 'Open') ? Html::a('Approve Request', ['approve-request', 'app' => $app->Document_No, 'empNo' => $app->Approver_No, 'docType' => $app->Document_Type], ['class' => 'btn btn-success btn-xs', 'data' => [
-                        'confirm' => 'Are you sure you want to Approve this request?',
-                        'method' => 'post',
-                    ]]) : '';
-
-                    $Rejectlink = ($app->Status == 'Open') ? Html::a('Reject Request', ['reject-request', 'docType' => $app->Document_Type], [
-                        'class' => 'btn btn-warning reject btn-xs',
-                        'rel' => $app->Document_No,
-                        'rev' => $app->Record_ID_to_Approve,
-                        'name' => $app->Table_ID
-                    ]) : "";
-                } elseif ($app->Document_Type == 'Training_Application') // Training Plan
-                {
-                    $Approvelink = ($app->Status == 'Open') ? Html::a('Approve Request', ['approve-request', 'app' => $app->Document_No, 'empNo' => $app->Approver_No, 'docType' => $app->Document_Type], ['class' => 'btn btn-success btn-xs', 'data' => [
-                        'confirm' => 'Are you sure you want to Approve this request?',
-                        'method' => 'post',
-                    ]]) : '';
-
-                    $Rejectlink = ($app->Status == 'Open') ? Html::a('Reject Request', ['reject-request', 'docType' => $app->Document_Type], [
-                        'class' => 'btn btn-warning reject btn-xs',
-                        'rel' => $app->Document_No,
-                        'rev' => $app->Record_ID_to_Approve,
-                        'name' => $app->Table_ID
-                    ]) : "";
-                } else {
-                    $Approvelink = ($app->Status == 'Open') ? Html::a('Approve Request', ['approve-request', 'app' => $app->Document_No, 'empNo' => $app->Approver_No, 'docType' => $app->Document_Type], ['class' => 'btn btn-success btn-xs', 'data' => [
-                        'confirm' => 'Are you sure you want to Approve this request?',
-                        'method' => 'post',
-                    ]]) : '';
-
-                    $Rejectlink = ($app->Status == 'Open') ? Html::a('Reject Request', ['reject-request', 'docType' => $app->Document_Type], [
-                        'class' => 'btn btn-warning reject btn-xs',
-                        'rel' => $app->Document_No,
-                        'rev' => $app->Record_ID_to_Approve,
-                        'name' => $app->Table_ID
-                    ]) : "";
-                }
-
-
-
-
+                $Rejectlink = ($app->Status == 'Open') ? Html::a('Reject Request', ['reject-request', 'recordID' => $app->Record_ID_to_Approve], [
+                    'class' => 'btn btn-warning reject btn-xs',
+                    'rel' => $app->Document_No,
+                    'rev' => $app->Record_ID_to_Approve,
+                    'name' => $app->Table_ID
+                ]) : "";
                 /*Card Details */
-
+                $app->Document_Type = '';
 
                 if ($app->Document_Type == 'Staff_Board_Allowance') {
                     $detailsLink = Html::a('View Details', ['fund-requisition/view', 'No' => $app->Document_No, 'Approval' => true], ['class' => 'btn btn-outline-info btn-xs', 'target' => '_blank']);
@@ -403,15 +320,15 @@ class ApprovalsController extends Controller
                     'Key' => $app->Key,
                     'Entry_No' => $app->Entry_No,
                     'Details' => !empty($app->Details) ? $app->Details : 'NOT SET',
-                    'Comment' => $app->Comment,
-                    'Sender_ID' => $app->Sender_Name,
-                    'Document_Type' => $app->Document_Type,
-                    'Status' => $app->Status,
-                    'Document_No' => $app->Document_No,
-                    'Approvelink' => $Approvelink,
+                    'Comment' => !empty($app->Comment) ? $app->Comment : '',
+                    'Sender_ID' => !empty($app->Sender_Name) ? $app->Sender_Name : '',
+                    'Document_Type' => !empty($app->Document_Type) ? $app->Document_Type : '',
+                    'Status' => !empty($app->Status) ? $app->Status : $app->Status,
+                    'Document_No' => !empty($app->Document_No) ? $app->Document_No : '',
+                    'Approvelink' => !empty($Approvelink) ? $Approvelink : '',
+                    'Delegatelink' => !empty($Delegatelink) ? $Delegatelink : '',
                     'Rejectlink' => $Rejectlink,
                     'details' => $detailsLink
-
                 ];
             }
         }
@@ -431,7 +348,7 @@ class ApprovalsController extends Controller
         ];
 
 
-        $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'SendDocumentApproval');
+        $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'ApproveDocument');
 
 
         if (!is_string($result)) {
@@ -443,7 +360,30 @@ class ApprovalsController extends Controller
         }
     }
 
-    public function actionRejectRequest($recordID)
+    // Deletegate
+
+    public function actionDelegateRequest($recordID)
+    {
+        $service = Yii::$app->params['ServiceName']['PortalFactory'];
+
+        $data = [
+            'recordID' => $recordID
+        ];
+
+
+        $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'DelegateDocument');
+
+
+        if (!is_string($result)) {
+            Yii::$app->session->setFlash('success', 'Approval Request Delegated Successfully.', true);
+            return $this->redirect(['index']);
+        } else {
+            Yii::$app->session->setFlash('error', 'Error Approving Approval Approval Request.  : ' . $result);
+            return $this->redirect(['index']);
+        }
+    }
+
+    public function actionRejectRequest()
     {
         $service = Yii::$app->params['ServiceName']['PortalFactory'];
         $Commentservice = Yii::$app->params['ServiceName']['ApprovalCommentsWeb'];
@@ -456,26 +396,26 @@ class ApprovalsController extends Controller
 
 
             $commentData = [
-                'Comment' => $comment,
-                'Document_No' => $documentno,
-                'Record_ID_to_Approve' => $Record_ID_to_Approve,
-                'Table_ID' => $Table_ID
+                'comment' => $comment,
+                'recordID' => $Record_ID_to_Approve,
+                'userID' => Yii::$app->user->identity->{'User ID'},
+                'docNo' => $documentno
             ];
 
-
+            // Yii::$app->recruitment->printrr($commentData);
             $data = [
-                'recordID' => $recordID
+                'recordID' => $Record_ID_to_Approve
             ];
             //save comment
-            $Commentrequest = Yii::$app->navhelper->postData($Commentservice, $commentData);
+            $Commentrequest = Yii::$app->navhelper->PortalWorkFlows($service, $commentData, 'ApprovalComment');
             // Call rejection cu function
 
             if (is_string($Commentrequest)) {
                 Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                return ['note' => '<div class="alert alert-danger">Error Rejecting Request: ' . $Commentrequest . '</div>'];
+                return ['note' => '<div class="alert alert-danger">Error Rej Rejecting Request: ' . $Commentrequest . '</div>'];
             }
 
-            $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'RejectDocumentApproval');
+            $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'RejectDocument');
 
 
 

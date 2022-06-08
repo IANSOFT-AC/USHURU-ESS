@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -11,9 +12,10 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\AgendaDocument */
+
 $this->title = 'Update Leave Recall Application';
 $this->params['breadcrumbs'][] = ['label' => 'Leaves', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => 'Update Request', 'url' => ['update','No' => $model->Recall_No]];
+$this->params['breadcrumbs'][] = ['label' => 'Update Request', 'url' => ['update', 'No' => $model->Recall_No]];
 
 $model->isNewRecord = false;
 /*$now = date('m-d-Y');
@@ -23,9 +25,10 @@ $model->Start_Date = date('m-d-Y', strtotime($now.' + 2 days'));*/
 
     <!--<h1><?= Html::encode($this->title) ?></h1>-->
 
-    <?= $this->render('_form',[
+    <?= $this->render('_form', [
         'model' => $model,
         'leaves' => $leaves,
+        'recordID' => $recordID
     ]) ?>
 
 </div>
