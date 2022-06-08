@@ -198,29 +198,29 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
 
 
                         <!--Approval Management -->
-                        <?php if (!Yii::$app->user->isGuest && Yii::$app->user->identity->isApprover()) : ?>
-                            <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('approvals') ? 'menu-open' : '' ?>">
 
-                                <a href="#" class="nav-link <?= Yii::$app->recruitment->currentCtrl('approvals') ? 'active' : '' ?>">
-                                    <i class="nav-icon fas fa-copy"></i>
-                                    <p>
-                                        Approval Management
-                                        <i class="fas fa-angle-left right"></i>
-                                        <!--<span class="badge badge-info right">6</span>-->
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview">
-                                    <li class="nav-item">
-                                        <a href="<?= $absoluteUrl ?>approvals" class="nav-link <?= Yii::$app->recruitment->currentaction('approvals', 'index') ? 'active' : '' ?>">
-                                            <i class="fa fa-check-square nav-icon"></i>
-                                            <p>Approval Requests</p>
-                                        </a>
-                                    </li>
+                        <li class="nav-item has-treeview <?= Yii::$app->recruitment->currentCtrl('approvals') ? 'menu-open' : '' ?>">
+
+                            <a href="#" class="nav-link <?= Yii::$app->recruitment->currentCtrl('approvals') ? 'active' : '' ?>">
+                                <i class="nav-icon fas fa-copy"></i>
+                                <p>
+                                    Approval Management
+                                    <i class="fas fa-angle-left right"></i>
+                                    <!--<span class="badge badge-info right">6</span>-->
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="<?= $absoluteUrl ?>approvals" class="nav-link <?= Yii::$app->recruitment->currentaction('approvals', 'index') ? 'active' : '' ?>">
+                                        <i class="fa fa-check-square nav-icon"></i>
+                                        <p>Approval Requests</p>
+                                    </a>
+                                </li>
 
 
-                                </ul>
-                            </li>
-                        <?php endif; ?>
+                            </ul>
+                        </li>
+
                         <!--end Aprroval Management-->
 
 
