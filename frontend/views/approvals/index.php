@@ -71,15 +71,9 @@ $url = \yii\helpers\Url::home(true);
                         <div class="card-body">
                             <textarea class="form-control" name="comment" rows="4" placeholder="Enter your approval comment here.."></textarea>
                             <br>
-<<<<<<< HEAD
                             <input type="text" name="documentNo" class="form-control">
                             <input type="text" name="Record_ID_to_Approve" class="form-control">
                             <input type="text" name="Table_ID" class="form-control">
-=======
-                            <input type="hidden" name="documentNo" class="form-control">
-                            <input type="hidden" name="Record_ID_to_Approve" class="form-control">
-                            <input type="hidden" name="Table_ID" class="form-control">
->>>>>>> 80aba0d183346265eddeded1a05d1347e962bdaa
                         </div>
                         <div class="card-footer">
                             <div class="input-group">
@@ -99,17 +93,10 @@ $url = \yii\helpers\Url::home(true);
         </div>
     </div>
 </div>
-<<<<<<< HEAD
+
 <input type="hidden" value="<?= $url ?>" id="url" />
 
 <?php
-=======
-
-<?php
-$absoluteUrl = \yii\helpers\Url::home(true);
-
-print '<input type="hidden" id="ab" value="' . $absoluteUrl . '" />';
->>>>>>> 80aba0d183346265eddeded1a05d1347e962bdaa
 $script = <<<JS
 
     $(function(){
@@ -151,7 +138,7 @@ $script = <<<JS
         
        //Hidding some 
        var table = $('#approvals').DataTable();
-       table.columns([1,3,5,2,0]).visible(false);
+       table.columns([1,5,2,0]).visible(false);
     
     /*End Data tables*/
     

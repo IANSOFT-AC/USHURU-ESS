@@ -79,13 +79,12 @@ class P9Controller extends Controller
                 'empNo' => Yii::$app->user->identity->{'Employee No_'},
                 'selectedYear' => Yii::$app->request->post('p9year'),
             ];
-            $path = Yii::$app->navhelper->PortalReports($service, $data, 'IanGeneratep9');
-            if (!empty($path['return_value']) && is_file($path['return_value'])) {
-                $binary = file_get_contents($path['return_value']); //fopen($path['return_value'],'rb');
-                $content = chunk_split(base64_encode($binary));
-                //delete the file after getting it's contents --> This is some house keeping
-                //unlink($path['return_value']);
-                //Yii::$app->recruitment->printrr($content);
+            $path = Yii::$app->navhelper->PortalReports($service, $data, 'Generatep9');
+            //Yii::$app->recruitment->printrr($path);
+            if (!empty($path['return_value'])) {
+                
+                $content = $path['return_value'];
+               // Yii::$app->recruitment->printrr($content);
                 return $this->render('index', [
                     'report' => true,
                     'content' => $content,

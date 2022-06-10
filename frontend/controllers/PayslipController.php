@@ -70,7 +70,7 @@ class PayslipController extends Controller
 
     public function actionIndex()
     {
-
+       // Yii::$app->recruitment->printrr($this->getPayrollperiods());
         $service = Yii::$app->params['ServiceName']['PortalReports'];
 
         //Yii::$app->recruitment->printrr(ArrayHelper::map($payrollperiods,'Date_Opened','desc'));
@@ -80,18 +80,13 @@ class PayslipController extends Controller
                 'selectedPeriod' => Yii::$app->request->post('payperiods'),
                 'empNo' => Yii::$app->user->identity->{'Employee No_'}
             ];
-            $path = Yii::$app->navhelper->PortalReports($service, $data, 'IanGeneratePayslip');
-            //Yii::$app->recruitment->printrr($path);
-            if (is_file($path['return_value'])) {
-                $binary = file_get_contents($path['return_value']);
-                $content = chunk_split(base64_encode($binary));
-                //delete the file after getting it's contents --> This is some house keeping
-                //unlink($path['return_value']);
-
-
+            $path = Yii::$app->navhelper->PortalReports($service, $data, 'GeneratePayslip');
+            // Yii::$app->recruitment->printrr($path);
+            if (!empty($path['return_value'])) {
+                                
                 return $this->render('index', [
                     'report' => true,
-                    'content' => $content,
+                    'content' => $path['return_value'],
                     'pperiods' => $this->getPayrollperiods()
                 ]);
             }
@@ -112,13 +107,17 @@ class PayslipController extends Controller
     {
         $service = Yii::$app->params['ServiceName']['Payrollperiods'];
 
-        $filter = ['Status' => 'Approved'];
-        $periods = \Yii::$app->navhelper->getData($service, $filter);
+        $filter = [
+            'Status' => 'Approved',
+        ];
 
-        if (is_array($periods)) {
-            krsort($periods); //sort  keys in descending order
+        $periods = \Yii::$app->navhelper->getData($service, $filter);
+      // return $periods->ReadMultiple_Result->PayrollPeriods;
+        if (is_array($periods->ReadMultiple_Result->PayrollPeriods)) {
+            krsort($periods->ReadMultiple_Result->PayrollPeriods); //sort  keys in descending order
             $res = [];
-            foreach ($periods as $p) {
+            foreach ($periods->ReadMultiple_Result->PayrollPeriods as $p) {
+               // var_dump($p); exit;
                 $res[] = [
                     'Date_Opened' => $p->Start_Date,
                     'desc' => $p->Start_Date . ' - ' . $p->Period_Name

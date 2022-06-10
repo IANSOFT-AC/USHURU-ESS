@@ -79,10 +79,11 @@ class LeavestatementController extends Controller
         $data = [
             'empNo' => Yii::$app->user->identity->{'Employee No_'}
         ];
-        $path = Yii::$app->navhelper->PortalReports($service, $data, 'IanGenerateLeaveStatement');
+        $path = Yii::$app->navhelper->PortalReports($service, $data, 'GenerateLeaveStatement');
         //Yii::$app->recruitment->printrr($path);
 
-        if (!is_file($path['return_value'])) {
+
+        if (empty($path['return_value'])) {
             //throw new HttpException(404,"Resouce Not Found: ".$path['return_value']);
             return $this->render('index', [
                 'report' => false,
@@ -90,8 +91,8 @@ class LeavestatementController extends Controller
             ]);
         }
 
-        $binary = file_get_contents($path['return_value']);
-        $content = chunk_split(base64_encode($binary));
+       // $binary = file_get_contents($path['return_value']);
+        $content = $path['return_value'];
         //delete the file after getting it's contents --> This is some house keeping
         // unlink($path['return_value']);
 

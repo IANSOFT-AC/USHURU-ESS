@@ -282,7 +282,11 @@ class ApprovalsController extends Controller
                     'name' => $app->Table_ID
                 ]) : "";
                 /*Card Details */
-                $app->Document_Type = '';
+                if(!empty($app->Record_ID_to_Approve)){
+                    $app->Document_Type = $this->getDocumentType($app->Record_ID_to_Approve);
+                }else{
+                    $app->Document_Type = '';
+                }
 
                 if ($app->Document_Type == 'Staff_Board_Allowance') {
                     $detailsLink = Html::a('View Details', ['fund-requisition/view', 'No' => $app->Document_No, 'Approval' => true], ['class' => 'btn btn-outline-info btn-xs', 'target' => '_blank']);
@@ -296,7 +300,7 @@ class ApprovalsController extends Controller
                     $detailsLink = Html::a('View Details', ['contractrenewal/view', 'No' => $app->Document_No, 'Approval' => true], ['class' => 'btn btn-outline-info btn-xs', 'target' => '_blank']);
                 } elseif ($app->Document_Type == 'Employee_Exit') {
                     $detailsLink = Html::a('View Details', ['exit/view', 'No' => $app->Document_No, 'Approval' => true], ['class' => 'btn btn-outline-info btn-xs', 'target' => '_blank']);
-                } elseif ($app->Document_Type == 'Leave_Plan') {
+                } elseif ($app->Document_Type == 'Leave') {
                     $detailsLink = Html::a('View Details', ['leaveplan/view', 'Plan_No' => $app->Document_No, 'Approval' => true], ['class' => 'btn btn-outline-info btn-xs', 'target' => '_blank']);
                 } elseif ($app->Document_Type == 'Leave_Recall') {
                     $detailsLink = Html::a('View Details', ['leaverecall/view', 'No' => $app->Document_No, 'Approval' => true], ['class' => 'btn btn-outline-info btn-xs', 'target' => '_blank']);
@@ -337,7 +341,16 @@ class ApprovalsController extends Controller
         return $result;
     }
 
-
+    Public function getDocumentType($recordID)
+    {
+        $service = Yii::$app->params['ServiceName']['PortalFactory'];
+        $data = [
+            'recordID' => $recordID
+        ];
+        $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'GetDocumentType');
+        //Yii::$app->recruitment->printrr($result);
+       return $result['return_value'];
+    }
 
     public function actionApproveRequest($recordID)
     {
