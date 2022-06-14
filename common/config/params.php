@@ -175,6 +175,7 @@ return [
         'EmployeeCard' => 'EmployeeCard', //50096
         'ExpetriateCard' => 'ExpetriateCard', // 52021
         'Employees' => 'Employees', //5201
+        'Employee_List' => 'Employee_List', //50093
         'EmpBeneficiaries' => 'EmpBeneficiaries',
 
         'DimensionValueList' => 'DimensionValueList', //560

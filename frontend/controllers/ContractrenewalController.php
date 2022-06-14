@@ -83,10 +83,7 @@ class ContractrenewalController extends Controller
             } else {
                 // Yii::$app->recruitment->printrr($request);
                 Yii::$app->session->setFlash('error', $request);
-                return $this->render('create', [
-                    'model' => $model,
-                    'employees' => $this->getEmployees()
-                ]);
+                return $this->redirect(['index']);
             }
         }
 
@@ -109,7 +106,7 @@ class ContractrenewalController extends Controller
 
         return $this->render('create', [
             'model' => $model,
-            'employees' => $this->getEmployees()
+            'employees' => Yii::$app->navhelper->dropdown('Employee_List','No','Full_Name',['Serving_Notice' => false])
         ]);
     }
 
@@ -287,19 +284,20 @@ class ContractrenewalController extends Controller
 
     public function getEmployees()
     {
-        $service = Yii::$app->params['ServiceName']['Employees'];
-        $filter = []; // ['Serving_Notice' => 0];
+        $service = Yii::$app->params['ServiceName']['Employee_List'];
+        $filter = ['Serving_Notice' => false];
         $employees = \Yii::$app->navhelper->getData($service, $filter);
+       // Yii::$app->recruitment->printrr($employees);
         $data = [];
         $i = 0;
         if (is_array($employees)) {
 
             foreach ($employees as  $emp) {
                 $i++;
-                if (!empty($emp->FullName) && !empty($emp->No)) {
+                if (!empty($emp->Full_Name) && !empty($emp->No)) {
                     $data[$i] = [
                         'No' => $emp->No,
-                        'Full_Name' => $emp->FullName
+                        'Full_Name' => $emp->Full_Name
                     ];
                 }
             }

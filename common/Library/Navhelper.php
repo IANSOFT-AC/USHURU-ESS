@@ -1481,14 +1481,11 @@ class Navhelper extends Component
 
         $filter = [];
         if (count($filterValues) && is_array($filterValues)) {
-            foreach ($filterValues  as $key => $value) {
-                $filter = [$key => $value];
-            }
-        } else {
-            $filter = [];
-        }
+            $filter = $filterValues;
+        } 
 
         $result = \Yii::$app->navhelper->getData($service, $filter);
+        //Yii::$app->recruitment->printrr($result);
         return Yii::$app->navhelper->refactorArray($result, $from, $to);
     }
 }
