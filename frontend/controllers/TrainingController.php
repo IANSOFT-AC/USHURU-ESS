@@ -183,8 +183,8 @@ class TrainingController extends Controller
         $service = Yii::$app->params['ServiceName']['TrainingApplicationList'];
 
         $filter = [
-            //'Employee_No' => \Yii::$app->user->identity->{'Employee No_'},
-            //'Status' => ''
+            'Employee_No' => \Yii::$app->user->identity->{'Employee No_'},
+            'Status' => 'Awaiting_Availability_Confirmation'
         ];
         $records = \Yii::$app->navhelper->getData($service, $filter);
 
@@ -237,8 +237,8 @@ class TrainingController extends Controller
         $service = Yii::$app->params['ServiceName']['TrainingApplicationList'];
 
         $filter = [
-            //'Employee_No' => \Yii::$app->user->identity->{'Employee No_'},
-            //'Status' => ''
+            'Employee_No' => \Yii::$app->user->identity->{'Employee No_'},
+            'Status' => 'Awaiting_Attendance_Confirmation'
         ];
         $records = \Yii::$app->navhelper->getData($service, $filter);
 
@@ -292,8 +292,8 @@ class TrainingController extends Controller
         $service = Yii::$app->params['ServiceName']['TrainingApplicationList'];
 
         $filter = [
-            //'Employee_No' => \Yii::$app->user->identity->{'Employee No_'},
-            //'Status' => ''
+            'Employee_No' => \Yii::$app->user->identity->{'Employee No_'},
+            'Status' => 'Awaiting_HR_Confirmation'
         ];
         $records = \Yii::$app->navhelper->getData($service, $filter);
 
@@ -347,8 +347,8 @@ class TrainingController extends Controller
         $service = Yii::$app->params['ServiceName']['TrainingApplicationList'];
 
         $filter = [
-            //'Employee_No' => \Yii::$app->user->identity->{'Employee No_'},
-            //'Status' => ''
+            'Employee_No' => \Yii::$app->user->identity->{'Employee No_'},
+            'Status' => 'Attended'
         ];
         $records = \Yii::$app->navhelper->getData($service, $filter);
 
