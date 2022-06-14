@@ -37,6 +37,8 @@ public $Notice_Fully_Served;
 public $Reasons_For_Not_Serving_Notice;
 public $isNewRecord;
 
+public $Created_By;
+
 
 
     public function rules()
