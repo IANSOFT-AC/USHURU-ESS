@@ -208,7 +208,7 @@ class ContractrenewalController extends Controller
     {
         $service = Yii::$app->params['ServiceName']['ContractRenewalList'];
         $filter = [
-            'Craeted_By' => Yii::$app->user->identity->{'Employee No_'},
+            'Created_By' => Yii::$app->user->identity->{'Employee No_'},
         ];
 
         $results = \Yii::$app->navhelper->getData($service, $filter);
@@ -288,7 +288,7 @@ class ContractrenewalController extends Controller
     public function getEmployees()
     {
         $service = Yii::$app->params['ServiceName']['Employees'];
-        $filter = ['Serving_Notice' => 0];
+        $filter = []; // ['Serving_Notice' => 0];
         $employees = \Yii::$app->navhelper->getData($service, $filter);
         $data = [];
         $i = 0;
@@ -296,10 +296,10 @@ class ContractrenewalController extends Controller
 
             foreach ($employees as  $emp) {
                 $i++;
-                if (!empty($emp->Full_Name) && !empty($emp->No)) {
+                if (!empty($emp->FullName) && !empty($emp->No)) {
                     $data[$i] = [
                         'No' => $emp->No,
-                        'Full_Name' => $emp->Full_Name
+                        'Full_Name' => $emp->FullName
                     ];
                 }
             }
