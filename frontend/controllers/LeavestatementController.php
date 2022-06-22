@@ -87,7 +87,7 @@ class LeavestatementController extends Controller
             //throw new HttpException(404,"Resouce Not Found: ".$path['return_value']);
             return $this->render('index', [
                 'report' => false,
-                'message' => strlen($path['return_value']) ? $path['return_value'] : 'Report Cannot be Found.'
+                'message' => $path ??  'Report Cannot be Found.'
             ]);
         }
 

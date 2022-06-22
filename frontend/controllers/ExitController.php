@@ -132,10 +132,7 @@ class ExitController extends Controller
                 Yii::$app->navhelper->loadmodel($request, $model);
             } else {
                 Yii::$app->session->setFlash('error', $request);
-                return $this->render('create', [
-                    'model' => $model,
-                    'reasons' => $this->getReasons(),
-                ]);
+                return $this->redirect(['index']);
             }
         }
 
@@ -165,7 +162,7 @@ class ExitController extends Controller
         $model->Date_of_Exit = date('Y-m-d');
         return $this->render('create', [
             'model' => $model,
-            'reasons' => $this->getReasons()
+            'reasons' => Yii::$app->navhelper->dropdown('ExitReasons','Code','Description',['Type' => 'Self'])
         ]);
     }
 
@@ -187,7 +184,8 @@ class ExitController extends Controller
             //load nav result to model
             $model = Yii::$app->navhelper->loadmodel($result[0], $model); //$this->loadtomodeEmployee_Plan_Nol($result[0],$Expmodel);
         } else {
-            Yii::$app->recruitment->printrr($result);
+            Yii::$app->session->setFlash('error', $request);
+            return $this->redirect(['index']);
         }
 
 
@@ -220,15 +218,13 @@ class ExitController extends Controller
         if (Yii::$app->request->isAjax) {
             return $this->renderAjax('update', [
                 'model' => $model,
-                'reasons' => $this->getReasons()
-
-
+                'reasons' => Yii::$app->navhelper->dropdown('ExitReasons','Code','Description',['Type' => 'Self'])
             ]);
         }
 
         return $this->render('update', [
             'model' => $model,
-            'reasons' => $this->getReasons()
+            'reasons' => Yii::$app->navhelper->dropdown('ExitReasons','Code','Description',['Type' => 'Self'])
 
         ]);
     }

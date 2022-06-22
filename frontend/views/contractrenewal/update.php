@@ -22,8 +22,7 @@ $this->title = 'Update Contract Renewal Card';
 
     <?= $this->render('_form',[
         'model' => $model,
-        'employees' => $employees,
-        
+        'employees' => $employees        
     ]) ?>
 
 </div>

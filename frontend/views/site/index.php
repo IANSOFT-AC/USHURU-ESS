@@ -300,7 +300,7 @@ exit;*/
                     <!-- /.col -->
 
                     <!-- /.col Appraisal Status Lists for HR Admins -->
-                    <?php if( Yii::$app->user->identity->{'Is HR Admin'} ): ?>
+                    <?php if(property_exists(Yii::$app->user->identity, 'Is HR Admin ') && Yii::$app->user->identity->{'Is HR Admin'} ): ?>
 
                                 <div class="col-12 col-sm-6 col-md-3">
                                     <a href="<?= Yii::$app->recruitment->absoluteUrl().'appraisal/prob-status-list' ?>" target="_blank">

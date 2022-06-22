@@ -971,7 +971,7 @@ $employee = (!Yii::$app->user->isGuest && is_array(Yii::$app->user->identity->em
                         <!-- /PIP -->
 
 
-                        <?php if (Yii::$app->user->identity->{'Is HR Admin'} || Yii::$app->dashboard->inSupervisorList()) : ?>
+                        <?php if (  (property_exists(Yii::$app->user->identity, 'Is HR Admin ') && Yii::$app->user->identity->{'Is HR Admin'}) || Yii::$app->dashboard->inSupervisorList()) : ?>
 
                             <!--Contract Management --->
 

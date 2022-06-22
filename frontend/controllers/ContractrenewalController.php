@@ -136,16 +136,16 @@ class ContractrenewalController extends Controller
 
         if (Yii::$app->request->post() && Yii::$app->navhelper->loadpost(Yii::$app->request->post()['Contractrenewal'], $model)) {
 
+            $line = Yii::$app->navhelper->readByKey($service, $model->Key);
+            Yii::$app->navhelper->loadmodel($line, $model);
             $result = Yii::$app->navhelper->updateData($service, $model);
 
             if (!is_string($result)) {
                 Yii::$app->session->setFlash('success', 'Document Updated Successfully.');
                 return $this->redirect(['view', 'No' => $result->No]);
             } else {
-                Yii::$app->session->setFlash('success', 'Error Updating Document' . $result);
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
+                Yii::$app->session->setFlash('error', 'Error Updating Document: ' . $result);
+                return $this->redirect(['index']);
             }
         }
 
@@ -285,15 +285,19 @@ class ContractrenewalController extends Controller
     public function getEmployees()
     {
         $service = Yii::$app->params['ServiceName']['Employee_List'];
-        $filter = ['Serving_Notice' => false];
+        $filter = [
+            'Nature_Of_Employment' => 'contract',
+            'Employee_Status' => 'Active | OnLeave'
+        ];
         $employees = \Yii::$app->navhelper->getData($service, $filter);
-       // Yii::$app->recruitment->printrr($employees);
+      // Yii::$app->recruitment->printrr($employees);
         $data = [];
         $i = 0;
         if (is_array($employees)) {
 
             foreach ($employees as  $emp) {
                 $i++;
+               
                 if (!empty($emp->Full_Name) && !empty($emp->No)) {
                     $data[$i] = [
                         'No' => $emp->No,

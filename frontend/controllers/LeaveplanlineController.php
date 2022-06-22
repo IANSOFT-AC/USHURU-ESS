@@ -72,7 +72,7 @@ class LeaveplanlineController extends Controller
     public function actionCreate($Plan_No){
        $service = Yii::$app->params['ServiceName']['LeavePlanLine'];
 
-        if(Yii::$app->request->get('Plan_No') && !isset( Yii::$app->request->post()['Leaveplanline'])){
+        if(Yii::$app->request->get('Plan_No') && Yii::$app->request->isGet){
 
                 $model = new Leaveplanline() ;
                 $model->Line_No = time();
@@ -80,7 +80,7 @@ class LeaveplanlineController extends Controller
                 $model->Leave_Code = 'Annual';
                 $model->Employee_Code = Yii::$app->user->identity->Employee[0]->No;
                 $result = Yii::$app->navhelper->postData($service, $model);
-                // Yii::$app->recruitment->printrr($result);
+                //Yii::$app->recruitment->printrr($result);
 
                  Yii::$app->navhelper->loadmodel($result,$model);
 
