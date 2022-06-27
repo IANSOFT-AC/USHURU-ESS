@@ -71,13 +71,13 @@ $url = \yii\helpers\Url::home(true);
                         <div class="card-body">
                             <textarea class="form-control" name="comment" rows="4" placeholder="Enter your approval comment here.."></textarea>
                             <br>
-                            <input type="text" name="documentNo" class="form-control">
-                            <input type="text" name="Record_ID_to_Approve" class="form-control">
-                            <input type="text" name="Table_ID" class="form-control">
+                            <input type="hidden" name="documentNo" class="form-control">
+                            <input type="hidden" name="Record_ID_to_Approve" class="form-control">
+                            <input type="hidden" name="Table_ID" class="form-control">
                         </div>
                         <div class="card-footer">
                             <div class="input-group">
-                                <input type="submit" class="btn btn-outline-primary" value="Save & Reject Approval">
+                                <input type="submit" form="approval-comment" class="btn btn-outline-primary" value="Save & Reject Approval">
                             </div>
                         </div>
                     </div>
@@ -95,12 +95,14 @@ $url = \yii\helpers\Url::home(true);
 </div>
 
 <input type="hidden" value="<?= $url ?>" id="url" />
-
+<input type="hidden" value="<?= $url ?>" id="absolute" />
 <?php
 $script = <<<JS
 
     $(function(){
          /*Data Tables*/
+
+         absolute = $("#absolute").val();
          
          const url = $('#url').val();
          
@@ -149,6 +151,7 @@ $script = <<<JS
         
         var url = absolute + 'approvals/reject-request'; 
         var data = $(this).serialize();
+        $(this).html('<div class="font-weight-light text-center text-primary">Processing request ...</div>');
         
         
         $.post(url, data).done(function(msg){

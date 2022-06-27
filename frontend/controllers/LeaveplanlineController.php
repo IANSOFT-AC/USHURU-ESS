@@ -80,9 +80,13 @@ class LeaveplanlineController extends Controller
                 $model->Leave_Code = 'Annual';
                 $model->Employee_Code = Yii::$app->user->identity->Employee[0]->No;
                 $result = Yii::$app->navhelper->postData($service, $model);
-                //Yii::$app->recruitment->printrr($result);
+               if(is_object($result))
+               {
+                   Yii::$app->navhelper->loadmodel($result,$model);
+               }else{
+                return '<div class="alert alert-danger">'.$result.'</div>';
+               }
 
-                 Yii::$app->navhelper->loadmodel($result,$model);
 
         }
         
