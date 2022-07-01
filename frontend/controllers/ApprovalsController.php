@@ -319,6 +319,7 @@ class ApprovalsController extends Controller
                 } elseif ($app->Document_Type == 'StoreRequisition') {
                     $detailsLink = Html::a('View Details', ['storerequisition/view', 'No' => $app->Document_No, 'Approval' => true], ['class' => 'btn btn-outline-info btn-xs', 'target' => '_blank']);
                 } 
+                
                 else { //Employee_Exit
                     $detailsLink = '';
                 }
