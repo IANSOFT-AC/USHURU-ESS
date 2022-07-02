@@ -23,7 +23,7 @@ Yii::$app->session->set('isAppraisee', $model->isAppraisee());
 
 $absoluteUrl = \yii\helpers\Url::home(true);
 
-//Yii::$app->recruitment->printrr($model->isSupervisor());
+//Yii::$app->recruitment->printrr($card);
 ?>
 
     <div class="row">
@@ -564,11 +564,12 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                     <div class="card-header">
                         <h4 class="card-title">Employee Appraisal Key Result Areas (KRAs)</h4>
                         <div class="card-tools">
-                            <?= ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level')? Html::a('<i class="fa fa-plus mr-2"></i> Add',['appraisalkra/create','Appraisal_No' => $_GET['Appraisal_No']],[
+                            <?= ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level')? Html::a('<i class="fa fa-plus mr-2"></i> Add',['appraisal/add-line'],[
                                 'class' => 'add btn btn-sm btn-outline-light',
                                 'data-Appraisal_No' => $model->Appraisal_No,
                                 'data-service' => 'EmployeeAppraisalKRA',
-                                'data-Line_No' => time()
+                                'data-Line_No' => time(),
+                                'data-Employee_No' => $model->Employee_No
                                 ]): ''?>
                         </div>
                     </div>
@@ -579,13 +580,13 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                             <table class="table table-bordered">
                                 <thead>
                                 <tr>
-                                    <th></th>
-                                    <th>Perspective_Pillar</th>
-                                    <th>KRA_Objective</th>
-                                    <th>Maximum_Weight</th>
-                                    <th>Total_Weigth</th>
-                                    <th>Agreed_Rating</th>
-                                    <th>Action</th>
+                                    
+                                    <td class="text text-bold text-center text-info">Perspective Pillar</td>
+                                    <td class="text text-bold text-center text-info">KRA Objective</td>
+                                    <td class="text text-bold text-center text-info">Maximum Weight</td>
+                                    <td class="text text-bold text-center">Total Weight</td>
+                                    <td class="text text-bold text-center">Agreed Rating</td>
+                                    <td class="text text-bold text-center">Action</td>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -594,13 +595,13 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                    
                                     ?>
 
-                                    <tr class="parent">
+                                    <tr>
 
-                                        <td><span>+</span></td>
+                                        
                                       
-                                        <td><?= !empty($k->Perspective_Pillar)?$k->Perspective_Pillar: '' ?></td>
-                                        <td><?= !empty($k->KRA_Objective)?$k->KRA_Objective: '' ?></td>
-                                        <td><?= !empty($k->Maximum_Weight)?$k->Maximum_Weight: '' ?></td>
+                                        <td data-key="<?= $k->Key ?>" data-name="Perspective_Pillar" data-service="EmployeeAppraisalKRA" ondblclick="addDropDown(this,'perspective')"><?= !empty($k->Perspective_Pillar)?$k->Perspective_Pillar: '' ?></td>
+                                        <td data-key="<?= $k->Key ?>" data-name="KRA_Objective" data-service="EmployeeAppraisalKRA" ondblclick="addInput(this)"><?= !empty($k->KRA_Objective)?$k->KRA_Objective: '' ?></td>
+                                        <td data-key="<?= $k->Key ?>" data-name="Maximum_Weight" data-service="EmployeeAppraisalKRA" ondblclick="addInput(this,'number')"><?= $k->Maximum_Weight ?></td>
                                         <td><?= $k->Agreed_Rating ?? '' ?></td>
                                         <td><?= $k->Overall_Rating ?? '' ?></td>
                                         <td>
@@ -1094,31 +1095,7 @@ $script = <<<JS
 
     $(function(){
       
-       // Trigger Creation of a line
-  $('.add').on('click',function(e){
-            e.preventDefault();
-            let url = $(this).attr('href');
-           
-            let data = $(this).data(); // Inpect this data to inform on payload
-           
-            console.log(data);
-            return;
-            $('a.add').text('Inserting...');
-            $('a.add').attr('disabled', true);
-            const res = fetch(`./add-line`, {
-                method: 'POST',
-                headers: new Headers({
-                Origin: 'http://localhost:80/',
-                "Content-Type": 'application/json',
-                //'Content-Type': 'application/x-www-form-urlencoded'
-                }),
-                body: payload
-            })
-            .then(data => data.json)
-            .then(result => console.log(result))
-            ;
-           
-        }); 
+  
       
     
    

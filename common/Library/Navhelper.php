@@ -1454,38 +1454,54 @@ class Navhelper extends Component
 
     // Refactor an array with valid and existing data
 
-    public function refactorArray($arr, $from, $to)
+   public function refactorArray($arr, $from, $to, $extraFields = [])
     {
         $list = [];
+
         if (is_array($arr)) {
 
             foreach ($arr as $item) {
-                if (!empty($item->$from) && !empty($item->$to)) {
+                // Check Valid fields to Add to the "to" values
+                $valid = [];
+                if (count($extraFields) > 0) {
+                    foreach ($extraFields as $exfield) {
+                        if (property_exists($item, $exfield)) {
+                            $valid[] = $item->$exfield;
+                        }
+                    }
+                }
+
+                $ValuesToAppend = '';
+                if (count($valid)) {
+                    $ValuesToAppend = implode(' - ', $valid);
+                }
+                if (property_exists($item, $from) && property_exists($item, $to)) {
+
                     $list[] = [
-                        $from => $item->$from,
-                        $to => $item->$to
+                        'Code' => $item->$from,
+                        'Desc' => strlen($ValuesToAppend) ? $item->$to . ' - ' . $ValuesToAppend : $item->$to
                     ];
                 }
             }
-
-            return  yii\helpers\ArrayHelper::map($list, $from, $to);
+            //  Yii::$app->recruitment->printrr($list);
+            return  yii\helpers\ArrayHelper::map($list, 'Code', 'Desc');
         }
 
         return $list;
     }
 
-    public function dropdown($service, $from, $to, $filterValues = [])
+
+
+    public function dropdown($service, $from, $to, $filterValues = [], $extraFields = [])
     {
 
         $service = Yii::$app->params['ServiceName'][$service];
 
-        $filter = [];
-        if (count($filterValues) && is_array($filterValues)) {
-            $filter = $filterValues;
-        } 
+        $result = \Yii::$app->navhelper->getData($service, $filterValues);
 
-        $result = \Yii::$app->navhelper->getData($service, $filter);
-        //Yii::$app->recruitment->printrr($result);
-        return Yii::$app->navhelper->refactorArray($result, $from, $to);
+        $dd =  Yii::$app->navhelper->refactorArray($result, $from, $to, $extraFields);
+        // Yii::$app->recruitment->printrr($dd);
+
+        return $dd;
     }
 }

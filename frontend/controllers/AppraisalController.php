@@ -85,8 +85,9 @@ class AppraisalController extends Controller
                     'getmyagreementlistsuper',
                     'probation-status-list-super',
                     'short-term-status-super',
-                    'long-term-status-super'
-
+                    'long-term-status-super',
+                    'add-line',
+                    'perspective'
                 ],
                 'formatParam' => '_format',
                 'formats' => [
@@ -95,6 +96,20 @@ class AppraisalController extends Controller
                 ],
             ]
         ];
+    }
+
+    public function beforeAction($action)
+    {
+
+        $ExcemptedActions = [
+            'add-line','perspective'
+        ];
+
+        if (in_array($action->id, $ExcemptedActions)) {
+            $this->enableCsrfValidation = false;
+        }
+
+        return parent::beforeAction($action);
     }
 
     public function actionIndex()
@@ -2260,27 +2275,53 @@ class AppraisalController extends Controller
         }
     }
 
+    // A universal data commital function
+
+    public function actionCommit()
+    {
+        $commitService = Yii::$app->request->post('service');
+        $key = Yii::$app->request->post('key');
+        $name = Yii::$app->request->post('name');
+        $value = Yii::$app->request->post('value');
+
+        $service = Yii::$app->params['ServiceName'][$commitService];
+        $request = Yii::$app->navhelper->readByKey($service, $key);
+        $data = [];
+        if (is_object($request)) {
+            $data = [
+                'Key' => $request->Key,
+                $name => $value
+            ];
+        } else {
+            Yii::$app->response->format = \yii\web\response::FORMAT_JSON;
+            return ['error' => $request];
+        }
+
+        $result = Yii::$app->navhelper->updateData($service, $data);
+        Yii::$app->response->format = \yii\web\response::FORMAT_JSON;
+        return $result;
+    }
+
     // A universal Line Addtion Method
 
-    public function actionAddLine($Service)
+    public function actionAddLine()
     {
-        $service = Yii::$app->params['ServiceName'][$Service];
-        /*$data = [
-            'Requisition_No' => $Document_No,
-            'Line_No' => time()
-        ];*/
-
         // get arguments as a json payload and cort it into a php array -- @todo
         $json = file_get_contents('php://input');
 
         // Convert it into a PHP object
         $data = json_decode($json);
 
+        $service = Yii::$app->params['ServiceName'][$data->Service];
+
+        // Remove unwanted attributes to payload attribute
+        unset($data->Service);
+        unset($data->Line_No);
+
         // Insert Record
 
         $result = Yii::$app->navhelper->postData($service, $data);
 
-        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         if (is_object($result)) {
             return [
                 'note' => 'Record Created Successfully.',
@@ -2307,5 +2348,13 @@ class AppraisalController extends Controller
         } else {
             return ['note' => $result];
         }
+    }
+
+    public function actionPerspective()
+    {
+        return []; // place holder before getting right variables
+       $data = Yii::$app->navhelper->dropdown('Locations', 'Code', 'Name', [], ['Code']);
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return $data;
     }
 }

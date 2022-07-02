@@ -644,4 +644,56 @@ $('.delete').on('click', function (e) {
 });
 
 
+// Trigger Creation of a line
+$('.add').on('click', function (e) {
+  e.preventDefault();
+  let url = $(this).attr('href');
+  let data = $(this).data(); // object of arrays - strange structure
+  payloadContent = Object.entries(data);
+  // convert object of arrays into a pure object
+  payload = Object.assign(...payloadContent.map(([key, val]) => ({ [key.replace(/(^\w{1})|(\_+\w{1})/g, letter => letter.toUpperCase())]: val })));
+  console.log(`Formatted payload`);
+  console.log(payload);
+
+  $('a.add').text('Inserting...');
+  $('a.add').attr('disabled', true);
+  const res = fetch(url, {
+    method: 'POST',
+    headers: new Headers({
+      Origin: 'http://localhost:8061/',
+      "Content-Type": 'application/json',
+      //'Content-Type': 'application/x-www-form-urlencoded'
+    }),
+    body: JSON.stringify({ ...payload })
+  })
+    .then(data => data.json())
+    .then(result => {
+      console.log(result);
+      if (result.result) {
+
+        Toast.fire({
+          type: 'success',
+          title: result.note
+        });
+
+        setTimeout(() => {
+          location.reload(true);
+        }, 500);
+
+      } else {
+        Toast.fire({
+          type: 'error',
+          title: result.note
+        });
+
+        setTimeout(() => {
+          location.reload(true);
+        }, 500);
+      }
+    })
+    ;
+
+});
+
+
 
