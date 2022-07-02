@@ -280,9 +280,9 @@ class AppraisalController extends Controller
                     'Employee_Name' => !empty($req->Employee_Name) ? $req->Employee_Name : 'Not Set',
                     'Level_Grade' => !empty($req->Level_Grade) ? $req->Level_Grade : 'Not Set',
                     'Job_Title' => !empty($req->Job_Title) ? $req->Job_Title : '',
-                    'Function_Team' =>  !empty($req->Function_Team) ? $req->Function_Team : '',
-                    'Appraisal_Period' =>  !empty($req->Appraisal_Period) ? $req->Appraisal_Period : '',
-                    'Goal_Setting_Start_Date' =>  !empty($req->Goal_Setting_Start_Date) ? $req->Goal_Setting_Start_Date : '',
+                    'Appraisal_Period' =>  !empty($req->Appraisal_Calendar) ? $req->Appraisal_Calendar : '',
+                    'Appraisal_Start_Date' =>  !empty($req->Appraisal_Start_Date) ? $req->Appraisal_Start_Date : '',
+                    'Appraisal_End_Date' =>  !empty($req->Appraisal_End_Date) ? $req->Appraisal_End_Date : '',
                     'Action' => !empty($Viewlink) ? $Viewlink : '',
 
                 ];
@@ -2257,6 +2257,55 @@ class AppraisalController extends Controller
 
             Yii::$app->session->setFlash('error', 'Error Approving Probation Goals  : ' . $result);
             return $this->redirect(['overviewgoalslist']);
+        }
+    }
+
+    // A universal Line Addtion Method
+
+    public function actionAddLine($Service)
+    {
+        $service = Yii::$app->params['ServiceName'][$Service];
+        /*$data = [
+            'Requisition_No' => $Document_No,
+            'Line_No' => time()
+        ];*/
+
+        // get arguments as a json payload and cort it into a php array -- @todo
+        $json = file_get_contents('php://input');
+
+        // Convert it into a PHP object
+        $data = json_decode($json);
+
+        // Insert Record
+
+        $result = Yii::$app->navhelper->postData($service, $data);
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        if (is_object($result)) {
+            return [
+                'note' => 'Record Created Successfully.',
+                'result' => $result
+            ];
+        } else {
+            return ['note' => $result];
+        }
+    }
+
+    // A universal line delete functionality
+
+    public function actionDeleteLine($Service, $Key)
+    {
+        $service = Yii::$app->params['ServiceName'][$Service];
+        $result = Yii::$app->navhelper->deleteData($service, Yii::$app->request->get('Key'));
+        Yii::$app->session->setFlash('success', 'Record Deleted Successfully.', true);
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        if (!is_string($result)) {
+            return [
+                'note' => 'Record Deleted Successfully.',
+                'result' => $result
+            ];
+        } else {
+            return ['note' => $result];
         }
     }
 }

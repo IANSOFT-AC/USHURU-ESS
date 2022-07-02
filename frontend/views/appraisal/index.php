@@ -38,7 +38,7 @@ if(Yii::$app->session->hasFlash('success')){
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">My Appraisal List</h3>
+                <h3 class="card-title">Appraisee Objective Setting List</h3>
             </div>
             <div class="card-body">
                 <table class="table table-bordered dt-responsive table-hover" id="appraisal">
@@ -70,10 +70,9 @@ $script = <<<JS
                 { title: 'Employee Name' ,data: 'Employee_Name'},
                 { title: 'Level Grade' ,data: 'Level_Grade'},
                 { title: 'Job Title' ,data: 'Job_Title'},
-                { title: 'Function Team' ,data: 'Function_Team'},
                 { title: 'Appraisal Period' ,data: 'Appraisal_Period'},
-                { title: 'Goal Setting Start Date' ,data: 'Goal_Setting_Start_Date'},
-               
+                { title: 'Appraisal Start Date' ,data: 'Appraisal_Start_Date'},
+                { title: 'Appraisal End Date' ,data: 'Appraisal_End_Date'},               
                 { title: 'Action', data: 'Action' },
                 
                
@@ -89,7 +88,7 @@ $script = <<<JS
         
        //Hidding some 
        var table = $('#appraisal').DataTable();
-       table.columns([0,3,5,7]).visible(false);
+       table.columns([]).visible(false);
     
     /*End Data tables*/
         $('#appraisal').on('click','tr', function(){

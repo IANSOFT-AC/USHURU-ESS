@@ -14,9 +14,9 @@ $this->params['breadcrumbs'][] = ['label' => 'Performance Management', 'url' => 
 $this->params['breadcrumbs'][] = ['label' => 'Appraisal View', 'url' => ['view','Employee_No'=> $model->Employee_No,'Appraisal_No' => $model->Appraisal_No]];
 /** Status Sessions */
 
-Yii::$app->session->set('Goal_Setting_Status',$model->Goal_Setting_Status);
-Yii::$app->session->set('MY_Appraisal_Status',$model->MY_Appraisal_Status);
-Yii::$app->session->set('EY_Appraisal_Status',$model->EY_Appraisal_Status);
+Yii::$app->session->set('Review_Period',$model->Review_Period);
+Yii::$app->session->set('Approval_Status',$model->Approval_Status);
+Yii::$app->session->set('Approval_Status',$model->Approval_Status);
 Yii::$app->session->set('isSupervisor',false);
 Yii::$app->session->set('isOverview', $model->isOverView());
 Yii::$app->session->set('isAppraisee', $model->isAppraisee());
@@ -36,7 +36,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                 <div class="card-body info-box">
 
                     <div class="row">
-                        <?php if($model->Goal_Setting_Status == 'New'): ?>
+                        <?php if($model->Review_Period == 'New'): ?>
 
                             <div class="col-md-4">
 
@@ -69,7 +69,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                     </div>
 
 
-                        <?php if($model->MY_Appraisal_Status == 'Closed' && $model->EY_Appraisal_Status == 'Appraisee_Level' ): ?>
+                        <?php if($model->Approval_Status == 'Closed' && $model->Approval_Status == 'Appraisee_Level' ): ?>
 
                             <div class="col-md-4">
                                 <?= Html::a('<i class="fas fa-forward"></i> submit EY',['submitey','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
@@ -85,7 +85,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                         <?php endif; ?>
 
 
-                         <?php if($model->MY_Appraisal_Status == 'Closed' && $model->EY_Appraisal_Status == 'Agreement_Level'): ?>
+                         <?php if($model->Approval_Status == 'Closed' && $model->Approval_Status == 'Agreement_Level'): ?>
 
                             <div class="col-md-4">
                                 <?= Html::a('<i class="fas fa-check"></i> To Ln Manager',['agreementtolinemgr','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
@@ -103,7 +103,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
 
-                    <?php if($model->Goal_Setting_Status == 'Overview_Manager' && $model->isOverview()): ?>
+                    <?php if($model->Review_Period == 'Overview_Manager' && $model->isOverview()): ?>
                         <div class="col-md-4">
 
                             <?= Html::a('<i class="fas fa-backward"></i> To Line Mgr.',['backtolinemgr','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
@@ -134,7 +134,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
                     <!-- Overview Manager Actions at MY -->
-                    <?php if($model->MY_Appraisal_Status == 'Overview_Manager' && $model->isOverview()): ?>
+                    <?php if($model->Approval_Status == 'Overview_Manager' && $model->isOverview()): ?>
                          <?= Html::a('<i class="fas fa-check"></i> Approve',['ovapprovemy','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
                                 [
 
@@ -163,7 +163,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                     <!--Mid Year Actions By Appraisee -->
 
-                    <?php if($model->Goal_Setting_Status == 'Closed' && $model->MY_Appraisal_Status == 'Appraisee_Level' && $model->isAppraisee()): ?>
+                    <?php if($model->Review_Period == 'Closed' && $model->Approval_Status == 'Appraisee_Level' && $model->isAppraisee()): ?>
 
                             <div class="col-md-4 mx-1">
                                 <?= Html::a('<i class="fas fa-forward"></i> Submit',['submitmy','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],[
@@ -180,7 +180,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                     <?php endif; ?>
 
-<?php if($model->Goal_Setting_Status == 'Closed' && $model->MY_Appraisal_Status == 'Agreement_Level' && $model->isAppraisee()): ?>
+<?php if($model->Review_Period == 'Closed' && $model->Approval_Status == 'Agreement_Level' && $model->isAppraisee()): ?>
                      <?= Html::a('<i class="fas fa-play"></i>Agreement To Ln Mgr ',['agreement-to-supervisor','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],[
                                 'class' => 'btn btn-app bg-warning  mx-1',
                                 'title' => 'Mid-Year to Agreement Stage',
@@ -195,7 +195,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                      <!-- Line Mgr Actions on complete goals -->
 
-                     <?php if($model->Goal_Setting_Status == 'Supervisor_Level'  && $model->isSupervisor()): ?>
+                     <?php if($model->Review_Period == 'Supervisor_Level'  && $model->isSupervisor()): ?>
 
 
                                 <?= Html::a('<i class="fas fa-backward"></i> To Appraisee.',['backtoemp','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
@@ -229,7 +229,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                      <!-- Mid YEar Supervisor Action -->
 
-                <?php if($model->MY_Appraisal_Status == 'Supervisor_Level'): ?>
+                <?php if($model->Approval_Status == 'Supervisor_Level'): ?>
 
                                 <?= Html::a('<i class="fas fa-times"></i> Reject MY',['rejectmy'],[
                                             'class' => 'btn btn-app bg-warning rejectmy mx-1',
@@ -272,7 +272,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 <!-- Agreement actions -->
 
 
-<?php if($model->MY_Appraisal_Status == 'Agreement_Level'): ?>
+<?php if($model->Approval_Status == 'Agreement_Level'): ?>
 
 <?= Html::a('<i class="fas fa-play"></i>MY To Appraisee ',['my-to-appraisee','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],[
                'class' => 'btn btn-app bg-warning  mx-1',
@@ -283,7 +283,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
            ]) ;
        ?>
 
-<?php elseif($model->EY_Appraisal_Status == 'Agreement_Level'): ?>
+<?php elseif($model->Approval_Status == 'Agreement_Level'): ?>
 
    
    <?= Html::a('<i class="fas fa-times"></i> Reject EY',['rejectey','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
@@ -301,7 +301,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 <!-- End Agreement actions -->
 
-<?php if($model->MY_Appraisal_Status == 'Closed' && $model->EY_Appraisal_Status == 'Agreement_Level'): ?>
+<?php if($model->Approval_Status == 'Closed' && $model->Approval_Status == 'Agreement_Level'): ?>
 
 <div class="col-md-4">
     <?= Html::a('<i class="fas fa-check"></i> To Ln Mgr.',['agreementtolinemgr','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
@@ -317,7 +317,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 <?php endif; ?>
 
 
-<?=($model->EY_Appraisal_Status == 'Peer_1_Level' || $model->EY_Appraisal_Status == 'Peer_2_Level')?Html::a('<i class="fas fa-play"></i> Send Back to Supervisor',['sendbacktosupervisor','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
+<?=($model->Approval_Status == 'Peer_1_Level' || $model->Approval_Status == 'Peer_2_Level')?Html::a('<i class="fas fa-play"></i> Send Back to Supervisor',['sendbacktosupervisor','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
             'class' => 'btn btn-success ',
             'title' => 'Send Peer Appraisal to Supervisor',
             'data' => [
@@ -329,7 +329,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
  <!-- Overview Manager Actions -->
 
- <?php if($model->EY_Appraisal_Status == 'Overview_Manager' && $model->isOverview()): ?>
+ <?php if($model->Approval_Status == 'Overview_Manager' && $model->isOverview()): ?>
 
 <?= Html::a('<i class="fas fa-check"></i> Approve EY',['approveey','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
             'class' => 'mx-1 btn btn-app bg-success submitforapproval',
@@ -354,7 +354,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 <?php endif; ?>
 
-<?php if($model->EY_Appraisal_Status == 'Supervisor_Level' ): ?>
+<?php if($model->Approval_Status == 'Supervisor_Level' ): ?>
 
 <?= Html::a('<i class="fas fa-check"></i> Agreement..',['sendtoagreementlevel','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
             'class' => 'btn btn-app bg-success submitforapproval',
@@ -450,34 +450,33 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                 <?= $form->field($model, 'Appraisal_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                 <?= $form->field($model, 'Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                 <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Mid_Year_Overrall_rating')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-
+                               
                                 <p class="parent"><span>+</span>
                                     <?= $form->field($model, 'Overview_Rejection_Comments')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                     <?= $form->field($model, 'Level_Grade')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                     <?= $form->field($model, 'Job_Title')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'Appraisal_Period')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                    
                                     <?php $form->field($model, 'Appraisal_Start_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'Goal_Setting_Start_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'MY_Start_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'MY_End_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                    
+                                   
+                                   
 
                                 </p>
 
 
                             </div>
                             <div class="col-md-6">
-                                <?= $form->field($model, 'EY_Start_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'EY_End_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Goal_Setting_Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                
+                                
+                                <?= $form->field($model, 'Review_Period')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                 <?= $form->field($model, 'Overall_Score')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
 
 
                                 <p class="parent"><span>+</span>
 
                                     <?= $form->field($model, 'Supervisor_Rejection_Comments')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'MY_Appraisal_Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'EY_Appraisal_Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                    <?= $form->field($model, 'Approval_Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
+                                    <?= $form->field($model, 'Approval_Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                    
                                     <?= $form->field($model, 'Supervisor_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
                                     
@@ -499,42 +498,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                     <!-- Mid Year Overview comment shit -->
 
-                    <div class="row">
-                        <div class="col-md-6">
-
-                                    <div class="card">
-                                                                <div class="card-header">
-                                                                    <div class="card-title">
-                                                                        Mid Year Line Manager Comments
-                                                                    </div>
-                                                                </div>
-                                                                <div class="card-body">
-                                                                    <?= ($model->MY_Appraisal_Status == 'Supervisor_Level') ?$form->field($model, 'Line_Manager_Mid_Year_Comments')->textArea(['rows' => 2, 'maxlength'=> '140']): '' ?>
-                                                                        <span class="text-success" id="ln-confirmation-my">Comment Saved Successfully.</span>
-
-                                                                        <?= ($model->MY_Appraisal_Status !== 'Supervisor_Level') ?$form->field($model, 'Line_Manager_Mid_Year_Comments')->textArea(['rows' => 2, 'readonly' => true, 'disabled' =>  true]): '' ?>
-                                                                </div>
-                                    </div>
-                        </div>
-
-                         <div class="col-md-6">
-
-                                                <div class="card">
-                                                            <div class="card-header">
-                                                                <div class="card-title">
-                                                                    Mid Year Overview Manager Comments
-                                                                </div>
-                                                            </div>
-                                                            <div class="card-body">
-                                                                 <?= ($model->MY_Appraisal_Status == 'Overview_Manager') ?$form->field($model, 'Overview_Mid_Year_Comments')->textArea(['rows' => 2, 'maxlength'=> '140']): '' ?>
-                                                                    <span class="text-success" id="confirmation-my">Comment Saved Successfully.</span>
-
-                                                                    <?= ($model->MY_Appraisal_Status !== 'Overview_Manager') ?$form->field($model, 'Overview_Mid_Year_Comments')->textArea(['rows' => 2, 'readonly' => true, 'disabled' =>  true]): '' ?>
-                                                            </div>
-                                                </div>
-
-                        </div>
-                    </div>
+                   
 
 
                       <div class="row">
@@ -551,10 +515,10 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                                                 </div>
                                                             </div>
                                                             <div class="card-body">
-                                                                 <?= ($model->EY_Appraisal_Status == 'Supervisor_Level') ?$form->field($model, 'Supervisor_Overall_Comments')->textArea(['rows' => 2, 'maxlength'=> '140']): '' ?>
+                                                                 <?= ($model->Approval_Status == 'Supervisor_Level') ?$form->field($model, 'Supervisor_Overall_Comments')->textArea(['rows' => 2, 'maxlength'=> '140']): '' ?>
                                                                     <span class="text-success" id="confirmation-super">Comment Saved Successfully.</span>
 
-                                                                    <?= ($model->EY_Appraisal_Status !== 'Supervisor_Level') ?$form->field($model, 'Supervisor_Overall_Comments')->textArea(['rows' => 2, 'readonly' => true, 'disabled' =>  true]): '' ?>
+                                                                    <?= ($model->Approval_Status !== 'Supervisor_Level') ?$form->field($model, 'Supervisor_Overall_Comments')->textArea(['rows' => 2, 'readonly' => true, 'disabled' =>  true]): '' ?>
                                                             </div>
                                     </div>
 
@@ -573,10 +537,10 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                                                 </div>
                                                             </div>
                                                             <div class="card-body">
-                                                                 <?= ($model->EY_Appraisal_Status == 'Overview_Manager') ?$form->field($model, 'Over_View_Manager_Comments')->textArea(['rows' => 2, 'maxlength'=> '140']): '' ?>
+                                                                 <?= ($model->Approval_Status == 'Overview_Manager') ?$form->field($model, 'Over_View_Manager_Comments')->textArea(['rows' => 2, 'maxlength'=> '140']): '' ?>
                                                                     <span class="text-success" id="confirmation">Comment Saved Successfully.</span>
 
-                                                                    <?= ($model->EY_Appraisal_Status !== 'Overview_Manager') ?$form->field($model, 'Over_View_Manager_Comments')->textArea(['rows' => 2, 'readonly' => true, 'disabled' =>  true]): '' ?>
+                                                                    <?= ($model->Approval_Status !== 'Overview_Manager') ?$form->field($model, 'Over_View_Manager_Comments')->textArea(['rows' => 2, 'readonly' => true, 'disabled' =>  true]): '' ?>
                                                             </div>
                                                 </div>
 
@@ -594,35 +558,39 @@ $absoluteUrl = \yii\helpers\Url::home(true);
             </div><!--end details card-->
 
 
-            <?php if(1 == 1){ //$model->EY_Appraisal_Status !== 'Agreement_Level' ?>
+            <?php if(1 == 1){ //$model->Approval_Status !== 'Agreement_Level' ?>
                 <!--KRA CARD -->
                 <div class="card-ushurusecondary">
                     <div class="card-header">
                         <h4 class="card-title">Employee Appraisal Key Result Areas (KRAs)</h4>
                         <div class="card-tools">
-                            <?= ($model->Goal_Setting_Status == 'New' || $model->MY_Appraisal_Status == 'Appraisee_Level')? Html::a('<i class="fa fa-plus mr-2"></i> Add',['appraisalkra/create','Appraisal_No' => $_GET['Appraisal_No']],['class' => 'add btn btn-sm btn-outline-light']): ''?>
+                            <?= ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level')? Html::a('<i class="fa fa-plus mr-2"></i> Add',['appraisalkra/create','Appraisal_No' => $_GET['Appraisal_No']],[
+                                'class' => 'add btn btn-sm btn-outline-light',
+                                'data-Appraisal_No' => $model->Appraisal_No,
+                                'data-service' => 'EmployeeAppraisalKRA',
+                                'data-Line_No' => time()
+                                ]): ''?>
                         </div>
                     </div>
 
                     <div class="card-body">
 
-                        <?php if(property_exists($card->Employee_Appraisal_KRAs,'Employee_Appraisal_KRAs')){ ?>
+                        <?php if(property_exists($card->Appraisal_Objectives_KRAs,'Appraisal_Objectives_KRAs')){ ?>
                             <table class="table table-bordered">
                                 <thead>
                                 <tr>
                                     <th></th>
-                                    <th>KRA</th>
-                                   
-                                    <th>Maximum Weight</th>
-                                    <th>Total Weight</th>
-                                    <th>Mid Year Overall Rating</th>
-                                     <th>Overall Rating</th>
+                                    <th>Perspective_Pillar</th>
+                                    <th>KRA_Objective</th>
+                                    <th>Maximum_Weight</th>
+                                    <th>Total_Weigth</th>
+                                    <th>Agreed_Rating</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php foreach($card->Employee_Appraisal_KRAs->Employee_Appraisal_KRAs as $k){
-                                    $mvtopip = Html::Checkbox('Move_To_PIP',$k->Move_To_PIP,['readonly' => true,'disabled' => true]);
+                                <?php foreach($card->Appraisal_Objectives_KRAs->Appraisal_Objectives_KRAs as $k){
+                                    
                                    
                                     ?>
 
@@ -630,24 +598,25 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                                         <td><span>+</span></td>
                                       
-                                        <td><?= $k->KRA ?></td>
-                                        
-                                       
-                                        <td><?= !empty($k->Maximum_Weight)?$k->Maximum_Weight: 'Not Set' ?></td>
-                                        <td><?= !empty($k->Total_Weigth)?$k->Total_Weigth: 'Not Set' ?></td>
-                                        <td><?= $k->Mid_Year_Overall_Rating ?></td>
-                                        <td><?= $k->Overall_Rating ?></td>
+                                        <td><?= !empty($k->Perspective_Pillar)?$k->Perspective_Pillar: '' ?></td>
+                                        <td><?= !empty($k->KRA_Objective)?$k->KRA_Objective: '' ?></td>
+                                        <td><?= !empty($k->Maximum_Weight)?$k->Maximum_Weight: '' ?></td>
+                                        <td><?= $k->Agreed_Rating ?? '' ?></td>
+                                        <td><?= $k->Overall_Rating ?? '' ?></td>
                                         <td>
-                                            <?=($model->Goal_Setting_Status == 'New' || $model->MY_Appraisal_Status == 'Appraisee_Level')?
+                                           
+                                         <?= ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level')?  Html::a(
+                                '<i class="fa fa-trash"></i> ',
+                                ['delete-line'],
+                                [
+                                    'class' => 'delete btn btn-outline-danger',
+                                    'title' => 'Delete this record.',
+                                    'data-key' => $k->Key,
+                                    'data-service' => 'EmployeeAppraisalKRA',
 
-                                        Html::a('<i class="fa fa-edit"></i>',['appraisalkra/update','Line_No'=> $k->Line_No,'Appraisal_No' => $k->Appraisal_No,'Employee_No' => $k->Employee_No ],['class' => ' evalkra btn btn-info btn-xs','title' => 'Update KRA'])
-
-                                        :''?>
-                                            
-
-
-
-                                         <?= ($model->Goal_Setting_Status == 'New' || $model->MY_Appraisal_Status == 'Appraisee_Level')? Html::a('<i class="fa fa-trash"></i>',['appraisalkra/delete','Key' => $k->Key],['class'=> 'btn btn-xs btn-danger delete-objective','title' => 'Delete KRA']) : ''
+                                ]
+                            )
+                            : ''
                                          ?>
 
 
@@ -663,23 +632,20 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                                     
                                                     <td><b>Weight</b></td>
                                                     <td><b>Target</b></td>
-                                                    <td><b>Mid Year Appraisee Assesment</b></td>
-                                                   
-                                                    <td><b>Mid Year Supervisor Assesment</b></td>
-                                                    <td><b>Mid Year Agreement</b></td>
+                                                  
                                                     <td class="text-bold">Mid Year Appraisee Comments</td>
                                                     <td class="text-bold">Mid Year Supervisor Comments</td> 
                                                     <td><b>Appraisee Self Rating</b></td>
                                                     <td><b>Employee Comments</b></td>
                                                     <td><b>Appraiser Rating</b></td>
                                                     <td><b>End Year Supervisor Comments</b></td>
-                                                    <td><b>Agree</b></td>
+                                                   
                                                     <td><b>Disagreement Comments</b></td>
                                                     
 
 
                                                     <th> <?= (
-                                                        //$model->Goal_Setting_Status == 'New' || $model->MY_Appraisal_Status == 'Appraisee_Level'
+                                                        //$model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level'
                                                         1 == 1
 
                                                     )?Html::a('<i class="fas fa-plus"></i>',['employeeappraisalkpi/create','Employee_No' => $k->Employee_No,'Appraisal_No'=> $k->Appraisal_No,'KRA_Line_No' => $k->Line_No],['class' => 'btn btn-xs btn-success add-objective','title' => 'Add Objective / KPI']):'' ?>
@@ -695,43 +661,42 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
 
-                                                             $mvkpitopip = Html::Checkbox('Move_To_PIP',$kpi->Move_To_PIP,['readonly' => true,'disabled' => true]);
+                                                             
 
                                                              $appmyassessment = !empty($kpi->Mid_Year_Appraisee_Assesment)?$kpi->Mid_Year_Appraisee_Assesment:'';
                                                              $supermyassessment = !empty($kpi->Mid_Year_Supervisor_Assesment)?$kpi->Mid_Year_Supervisor_Assesment:'';
 
-                                                             $agree = ($kpi->Agree)?'Yes':'No';
+                                                            
                                                      ?>
                                                         <tr>
                                                             
                                                 
-                                                            <td><?= $kpi->Objective ?></td>
+                                                           
                                                             
                                                             <td><?= !empty($kpi->Weight)?$kpi->Weight:'Not Set' ?></td>
                                                             <td><?= !empty($kpi->Target)?$kpi->Target:'Not Set' ?></td>
                                                             <td><?= !empty($kpi->Mid_Year_Appraisee_Assesment)?$appmyassessment:'Not Set' ?></td>
                                                            
                                                             <td><?= !empty($kpi->Mid_Year_Supervisor_Assesment)?$supermyassessment:'Not Set' ?></td>
-                                                            <td><?= ($kpi->Mid_Year_Agreement)?'Yes': 'No' ?></td>
-                                                            <td><?= !empty($kpi->Mid_Year_Appraisee_Comments)?$kpi->Mid_Year_Appraisee_Comments:'Not Set' ?></td>
-                                                            <td><?= !empty($kpi->Mid_Year_Supervisor_Comments)?$kpi->Mid_Year_Supervisor_Comments:'Not Set' ?></td> 
+                                                          
+                                                           
                                                             <td><?= !empty($kpi->Appraisee_Self_Rating)?$kpi->Appraisee_Self_Rating:'Not Set' ?></td>
                                                             <td><?= !empty($kpi->Employee_Comments)?$kpi->Employee_Comments:'Not Set' ?></td>
                                                             <td><?= !empty($kpi->Appraiser_Rating)?$kpi->Appraiser_Rating:'Not Set' ?></td>
                                                             <td><?= !empty($kpi->End_Year_Supervisor_Comments)?$kpi->End_Year_Supervisor_Comments:'Not Set' ?></td>
-                                                            <td><?= $agree ?></td>
+                                                           
                                                             <td><?= !empty($kpi->Disagreement_Comments)?$kpi->Disagreement_Comments:'Not Set' ?></td>
-                                                            <!-- <td><?php $mvkpitopip ?></td> -->
+                                                            
 
                                                             <td>
                                                                 <?= (
-                                                                    $model->Goal_Setting_Status == 'New' ||
-                                                                    $model->MY_Appraisal_Status == 'Appraisee_Level' ||
-                                                                    $model->EY_Appraisal_Status == 'Appraisee_Level' ||
-                                                                    $model->EY_Appraisal_Status == 'Agreement_Level' ||
-                                                                    $model->MY_Appraisal_Status == 'Agreement_Level' ||
-                                                                    $model->MY_Appraisal_Status == 'Supervisor_Level' ||
-                                                                    $model->EY_Appraisal_Status == 'Supervisor_Level' 
+                                                                    $model->Review_Period == 'New' ||
+                                                                    $model->Approval_Status == 'Appraisee_Level' ||
+                                                                    $model->Approval_Status == 'Appraisee_Level' ||
+                                                                    $model->Approval_Status == 'Agreement_Level' ||
+                                                                    $model->Approval_Status == 'Agreement_Level' ||
+                                                                    $model->Approval_Status == 'Supervisor_Level' ||
+                                                                    $model->Approval_Status == 'Supervisor_Level' 
 
                                                             )?
                                                            
@@ -739,7 +704,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                                               Html::a('<i class="fas fa-edit"></i> ',['employeeappraisalkpi/update','Appraisal_No'=> $kpi->Appraisal_No,'Employee_No' => $kpi->Employee_No,'KRA_Line_No' => $kpi->KRA_Line_No,'Line_No' => $kpi->Line_No],['class' => 'btn btn-xs btn-primary add-objective', 'title' => 'Update Objective /KPI']):'' ?>
 
 
-                                                                <?= ($model->Goal_Setting_Status == 'New' || $model->MY_Appraisal_Status == 'Appraisee_Level')? Html::a('<i class="fa fa-trash"></i>',['employeeappraisalkpi/delete','Key' => $kpi->Key],['class'=> 'btn btn-xs btn-danger delete-objective','title' => 'Delete Objective']):'' ?>
+                                                                <?= ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level')? Html::a('<i class="fa fa-trash"></i>',['employeeappraisalkpi/delete','Key' => $kpi->Key],['class'=> 'btn btn-xs btn-danger delete-objective','title' => 'Delete Objective']):'' ?>
 
                                                             </td>
 
@@ -778,22 +743,22 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                
                                 <td>Category</td>
                                 <td>Maximum Weight</td>
-                                <td>Mid Year Overall Rating</td>
+                               
                                 <td>Overall Rating</td>
 
                             </tr>
                             </thead>
-                            <?php if(property_exists($card->Employee_Appraisal_Competence,'Employee_Appraisal_Competence')){ ?>
+                            <?php if(property_exists($card->Appraisal_Competence,'Appraisal_Competence')){ ?>
 
                             <tbody>
-                            <?php foreach($card->Employee_Appraisal_Competence->Employee_Appraisal_Competence as $comp){ ?>
+                            <?php foreach($card->Appraisal_Competence->Appraisal_Competence as $comp){ ?>
 
                                 <tr class="parent">
                                     <td><span>+</span></td>
                                    
                                     <td><?= isset($comp->Category)?$comp->Category:'Not Set' ?></td>
                                     <td><?= isset($comp->Maximum_Weigth)?$comp->Maximum_Weigth:'Not Set' ?></td>
-                                    <td><?= $comp->Mid_Year_Overall_Rating ?></td>
+                                    
                                     <td><?= isset($comp->Overal_Rating)?$comp->Overal_Rating:'Not Set' ?></td>
 
                                 </tr>
@@ -825,7 +790,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
                                                 <td><b>Overall Remarks</b></td>
-                                                <td><b>Agree</b></td>
+                                               
                                                 <td><b>Action</b></td>
                                             </tr>
                                             </thead>
@@ -842,7 +807,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                                         <td><?= !empty($be->Mid_Year_Employee_Comments)?$be->Mid_Year_Employee_Comments:'' ?></td>
                                                         <td><?= !empty($be->Mid_Year_Supervisor_Rating)?$be->Mid_Year_Supervisor_Rating:'' ?></td>
                                                         <td><?= !empty($be->Mid_Year_Supervisor_Comments)?$be->Mid_Year_Supervisor_Comments:'' ?></td>
-                                                        <td><?= ($be->Mid_Year_Agreement)?'Yes':'No' ?></td>
+                                                        
 
 
                                                         <td><?= !empty($be->Self_Rating)?$be->Self_Rating:'' ?></td>
@@ -851,15 +816,15 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
                                                         <td><?= !empty($be->Overall_Remarks)?$be->Overall_Remarks:'' ?></td>
-                                                        <td><?= ($be->Agree)?'Yes': 'No' ?></td>
+                                                       
                                                         <td><?= (
-                                                            $model->Goal_Setting_Status == 'New' ||
-                                                            $model->MY_Appraisal_Status == 'Appraisee_Level' || 
-                                                            $model->EY_Appraisal_Status == 'Appraisee_Level' ||
-                                                            $model->EY_Appraisal_Status == 'Agreement_Level' ||
-                                                            $model->MY_Appraisal_Status == 'Agreement_Level' ||
-                                                            $model->MY_Appraisal_Status == 'Supervisor_Level' ||
-                                                            $model->EY_Appraisal_Status == 'Supervisor_Level'
+                                                            $model->Review_Period == 'New' ||
+                                                            $model->Approval_Status == 'Appraisee_Level' || 
+                                                            $model->Approval_Status == 'Appraisee_Level' ||
+                                                            $model->Approval_Status == 'Agreement_Level' ||
+                                                            $model->Approval_Status == 'Agreement_Level' ||
+                                                            $model->Approval_Status == 'Supervisor_Level' ||
+                                                            $model->Approval_Status == 'Supervisor_Level'
 
 
 
@@ -883,58 +848,13 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                     </div>
                 </div>
 
-                <!--/Employee Appraisal  Competence --->
-
-
-                <!--Training Plan Card -->
-               <!-- <div class="card-ushurusecondary">
-                    <div class="card-header">
-                        <h4 class="card-title">Training Plan </h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-                        <?/*= Html::a('<i class="fas fa-plus"></i> Add New',['training-plan/create','Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-primary add-trainingplan']) */?>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-bordered">
-                            <thead>
-                            <tr>
-                                <th>Line No.</th>
-                                <th>Appraisal No</th>
-                                <th>Employee No</th>
-                                <th>Training Action</th>
-                                <th>Delivery Method</th>
-                                <th>Due Date</th>
-                                <th>Action</th>
-
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            <?php /*if(property_exists($card->Training_Plan,'Training_Plan')){ */?>
-                                <?php /*foreach($card->Training_Plan->Training_Plan as $training){ */?>
-                                    <tr>
-                                        <td><?/*= $training->Line_No */?></td>
-                                        <td><?/*= $training->Appraisal_No */?></td>
-                                        <td><?/*= $training->Employee_No */?></td>
-                                        <td><?/*= $training->Training_Action */?></td>
-                                        <td><?/*= $training->Delivery_Method */?></td>
-                                        <td><?/*= $training->Due_Date */?></td>
-                                        <td><?/*= Html::a('<i class="fas fa-edit"></i> ',['training-plan/update','Line_No'=> $training->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-trainingplan']) */?></td>
-                                    </tr>
-                                <?php /*} */?>
-                            <?php /*}  */?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>-->
-                <!--/Training Plan Card -->
-
-
+                
 
             <?php } ?>
 
-            <?php //if($model->EY_Appraisal_Status !== 'Agreement_Level'){ ?>
+           
 
-            <?php if(1==1){ ?>
+           
 
 
 
@@ -945,7 +865,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                         <div class="card-header">
                             <h4 class="card-title">Training Needs</h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <div class="card-tools">
-                            <?= ($model->isAppraisee() && $model->EY_Appraisal_Status == 'Appraisee_Level')?Html::a('<i class="fas fa-plus"></i> Add New',['weeknessdevelopmentplan/create','Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-sm btn-outline-light add']):'' ?>
+                            <?= ($model->isAppraisee() && $model->Approval_Status == 'Appraisee_Level')?Html::a('<i class="fas fa-plus"></i> Add New',['weeknessdevelopmentplan/create','Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-sm btn-outline-light add']):'' ?>
                             </div>
 
                         </div>
@@ -963,9 +883,9 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                                 </tr>
                                     </thead>
                                      <tbody>
-                                             <?php if(property_exists($card->Weakness_Development_Plan,'Weakness_Development_Plan')){ ?>
+                                             <?php if(property_exists($card->Areas_of_Further_Development,'Areas_of_Further_Development')){ ?>
 
-                                                    <?php foreach($card->Weakness_Development_Plan->Weakness_Development_Plan as $wdp):  ?>
+                                                    <?php foreach($card->Areas_of_Further_Development->Areas_of_Further_Development as $wdp):  ?>
                                                         <tr>
                                                            
                                                             <td><?= !empty($wdp->Development_Plan)?$wdp->Development_Plan: '' ?></td>
@@ -1042,14 +962,14 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                         <td>
                                             <?= (
 
-                                                ($model->Goal_Setting_Status == 'New' || $model->EY_Appraisal_Status == 'Appraisee_Level' ||  $model->MY_Appraisal_Status == 'Appraisee_Level') && $model->Goal_Setting_Status !== 'Overview_Manager'
+                                                ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level' ||  $model->Approval_Status == 'Appraisee_Level') && $model->Review_Period !== 'Overview_Manager'
 
                                                  )?Html::a('<i class="fas fa-edit"></i> ',['furtherdevelopmentarea/update','Line_No'=> $fda->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning']):'' ?>
 
-                                                 <?= ($model->Goal_Setting_Status == 'New' || $model->EY_Appraisal_Status == 'Appraisee_Level' ||  $model->MY_Appraisal_Status == 'Appraisee_Level')? Html::a('<i class="fas fa-trash"></i> ',['furtherdevelopmentarea/delete','Key'=> $fda->Key],['class' => 'btn btn-xs btn-outline-primary delete', 'title'=>'Delete Weakness Development Plan']):'' ?>
+                                                 <?= ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level' ||  $model->Approval_Status == 'Appraisee_Level')? Html::a('<i class="fas fa-trash"></i> ',['furtherdevelopmentarea/delete','Key'=> $fda->Key],['class' => 'btn btn-xs btn-outline-primary delete', 'title'=>'Delete Weakness Development Plan']):'' ?>
 
 
-                                            <?php ($fda->Training_Needed  && $model->EY_Appraisal_Status == 'Appraisee_Level')?Html::a('<i class="fas fa-plus-square"></i> ',['weeknessdevelopmentplan/create','Wekaness_Line_No'=> $fda->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary add','Add a Weakness Development Plan.']):'' ?>
+                                            <?php ($fda->Training_Needed  && $model->Approval_Status == 'Appraisee_Level')?Html::a('<i class="fas fa-plus-square"></i> ',['weeknessdevelopmentplan/create','Wekaness_Line_No'=> $fda->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary add','Add a Weakness Development Plan.']):'' ?>
                                         </td>
                                     </tr>
                                     <!--Start displaying children-- comment connt
@@ -1077,8 +997,8 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                                             <td><?= !empty($wdp->Proposed_Trainer)?$wdp->Proposed_Trainer: '' ?></td>
                                                             <td><?= !empty($wdp->Training_Need_Description)?$wdp->Training_Need_Description:'' ?></td>
                                                             <td>
-                                                                <?= ($model->Goal_Setting_Status !== 'Overview_Manager' &&  $model->EY_Appraisal_Status == 'Appraisee_Level')? Html::a('<i class="fas fa-edit"></i> ',['weeknessdevelopmentplan/update','Line_No'=> $wdp->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning','title'=> 'Update Weakness Development Plan']):'' ?>
-                                                                <?= ($model->Goal_Setting_Status !== 'Overview_Manager' && $model->EY_Appraisal_Status == 'Appraisee_Level')? Html::a('<i class="fas fa-trash"></i> ',['weeknessdevelopmentplan/delete','Key'=> $wdp->Key],['class' => 'btn btn-xs btn-outline-primary delete', 'title'=>'Delete Weakness Development Plan']):'' ?>
+                                                                <?= ($model->Review_Period !== 'Overview_Manager' &&  $model->Approval_Status == 'Appraisee_Level')? Html::a('<i class="fas fa-edit"></i> ',['weeknessdevelopmentplan/update','Line_No'=> $wdp->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning','title'=> 'Update Weakness Development Plan']):'' ?>
+                                                                <?= ($model->Review_Period !== 'Overview_Manager' && $model->Approval_Status == 'Appraisee_Level')? Html::a('<i class="fas fa-trash"></i> ',['weeknessdevelopmentplan/delete','Key'=> $wdp->Key],['class' => 'btn btn-xs btn-outline-primary delete', 'title'=>'Delete Weakness Development Plan']):'' ?>
                                                             </td>
                                                         </tr>
                                                         <?php
@@ -1100,8 +1020,8 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                 <!--/-Areas_of_Further_Development-->
 
-            <?php } //end inner condition ?>
-            <?php //}  ?>
+           
+           
 
 
         </div>
@@ -1174,102 +1094,35 @@ $script = <<<JS
 
     $(function(){
       
-        
-     /*Deleting Records*/
-     
-     $('.delete, .delete-objective').on('click',function(e){
-         e.preventDefault();
-           var secondThought = confirm("Are you sure you want to delete this record ?");
-           if(!secondThought){//if user says no, kill code execution
-                return;
-           }
+       // Trigger Creation of a line
+  $('.add').on('click',function(e){
+            e.preventDefault();
+            let url = $(this).attr('href');
            
-         var url = $(this).attr('href');
-         $.get(url).done(function(msg){
-             $('.modal').modal('show')
-                    .find('.modal-body')
-                    .html(msg.note);
-         },'json');
-     });
+            let data = $(this).data(); // Inpect this data to inform on payload
+           
+            console.log(data);
+            return;
+            $('a.add').text('Inserting...');
+            $('a.add').attr('disabled', true);
+            const res = fetch(`./add-line`, {
+                method: 'POST',
+                headers: new Headers({
+                Origin: 'http://localhost:80/',
+                "Content-Type": 'application/json',
+                //'Content-Type': 'application/x-www-form-urlencoded'
+                }),
+                body: payload
+            })
+            .then(data => data.json)
+            .then(result => console.log(result))
+            ;
+           
+        }); 
       
     
-    /*Evaluate KRA*/
-        $('.evalkra').on('click', function(e){
-             e.preventDefault();
-            var url = $(this).attr('href');
-            console.log('clicking...');
-            $('.modal').modal('show')
-                            .find('.modal-body')
-                            .load(url); 
-
-        });
-        
-        
-      //Add a training plan
-    
-     $('.add-trainingplan, .add').on('click',function(e){
-        e.preventDefault();
-        var url = $(this).attr('href');
-        console.log('clicking...');
-        $('.modal').modal('show')
-                        .find('.modal-body')
-                        .load(url); 
-
-     });
+   
      
-     
-     //Update a training plan
-    
-     $('.update-trainingplan').on('click',function(e){
-        e.preventDefault();
-        var url = $(this).attr('href');
-        console.log('clicking...');
-        $('.modal').modal('show')
-                        .find('.modal-body')
-                        .load(url); 
-
-     });
-     
-     
-     //Update/ Evalute Employeeappraisal behaviour -- evalbehaviour
-     
-      $('.evalbehaviour').on('click',function(e){
-        e.preventDefault();
-        var url = $(this).attr('href');
-        console.log('clicking...');
-        $('.modal').modal('show')
-                        .find('.modal-body')
-                        .load(url); 
-
-     });
-      
-      /*Add learning assessment competence-----> add-learning-assessment */
-      
-      
-      $('.add-learning-assessment').on('click',function(e){
-        e.preventDefault();
-        var url = $(this).attr('href');
-        console.log('clicking...');
-        $('.modal').modal('show')
-                        .find('.modal-body')
-                        .load(url); 
-
-     });
-      
-      /*Update Learning Assessment and Add/update employee objectives/kpis */
-      
-      $('.update-learning, .add-objective').on('click',function(e){
-        e.preventDefault();
-        var url = $(this).attr('href');
-        console.log('clicking...');
-        $('.modal').modal('show')
-                        .find('.modal-body')
-                        .load(url); 
-
-     });
-      
-      
-      
     
     /*Handle modal dismissal event  */
     $('.modal').on('hidden.bs.modal',function(){
@@ -1297,64 +1150,7 @@ $script = <<<JS
             $(this).nextUntil('p.parent').slideToggle(100, function(){});
      });
     
-        //Add Career Development Plan
-        
-        $('.add-cdp').on('click',function(e){
-            e.preventDefault();
-            var url = $(this).attr('href');
-           
-            
-            console.log('clicking...');
-            $('.modal').modal('show')
-                            .find('.modal-body')
-                            .load(url); 
-            
-         });//End Adding career development plan
-         
-         /*Add Career development Strength*/
-         
-         
-        $('.add-cds').on('click',function(e){
-            e.preventDefault();
-            var url = $(this).attr('href');
-            
-            $('.modal').modal('show')
-                            .find('.modal-body')
-                            .load(url); 
-            
-         });
-         
-         /*End Add Career development Strength*/
-         
-         
-         /* Add further development Areas */
-         
-            $('.add-fda').on('click',function(e){
-            e.preventDefault();
-            var url = $(this).attr('href');
-                       
-            console.log('clicking...');
-            $('.modal').modal('show')
-                            .find('.modal-body')
-                            .load(url); 
-            
-         });
-         
-         /* End Add further development Areas */
-         
-         /*Add Weakness Development Plan*/
-             $('.add-wdp').on('click',function(e){
-            e.preventDefault();
-            var url = $(this).attr('href');
-                       
-            console.log('clicking...');
-            $('.modal').modal('show')
-                            .find('.modal-body')
-                            .load(url); 
-            
-         });
-         /*End Add Weakness Development Plan*/
-
+     
 
 
 /*Send Goals Back to Line Mgr*/

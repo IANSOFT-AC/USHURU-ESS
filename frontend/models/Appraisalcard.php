@@ -18,42 +18,32 @@ class Appraisalcard extends Model
 {
 
     public $Key;
-    public $Appraisal_No;
-    public $Employee_No;
-    public $Employee_Name;
-    public $Employee_User_Id;
-    public $Level_Grade;
-    public $Job_Title;
-    public $Appraisal_Period;
-    public $Appraisal_Start_Date;
-    public $Goal_Setting_Start_Date;
-    public $Goal_Setting_End_Date;
-    public $MY_Start_Date;
-    public $MY_End_Date;
-    public $EY_Start_Date;
-    public $EY_End_Date;
-    public $Goal_Setting_Status;
-    public $MY_Appraisal_Status;
-    public $EY_Appraisal_Status;
-    public $Supervisor_No;
-    public $Supervisor_Name;
-    public $Supervisor_User_Id;
-    public $Overview_Manager;
-    public $Overview_Manager_Name;
-    public $Overview_Manager_UserID;
-    public $Over_View_Manager_Comments;
-    public $Supervisor_Overall_Comments;
-    public $Overall_Score;
-    public $Is_Long_Term;
-    public $Recomended_Action;
-
-    public $Overview_Rejection_Comments;
-    public $Supervisor_Rejection_Comments;
-    public $Overview_Mid_Year_Comments;
-
-    public $Mid_Year_Overrall_rating;
-
-    public $Line_Manager_Mid_Year_Comments;
+    
+public $Appraisal_No;
+public $Employee_No;
+public $Employee_Name;
+public $Employee_User_Id;
+public $Global_Dimension_1_Code;
+public $Global_Dimension_2_Code;
+public $Level_Grade;
+public $Job_Title;
+public $Appraisal_Calendar;
+public $Appraisal_Start_Date;
+public $Supervisor_No;
+public $Supervisor_Name;
+public $Supervisor_User_Id;
+public $Supervisor_Overall_Comments;
+public $Supervisor_Rejection_Comments;
+public $Overview_Manager;
+public $Overview_Manager_Name;
+public $Overview_Manager_UserID;
+public $Over_View_Manager_Comments;
+public $Overview_Rejection_Comments;
+public $Review_Period;
+public $Overall_Score;
+public $Quarter;
+public $Approval_Status;
+public $Recomended_Action;
 
 
 
@@ -93,7 +83,7 @@ class Appraisalcard extends Model
         $service = Yii::$app->params['ServiceName']['EmployeeAppraisalBehaviours'];
         $filter = [
             'Appraisal_Code' => $this->Appraisal_No,
-            'Category_Line_No' => $Category_Line_No
+            'Competence_Line_No' => $Category_Line_No
         ];
 
         $behaviours = Yii::$app->navhelper->getData($service, $filter);
