@@ -591,14 +591,9 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                 </thead>
                                 <tbody>
                                 <?php foreach($card->Appraisal_Objectives_KRAs->Appraisal_Objectives_KRAs as $k){
-                                    
-                                   
+                                
                                     ?>
-
                                     <tr>
-
-                                        
-                                      
                                         <td data-key="<?= $k->Key ?>" data-name="Perspective_Pillar" data-service="EmployeeAppraisalKRA" ondblclick="addDropDown(this,'perspective')"><?= !empty($k->Perspective_Pillar)?$k->Perspective_Pillar: '' ?></td>
                                         <td data-key="<?= $k->Key ?>" data-name="KRA_Objective" data-service="EmployeeAppraisalKRA" ondblclick="addInput(this)"><?= !empty($k->KRA_Objective)?$k->KRA_Objective: '' ?></td>
                                         <td data-key="<?= $k->Key ?>" data-name="Maximum_Weight" data-service="EmployeeAppraisalKRA" ondblclick="addInput(this,'number')"><?= $k->Maximum_Weight ?></td>
@@ -629,90 +624,58 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                                 <thead>
                                                 <tr >
                                                    
-                                                    <td><b>Objective</b></td>
+                                                     <td class="text text-bold text-center">KRA_Objective</td>
+                                                     <td class="text text-bold text-center text-info">Activity</td>
+                                                     <td class="text text-bold text-center text-info">Due_Date</td>
+                                                     <td class="text text-bold text-center text-info">Target_KPI</td>
+                                                     <td class="text text-bold text-center text-info">Weight</td>
+                                                     <td class="text text-bold text-center text-info">Target_KPI_Status</td>
+                                                     <td class="text text-bold text-center text-info">Target_Justification</td>
                                                     
-                                                    <td><b>Weight</b></td>
-                                                    <td><b>Target</b></td>
-                                                  
-                                                    <td class="text-bold">Mid Year Appraisee Comments</td>
-                                                    <td class="text-bold">Mid Year Supervisor Comments</td> 
-                                                    <td><b>Appraisee Self Rating</b></td>
-                                                    <td><b>Employee Comments</b></td>
-                                                    <td><b>Appraiser Rating</b></td>
-                                                    <td><b>End Year Supervisor Comments</b></td>
-                                                   
-                                                    <td><b>Disagreement Comments</b></td>
-                                                    
-
-
-                                                    <th> <?= (
-                                                        //$model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level'
-                                                        1 == 1
-
-                                                    )?Html::a('<i class="fas fa-plus"></i>',['employeeappraisalkpi/create','Employee_No' => $k->Employee_No,'Appraisal_No'=> $k->Appraisal_No,'KRA_Line_No' => $k->Line_No],['class' => 'btn btn-xs btn-success add-objective','title' => 'Add Objective / KPI']):'' ?>
+                                    
+                                                    <th> <?= 
+                                                    Html::a('<i class="fas fa-plus"></i>',['appraisal/add-line'],
+                                                    [
+                                                        'class' => 'add btn btn-xs btn-success',
+                                                        'title' => 'Add Objective / KPI',
+                                                         'data-Appraisal_No' => $model->Appraisal_No,
+                                                        'data-service' => 'EmployeeAppraisalKPI',
+                                                        'data-Line_No' => time(),
+                                                        'data-Employee_No' => $model->Employee_No,
+                                                        'data-KRA_Line_No' =>  $k->Line_No
+                                                        ]) ?>
                                                     </th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <?php if(is_array($model->getKPI($k->Line_No))){
-
-                                                   
-
+                                                <?php if(is_array($model->getKPI($k->Line_No))):
                                                     foreach($model->getKPI($k->Line_No) as $kpi):
-
-
-
-                                                             
-
-                                                             $appmyassessment = !empty($kpi->Mid_Year_Appraisee_Assesment)?$kpi->Mid_Year_Appraisee_Assesment:'';
-                                                             $supermyassessment = !empty($kpi->Mid_Year_Supervisor_Assesment)?$kpi->Mid_Year_Supervisor_Assesment:'';
-
                                                             
                                                      ?>
                                                         <tr>
-                                                            
-                                                
-                                                           
-                                                            
-                                                            <td><?= !empty($kpi->Weight)?$kpi->Weight:'Not Set' ?></td>
-                                                            <td><?= !empty($kpi->Target)?$kpi->Target:'Not Set' ?></td>
-                                                            <td><?= !empty($kpi->Mid_Year_Appraisee_Assesment)?$appmyassessment:'Not Set' ?></td>
-                                                           
-                                                            <td><?= !empty($kpi->Mid_Year_Supervisor_Assesment)?$supermyassessment:'Not Set' ?></td>
-                                                          
-                                                           
-                                                            <td><?= !empty($kpi->Appraisee_Self_Rating)?$kpi->Appraisee_Self_Rating:'Not Set' ?></td>
-                                                            <td><?= !empty($kpi->Employee_Comments)?$kpi->Employee_Comments:'Not Set' ?></td>
-                                                            <td><?= !empty($kpi->Appraiser_Rating)?$kpi->Appraiser_Rating:'Not Set' ?></td>
-                                                            <td><?= !empty($kpi->End_Year_Supervisor_Comments)?$kpi->End_Year_Supervisor_Comments:'Not Set' ?></td>
-                                                           
-                                                            <td><?= !empty($kpi->Disagreement_Comments)?$kpi->Disagreement_Comments:'Not Set' ?></td>
-                                                            
+                                                             <td class="KRA_Objective" data-key="<?= $kpi->Key ?>" data-name="KRA_Objective" data-service="EmployeeAppraisalKPI"><?= $kpi->KRA_Objective ?></td>
+                                                             <td data-key="<?= $kpi->Key ?>" data-name="Activity" data-service="EmployeeAppraisalKPI" ondblclick="addInput(this)" data-validate="KRA_Objective"><?= $kpi->Activity ?? '' ?></td>
+                                                             <td data-key="<?= $kpi->Key ?>" data-name="Due_Date" data-service="EmployeeAppraisalKPI" ondblclick="addInput(this,'date')"><?= $kpi->Due_Date ?></td>
+                                                             <td data-key="<?= $kpi->Key ?>" data-name="Target_KPI" data-service="EmployeeAppraisalKPI" ondblclick="addInput(this)"><?= $kpi->Target_KPI ?? '' ?></td>
+                                                             <td data-key="<?= $kpi->Key ?>" data-name="Weight" data-service="EmployeeAppraisalKPI" ondblclick="addInput(this,'number')"><?= $kpi->Weight ?></td>
+                                                             <td data-key="<?= $kpi->Key ?>" data-name="Target_KPI_Status" data-service="EmployeeAppraisalKPI" ondblclick="addDropDown(this,'kpi-status')"><?= $kpi->Target_KPI_Status ?></td>
+                                                             <td data-key="<?= $kpi->Key ?>" data-name="Target_Justification" data-service="EmployeeAppraisalKPI" ondblclick="addInput(this)"><?= $kpi->Target_Justification ?? '' ?></td>                                               
+                                                            <td><?= ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level')?  Html::a(
+                                '<i class="fa fa-trash"></i> ',
+                                ['delete-line'],
+                                [
+                                    'class' => 'delete  btn-outline-danger',
+                                    'title' => 'Delete this record.',
+                                    'data-key' => $kpi->Key,
+                                    'data-service' => 'EmployeeAppraisalKPI',
 
-                                                            <td>
-                                                                <?= (
-                                                                    $model->Review_Period == 'New' ||
-                                                                    $model->Approval_Status == 'Appraisee_Level' ||
-                                                                    $model->Approval_Status == 'Appraisee_Level' ||
-                                                                    $model->Approval_Status == 'Agreement_Level' ||
-                                                                    $model->Approval_Status == 'Agreement_Level' ||
-                                                                    $model->Approval_Status == 'Supervisor_Level' ||
-                                                                    $model->Approval_Status == 'Supervisor_Level' 
-
-                                                            )?
-                                                           
-
-                                                              Html::a('<i class="fas fa-edit"></i> ',['employeeappraisalkpi/update','Appraisal_No'=> $kpi->Appraisal_No,'Employee_No' => $kpi->Employee_No,'KRA_Line_No' => $kpi->KRA_Line_No,'Line_No' => $kpi->Line_No],['class' => 'btn btn-xs btn-primary add-objective', 'title' => 'Update Objective /KPI']):'' ?>
-
-
-                                                                <?= ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level')? Html::a('<i class="fa fa-trash"></i>',['employeeappraisalkpi/delete','Key' => $kpi->Key],['class'=> 'btn btn-xs btn-danger delete-objective','title' => 'Delete Objective']):'' ?>
-
-                                                            </td>
-
+                                ]
+                            )
+                            : '';?></td>
                                                         </tr>
                                                         <?php
                                                     endforeach;
-                                                }
+                                                endif;
                                                 ?>
                                                 </tbody>
                                             </table>

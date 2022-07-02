@@ -87,7 +87,8 @@ class AppraisalController extends Controller
                     'short-term-status-super',
                     'long-term-status-super',
                     'add-line',
-                    'perspective'
+                    'perspective',
+                    'kpi-status'
                 ],
                 'formatParam' => '_format',
                 'formats' => [
@@ -102,7 +103,7 @@ class AppraisalController extends Controller
     {
 
         $ExcemptedActions = [
-            'add-line','perspective'
+            'add-line','perspective','kpi-status'
         ];
 
         if (in_array($action->id, $ExcemptedActions)) {
@@ -2352,9 +2353,17 @@ class AppraisalController extends Controller
 
     public function actionPerspective()
     {
-        return []; // place holder before getting right variables
-       $data = Yii::$app->navhelper->dropdown('Locations', 'Code', 'Name', [], ['Code']);
-        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        return $data;
+       $data = Yii::$app->navhelper->dropdown('AppraisalPerspectives', 'Code', 'Description', [], ['Code']);
+       return $data;
+    }
+
+    public function actionKpiStatus()
+    {
+       $data = [
+        '_blank_' => '_blank_',
+        'Achieved' => 'Achieved',
+        'Not_Achieved' => 'Not_Achieved'
+       ];
+       return $data;
     }
 }

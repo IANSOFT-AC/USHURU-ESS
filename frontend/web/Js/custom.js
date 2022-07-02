@@ -678,7 +678,7 @@ $('.add').on('click', function (e) {
 
         setTimeout(() => {
           location.reload(true);
-        }, 500);
+        }, 1500);
 
       } else {
         Toast.fire({
@@ -688,7 +688,7 @@ $('.add').on('click', function (e) {
 
         setTimeout(() => {
           location.reload(true);
-        }, 500);
+        }, 1500);
       }
     })
     ;

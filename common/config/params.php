@@ -234,7 +234,7 @@ return [
         'AppraisalCard' => 'AppraisalCard', //60008
         'EmployeeAppraisalKPI' => 'EmployeeAppraisalKPI', //60010 --->Employee objectives
         'SubmittedAppraisals' => 'SubmittedAppraisals', //60012
-        'ApprovedAppraisals' => 'ApprovedAppraisals', //60013 -- overview goal setting
+        'AppraisalPerspectives' => 'AppraisalPerspectives', // 60013
         'MYAppraiseeList' => 'MYAppraiseeList', //60014
         'MYSupervisorList' => 'MYSupervisorList', //60015
         'MYAgreementList' => 'MYAgreementList', //60036
