@@ -89,7 +89,9 @@ class AppraisalController extends Controller
                     'add-line',
                     'perspective',
                     'kpi-status',
-                    'training-categories'
+                    'training-categories',
+                    'rating',
+                    'add-rating-line'
                 ],
                 'formatParam' => '_format',
                 'formats' => [
@@ -104,7 +106,7 @@ class AppraisalController extends Controller
     {
 
         $ExcemptedActions = [
-            'add-line','perspective','kpi-status','training-categories'
+            'add-line', 'perspective', 'kpi-status', 'training-categories', 'rating', 'add-rating-line'
         ];
 
         if (in_array($action->id, $ExcemptedActions)) {
@@ -2334,6 +2336,27 @@ class AppraisalController extends Controller
         }
     }
 
+    public function actionAddRatingLine()
+    {
+        $json = file_get_contents('php://input');
+        $data = json_decode($json);
+
+        $service = Yii::$app->params['ServiceName'][$data->Service];
+
+        // Remove unwanted attributes to payload attribute
+        unset($data->Service);
+        // Insert Record
+        $result = Yii::$app->navhelper->postData($service, $data);
+        if (is_object($result)) {
+            return [
+                'note' => 'Record Created Successfully.',
+                'result' => $result
+            ];
+        } else {
+            return ['note' => $result];
+        }
+    }
+
     // A universal line delete functionality
 
     public function actionDeleteLine($Service, $Key)
@@ -2372,5 +2395,10 @@ class AppraisalController extends Controller
     {
        $data = Yii::$app->navhelper->dropdown('TrainingCategories', 'Code', 'Description', [], ['Code']);
        return $data;
+    }
+    public function actionRating()
+    {
+        $data = Yii::$app->navhelper->dropdown('AppraisalRating', 'Code', 'Description');
+        return $data;
     }
 }

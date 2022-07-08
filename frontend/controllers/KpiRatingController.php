@@ -54,7 +54,8 @@ class KpiRatingController extends Controller
                 'only' => [
                      'add-line',
                     'perspective',
-                    'kpi-status'
+                    'kpi-status',
+                    'rating'
                 ],
                 'formatParam' => '_format',
                 'formats' => [
@@ -69,7 +70,7 @@ class KpiRatingController extends Controller
     {
 
         $ExcemptedActions = [
-            'add-line','perspective','kpi-status'
+            'add-line', 'perspective', 'kpi-status', 'rating'
         ];
 
         if (in_array($action->id, $ExcemptedActions)) {
@@ -187,5 +188,11 @@ class KpiRatingController extends Controller
         'Not_Achieved' => 'Not_Achieved'
        ];
        return $data;
+    }
+
+    public function actionRating()
+    {
+        $data = Yii::$app->navhelper->dropdown('AppraisalRating', 'Code', 'Description');
+        return $data;
     }
 }

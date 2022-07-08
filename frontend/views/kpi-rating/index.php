@@ -25,7 +25,7 @@ $url = \yii\helpers\Url::home(true);
                 <div class="table-responsive">
                     <table class="table table-bordered">
                         <thead>
-                            <tr>                                                                                           
+                            <tr>
                                 <td class="text text-bold text-center">Line No.</td>
                                 <td class="text text-bold text-center">Review Period</td>
                                 <td class="text text-bold text-center">Target_KPI_Status</td>
@@ -42,31 +42,30 @@ $url = \yii\helpers\Url::home(true);
                             </tr>
                         </thead>
                         <tbody>
-                            <?php                                                                                       
-                                
-                                foreach($ratings as $br):
-                                    if(empty($br->Key))
-                                    {
-                                        continue;
-                                    }
-                                 ?>
-                                <tr>                                                                                              
+                            <?php
+
+                            foreach ($ratings as $br) :
+                                if (empty($br->Key)) {
+                                    continue;
+                                }
+                            ?>
+                                <tr>
                                     <td><?= $br->Line_No ?? '' ?></td>
-                                    <td data-key="<?= $br->Key ?>" data-name="Review_Period" data-service="AppraisalKPIRating" ondblclick="addInput(this)" ><?= $br->Review_Period ?? '' ?></td>
-                                    <td data-key="<?= $br->Key ?>" data-name="Target_KPI_Status" data-service="AppraisalKPIRating" ondblclick="addInput(this)" ><?= $br->Target_KPI_Status ??'' ?></td>
-                                    <td data-key="<?= $br->Key ?>" data-name="Non_Achievement_Reasons" data-service="AppraisalKPIRating" ondblclick="addInput(this)" ><?= $br->Non_Achievement_Reasons ?? '' ?></td>
-                                    <td data-key="<?= $br->Key ?>" data-name="Appraisee_Self_Rating" data-service="AppraisalKPIRating" ondblclick="addInput(this)" ><?= $br->Appraisee_Self_Rating ?? '' ?></td>
-                                    <td data-key="<?= $br->Key ?>" data-name="Appraisee_Comments" data-service="AppraisalKPIRating" ondblclick="addInput(this)" ><?= $br->Appraisee_Comments ?? '' ?></td>
-                                    <td data-key="<?= $br->Key ?>" data-name="Appraiser_Rating" data-service="AppraisalKPIRating" ondblclick="addInput(this)" ><?= $br->Appraiser_Rating ?? '' ?></td>
-                                    <td data-key="<?= $br->Key ?>" data-name="Appraiser_Comments" data-service="AppraisalKPIRating" ondblclick="addInput(this)" ><?= $br->Appraiser_Comments ?? '' ?></td>
-                                    <td data-key="<?= $br->Key ?>" data-name="Score" data-service="AppraisalKPIRating" ondblclick="addInput(this,'number')" ><?= $br->Score ?></td>
-                                    <td data-key="<?= $br->Key ?>" data-name="Agree" data-service="AppraisalKPIRating" ondblclick="addInput(this,'checkbox')" ><?= $br->Agree ?></td>
-                                    <td data-key="<?= $br->Key ?>" data-name="Disagreement_Comments" data-service="AppraisalKPIRating" ondblclick="addTextarea(this,'number')" ><?= $br->Disagreement_Comments ?? '' ?></td>
-                                    <td data-key="<?= $br->Key ?>" data-name="Overview_Manager_Comments" data-service="AppraisalKPIRating" ondblclick="addTextarea(this,'number')" ><?= $br->Overview_Manager_Comments ?? '' ?></td>
+                                    <td data-key="<?= $br->Key ?>" data-name="Review_Period" data-service="AppraisalKPIRating" ondblclick="addInput(this)"><?= $br->Review_Period ?? '' ?></td>
+                                    <td data-key="<?= $br->Key ?>" data-name="Target_KPI_Status" data-service="AppraisalKPIRating" ondblclick="addDropDown(this,'kpi-status')"><?= $br->Target_KPI_Status ?? '' ?></td>
+                                    <td data-key="<?= $br->Key ?>" data-name="Non_Achievement_Reasons" data-service="AppraisalKPIRating" ondblclick="addInput(this)"><?= $br->Non_Achievement_Reasons ?? '' ?></td>
+                                    <td data-key="<?= $br->Key ?>" data-name="Appraisee_Self_Rating" data-service="AppraisalKPIRating" ondblclick="addDropDown(this,'rating')"><?= $br->Appraisee_Self_Rating ?? '' ?></td>
+                                    <td data-key="<?= $br->Key ?>" data-name="Appraisee_Comments" data-service="AppraisalKPIRating" ondblclick="addInput(this)"><?= $br->Appraisee_Comments ?? '' ?></td>
+                                    <td data-key="<?= $br->Key ?>" data-name="Appraiser_Rating" data-service="AppraisalKPIRating" ondblclick="addDropDown(this, 'rating')"><?= $br->Appraiser_Rating ?? '' ?></td>
+                                    <td data-key="<?= $br->Key ?>" data-name="Appraiser_Comments" data-service="AppraisalKPIRating" ondblclick="addInput(this)"><?= $br->Appraiser_Comments ?? '' ?></td>
+                                    <td data-key="<?= $br->Key ?>" data-name="Score" data-service="AppraisalKPIRating" ondblclick="addInput(this,'number')"><?= $br->Score ?></td>
+                                    <td data-key="<?= $br->Key ?>" data-name="Agree" data-service="AppraisalKPIRating" ondblclick="addInput(this,'checkbox')"><?= $br->Agree ?></td>
+                                    <td data-key="<?= $br->Key ?>" data-name="Disagreement_Comments" data-service="AppraisalKPIRating" ondblclick="addTextarea(this,'number')"><?= $br->Disagreement_Comments ?? '' ?></td>
+                                    <td data-key="<?= $br->Key ?>" data-name="Overview_Manager_Comments" data-service="AppraisalKPIRating" ondblclick="addTextarea(this,'number')"><?= $br->Overview_Manager_Comments ?? '' ?></td>
                                 </tr>
-                                <?php endforeach;
-                                
-                                    ?>
+                            <?php endforeach;
+
+                            ?>
                         </tbody>
                     </table>
                 </div>
@@ -74,7 +73,3 @@ $url = \yii\helpers\Url::home(true);
         </div>
     </div>
 </div>
-
-
-
-

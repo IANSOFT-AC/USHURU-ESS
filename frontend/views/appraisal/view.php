@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -9,15 +10,15 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$this->title = 'Performance Appraisal - '.$model->Appraisal_No;
+$this->title = 'Performance Appraisal - ' . $model->Appraisal_No;
 $this->params['breadcrumbs'][] = ['label' => 'Performance Management', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => 'Appraisal View', 'url' => ['view','Employee_No'=> $model->Employee_No,'Appraisal_No' => $model->Appraisal_No]];
+$this->params['breadcrumbs'][] = ['label' => 'Appraisal View', 'url' => ['view', 'Employee_No' => $model->Employee_No, 'Appraisal_No' => $model->Appraisal_No]];
 /** Status Sessions */
 
-Yii::$app->session->set('Review_Period',$model->Review_Period);
-Yii::$app->session->set('Approval_Status',$model->Approval_Status);
-Yii::$app->session->set('Approval_Status',$model->Approval_Status);
-Yii::$app->session->set('isSupervisor',false);
+Yii::$app->session->set('Review_Period', $model->Review_Period);
+Yii::$app->session->set('Approval_Status', $model->Approval_Status);
+Yii::$app->session->set('Approval_Status', $model->Approval_Status);
+Yii::$app->session->set('isSupervisor', false);
 Yii::$app->session->set('isOverview', $model->isOverView());
 Yii::$app->session->set('isAppraisee', $model->isAppraisee());
 
@@ -26,107 +27,115 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 //Yii::$app->recruitment->printrr($card);
 ?>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card-ushurusecondary">
-                <div class="card-header">
-                    <h3>Performance Appraisal Card </h3>
-                </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card-ushurusecondary">
+            <div class="card-header">
+                <h3>Performance Appraisal Card </h3>
+            </div>
 
-                <div class="card-body info-box">
+            <div class="card-body info-box">
 
-                    <div class="row">
-                        <?php if($model->Review_Period == 'New'): ?>
+                <div class="row">
+                    <?php if ($model->Review_Period == 'New') : ?>
 
-                            <div class="col-md-4">
+                        <div class="col-md-4">
 
-                                <?= Html::a('<i class="fas fa-forward"></i> submit',['submit','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],['class' => 'btn btn-app submitforapproval mx-1','data' => [
+                            <?= Html::a('<i class="fas fa-forward"></i> submit', ['submit', 'appraisalNo' => $_GET['Appraisal_No'], 'employeeNo' => $_GET['Employee_No']], [
+                                'class' => 'btn btn-app submitforapproval mx-1', 'data' => [
                                     'confirm' => 'Are you sure you want to submit this appraisal?',
                                     'method' => 'post',
                                 ],
-                                    'title' => 'Submit Goals for Approval'
+                                'title' => 'Submit Goals for Approval'
 
-                                ]) ?>
-                            </div>
+                            ]) ?>
+                        </div>
 
-                        <?php endif; ?>
-                       
-                         <div class="col-md-4">
-                                <?=  Html::a('<i class="fas fa-book-open"></i> P.A Report',['report','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-                                    'class' => 'btn btn-app bg-success  pull-right mx-1',
-                                    'title' => 'Generate Performance Appraisal Report',
-                                    'target'=> '_blank',
-                                    'data' => [
-                                        // 'confirm' => 'Are you sure you want to send appraisal to peer 2?',
-                                        'params'=>[
-                                            'appraisalNo'=> $_GET['Appraisal_No'],
-                                            'employeeNo' => $_GET['Employee_No'],
-                                        ],
-                                        'method' => 'post',]
-                                ]);
-                                ?>
+                    <?php endif; ?>
+
+                    <div class="col-md-4">
+                        <?= Html::a('<i class="fas fa-book-open"></i> P.A Report', ['report', 'appraisalNo' => $_GET['Appraisal_No'], 'employeeNo' => $_GET['Employee_No']], [
+                            'class' => 'btn btn-app bg-success  pull-right mx-1',
+                            'title' => 'Generate Performance Appraisal Report',
+                            'target' => '_blank',
+                            'data' => [
+                                // 'confirm' => 'Are you sure you want to send appraisal to peer 2?',
+                                'params' => [
+                                    'appraisalNo' => $_GET['Appraisal_No'],
+                                    'employeeNo' => $_GET['Employee_No'],
+                                ],
+                                'method' => 'post',
+                            ]
+                        ]);
+                        ?>
 
                     </div>
 
 
-                        <?php if($model->Approval_Status == 'Closed' && $model->Approval_Status == 'Appraisee_Level' ): ?>
+                    <?php if ($model->Approval_Status == 'Closed' && $model->Approval_Status == 'Appraisee_Level') : ?>
 
-                            <div class="col-md-4">
-                                <?= Html::a('<i class="fas fa-forward"></i> submit EY',['submitey','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-                                    'class' => 'btn btn-app bg-primary',
-                                    'title' => 'Submit End Year Appraisal for Approval',
-                                    'data' => [
-                                        'confirm' => 'Are you sure you want to submit End Year Appraisal?',
-                                        'method' => 'post',
-                                    ]
-                                ]) ?>
-                            </div>
+                        <div class="col-md-4">
+                            <?= Html::a('<i class="fas fa-forward"></i> submit EY', ['submitey', 'appraisalNo' => $_GET['Appraisal_No'], 'employeeNo' => $_GET['Employee_No']], [
+                                'class' => 'btn btn-app bg-primary',
+                                'title' => 'Submit End Year Appraisal for Approval',
+                                'data' => [
+                                    'confirm' => 'Are you sure you want to submit End Year Appraisal?',
+                                    'method' => 'post',
+                                ]
+                            ]) ?>
+                        </div>
 
-                        <?php endif; ?>
-
-
-                         <?php if($model->Approval_Status == 'Closed' && $model->Approval_Status == 'Agreement_Level'): ?>
-
-                            <div class="col-md-4">
-                                <?= Html::a('<i class="fas fa-check"></i> To Ln Manager',['agreementtolinemgr','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-                                    'class' => 'btn btn-app bg-success py-2 mx-2',
-                                    'title' => 'To Line Manager',
-                                    'data' => [
-                                        'confirm' => 'Are you sure you want to submit End Year Appraisal?',
-                                        'method' => 'post',
-                                    ]
-                                ]) ?>
-                            </div>
-
-                        <?php endif; ?>
+                    <?php endif; ?>
 
 
+                    <?php if ($model->Approval_Status == 'Closed' && $model->Approval_Status == 'Agreement_Level') : ?>
+
+                        <div class="col-md-4">
+                            <?= Html::a('<i class="fas fa-check"></i> To Ln Manager', ['agreementtolinemgr', 'appraisalNo' => $_GET['Appraisal_No'], 'employeeNo' => $_GET['Employee_No']], [
+                                'class' => 'btn btn-app bg-success py-2 mx-2',
+                                'title' => 'To Line Manager',
+                                'data' => [
+                                    'confirm' => 'Are you sure you want to submit End Year Appraisal?',
+                                    'method' => 'post',
+                                ]
+                            ]) ?>
+                        </div>
+
+                    <?php endif; ?>
 
 
-                    <?php if($model->Review_Period == 'Overview_Manager' && $model->isOverview()): ?>
+
+
+                    <?php if ($model->Review_Period == 'Overview_Manager' && $model->isOverview()) : ?>
                         <div class="col-md-4">
 
-                            <?= Html::a('<i class="fas fa-backward"></i> To Line Mgr.',['backtolinemgr','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
+                            <?= Html::a(
+                                '<i class="fas fa-backward"></i> To Line Mgr.',
+                                ['backtolinemgr', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No],
                                 [
                                     'class' => 'btn btn-app bg-danger rejectgoals',
                                     'rel' => $_GET['Appraisal_No'],
                                     'rev' => $_GET['Employee_No'],
                                     'title' => 'Submit Appraisal  Back to Line Manager'
 
-                            ]) ?>
+                                ]
+                            ) ?>
                         </div>
                         <div class="col-md-4">&nbsp;</div>
                         <div class="col-md-4">
 
-                            <?= Html::a('<i class="fas fa-forward"></i> Approve',['approvegoals','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
+                            <?= Html::a(
+                                '<i class="fas fa-forward"></i> Approve',
+                                ['approvegoals', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No],
                                 [
 
-                                'class' => 'btn btn-app submitforapproval','data' => [
-                                'confirm' => 'Are you sure you want to approve goals ?',
-                                'method' => 'post',
-                            ],
-                                'title' => 'Approve Set Appraisal Goals .'
-                            ]) ?>
+                                    'class' => 'btn btn-app submitforapproval', 'data' => [
+                                        'confirm' => 'Are you sure you want to approve goals ?',
+                                        'method' => 'post',
+                                    ],
+                                    'title' => 'Approve Set Appraisal Goals .'
+                                ]
+                            ) ?>
 
                         </div>
 
@@ -134,27 +143,33 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
                     <!-- Overview Manager Actions at MY -->
-                    <?php if($model->Approval_Status == 'Overview_Manager' && $model->isOverview()): ?>
-                         <?= Html::a('<i class="fas fa-check"></i> Approve',['ovapprovemy','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
-                                [
+                    <?php if ($model->Approval_Status == 'Overview_Manager' && $model->isOverview()) : ?>
+                        <?= Html::a(
+                            '<i class="fas fa-check"></i> Approve',
+                            ['ovapprovemy', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No],
+                            [
 
-                                'class' => 'mx-1 btn btn-app bg-success submitforapproval','data' => [
-                                'confirm' => 'Are you sure you want to approve this Mid-Year Appraisal ?',
-                                'method' => 'post',
-                            ],
+                                'class' => 'mx-1 btn btn-app bg-success submitforapproval', 'data' => [
+                                    'confirm' => 'Are you sure you want to approve this Mid-Year Appraisal ?',
+                                    'method' => 'post',
+                                ],
                                 'title' => 'Approve Mid Year Appraisal .'
-                            ]) ?>
+                            ]
+                        ) ?>
 
 
 
-                            <?= Html::a('<i class="fas fa-backward"></i> To Line Mgr.',['mybacktolinemgr','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
-                                [
-                                    'class' => 'btn btn-app bg-danger rejectmyappraisal',
-                                    'rel' => $_GET['Appraisal_No'],
-                                    'rev' => $_GET['Employee_No'],
-                                    'title' => 'Send Mid Year Appraisal Back to Line Manager'
+                        <?= Html::a(
+                            '<i class="fas fa-backward"></i> To Line Mgr.',
+                            ['mybacktolinemgr', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No],
+                            [
+                                'class' => 'btn btn-app bg-danger rejectmyappraisal',
+                                'rel' => $_GET['Appraisal_No'],
+                                'rev' => $_GET['Employee_No'],
+                                'title' => 'Send Mid Year Appraisal Back to Line Manager'
 
-                            ]) ?>
+                            ]
+                        ) ?>
 
                     <?php endif; ?>
 
@@ -163,424 +178,437 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                     <!--Mid Year Actions By Appraisee -->
 
-                    <?php if($model->Review_Period == 'Closed' && $model->Approval_Status == 'Appraisee_Level' && $model->isAppraisee()): ?>
+                    <?php if ($model->Review_Period == 'Closed' && $model->Approval_Status == 'Appraisee_Level' && $model->isAppraisee()) : ?>
 
-                            <div class="col-md-4 mx-1">
-                                <?= Html::a('<i class="fas fa-forward"></i> Submit',['submitmy','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],[
-                                        'class' => 'btn btn-app bg-info submitforapproval ',
-                                        'title' => 'Submit Your Mid Year Appraisal for Approval',
-                                        'data' => [
-                                            'confirm' => 'Are you sure you want to submit Your Mid Year Appraisal?',
-                                            'method' => 'post',
-                                        ]
-                                    ]) ?>
+                        <div class="col-md-4 mx-1">
+                            <?= Html::a('<i class="fas fa-forward"></i> Submit', ['submitmy', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No], [
+                                'class' => 'btn btn-app bg-info submitforapproval ',
+                                'title' => 'Submit Your Mid Year Appraisal for Approval',
+                                'data' => [
+                                    'confirm' => 'Are you sure you want to submit Your Mid Year Appraisal?',
+                                    'method' => 'post',
+                                ]
+                            ]) ?>
 
-                            </div>
+                        </div>
 
 
                     <?php endif; ?>
 
-<?php if($model->Review_Period == 'Closed' && $model->Approval_Status == 'Agreement_Level' && $model->isAppraisee()): ?>
-                     <?= Html::a('<i class="fas fa-play"></i>Agreement To Ln Mgr ',['agreement-to-supervisor','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],[
-                                'class' => 'btn btn-app bg-warning  mx-1',
-                                'title' => 'Mid-Year to Agreement Stage',
-                                'data' => [
+                    <?php if ($model->Review_Period == 'Closed' && $model->Approval_Status == 'Agreement_Level' && $model->isAppraisee()) : ?>
+                        <?= Html::a('<i class="fas fa-play"></i>Agreement To Ln Mgr ', ['agreement-to-supervisor', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No], [
+                            'class' => 'btn btn-app bg-warning  mx-1',
+                            'title' => 'Mid-Year to Agreement Stage',
+                            'data' => [
                                 'confirm' => 'Are you sure you want to send MY Appraisal to Agreement Level ?',
-                                'method' => 'post',]
-                            ]) ;
+                                'method' => 'post',
+                            ]
+                        ]);
                         ?>
-<?php endif; ?>
+                    <?php endif; ?>
 
                     <!--Enf Mid Year Actions By Appraisee -->
 
-                     <!-- Line Mgr Actions on complete goals -->
+                    <!-- Line Mgr Actions on complete goals -->
 
-                     <?php if($model->Review_Period == 'Supervisor_Level'  && $model->isSupervisor()): ?>
-
-
-                                <?= Html::a('<i class="fas fa-backward"></i> To Appraisee.',['backtoemp','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
-                                    [
-                                        'class' => 'btn btn-app bg-danger rejectappraiseesubmition',
-                                        'rel' => $_GET['Appraisal_No'],
-                                        'rev' => $_GET['Employee_No'],
-                                        'title' => 'Submit Probation  Back to Appraisee'
-
-                                ]) ?>
+                    <?php if ($model->Review_Period == 'Supervisor_Level'  && $model->isSupervisor()) : ?>
 
 
-                                <!-- Send Probation to Overview -->
+                        <?= Html::a(
+                            '<i class="fas fa-backward"></i> To Appraisee.',
+                            ['backtoemp', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No],
+                            [
+                                'class' => 'btn btn-app bg-danger rejectappraiseesubmition',
+                                'rel' => $_GET['Appraisal_No'],
+                                'rev' => $_GET['Employee_No'],
+                                'title' => 'Submit Probation  Back to Appraisee'
 
-                                <?= Html::a('<i class="fas fa-forward"></i> Overview ',['sendgoalsettingtooverview','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],
-                                    [
+                            ]
+                        ) ?>
 
-                                    'class' => 'mx-1 btn btn-app submitforapproval','data' => [
+
+                        <!-- Send Probation to Overview -->
+
+                        <?= Html::a(
+                            '<i class="fas fa-forward"></i> Overview ',
+                            ['sendgoalsettingtooverview', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No],
+                            [
+
+                                'class' => 'mx-1 btn btn-app submitforapproval', 'data' => [
                                     'confirm' => 'Are you sure you want to Submit Goals to Overview Manager ?',
                                     'method' => 'post',
                                 ],
-                                    'title' => 'Submit Goals to Overview Manager.'
-                                ]) ?>
+                                'title' => 'Submit Goals to Overview Manager.'
+                            ]
+                        ) ?>
 
 
-                                
+
 
 
 
                     <?php endif; ?>
 
-                     <!-- Mid YEar Supervisor Action -->
+                    <!-- Mid YEar Supervisor Action -->
 
-                <?php if($model->Approval_Status == 'Supervisor_Level'): ?>
+                    <?php if ($model->Approval_Status == 'Supervisor_Level') : ?>
 
-                                <?= Html::a('<i class="fas fa-times"></i> Reject MY',['rejectmy'],[
-                                            'class' => 'btn btn-app bg-warning rejectmy mx-1',
-                                            'title' => 'Reject Mid-Year Appraisal',
-                                            'rel' => $_GET['Appraisal_No'],
-                                            'rev' => $_GET['Employee_No'],
-                                            /*'data' => [
+                        <?= Html::a('<i class="fas fa-times"></i> Reject MY', ['rejectmy'], [
+                            'class' => 'btn btn-app bg-warning rejectmy mx-1',
+                            'title' => 'Reject Mid-Year Appraisal',
+                            'rel' => $_GET['Appraisal_No'],
+                            'rev' => $_GET['Employee_No'],
+                            /*'data' => [
                                             'confirm' => 'Are you sure you want to Reject this Mid-Year appraisal?',
                                             'method' => 'post',]*/
-                                        ]) 
-                                    ?>
+                        ])
+                        ?>
 
-                                <?= Html::a('<i class="fas fa-play"></i>MY To Agreement ',['send-my-to-agreement','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],[
-                                            'class' => 'btn btn-app bg-warning  mx-1',
-                                            'title' => 'Mid-Year to Agreement Stage',
-                                            'data' => [
-                                            'confirm' => 'Are you sure you want to send MY Appraisal to Agreement Level ?',
-                                            'method' => 'post',]
-                                        ]) ;
-                                    ?>
-
-
-
-
-                                    <?= Html::a('<i class="fas fa-play"></i> To Overview ',['my-to-overview','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],[
-                                            'class' => 'btn btn-app bg-warning mx-1',
-                                            'title' => 'Send Appraisal To Overview Manager.',
-                                            'data' => [
-                                            'confirm' => 'Are you sure you want to send MY Appraisal to Overview Manager ?',
-                                            'method' => 'post',]
-                                        ]) ;
-                                    ?>
-
-                                    <?php endif; ?>
-
-<!--/ Mid YEar Supervisor Action -->
+                        <?= Html::a('<i class="fas fa-play"></i>MY To Agreement ', ['send-my-to-agreement', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No], [
+                            'class' => 'btn btn-app bg-warning  mx-1',
+                            'title' => 'Mid-Year to Agreement Stage',
+                            'data' => [
+                                'confirm' => 'Are you sure you want to send MY Appraisal to Agreement Level ?',
+                                'method' => 'post',
+                            ]
+                        ]);
+                        ?>
 
 
 
-<!-- Agreement actions -->
+
+                        <?= Html::a('<i class="fas fa-play"></i> To Overview ', ['my-to-overview', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No], [
+                            'class' => 'btn btn-app bg-warning mx-1',
+                            'title' => 'Send Appraisal To Overview Manager.',
+                            'data' => [
+                                'confirm' => 'Are you sure you want to send MY Appraisal to Overview Manager ?',
+                                'method' => 'post',
+                            ]
+                        ]);
+                        ?>
+
+                    <?php endif; ?>
+
+                    <!--/ Mid YEar Supervisor Action -->
 
 
-<?php if($model->Approval_Status == 'Agreement_Level'): ?>
 
-<?= Html::a('<i class="fas fa-play"></i>MY To Appraisee ',['my-to-appraisee','appraisalNo'=> $model->Appraisal_No,'employeeNo' => $model->Employee_No],[
-               'class' => 'btn btn-app bg-warning  mx-1',
-               'title' => 'Mid-Year Agreement Back to Appraisee.',
-               'data' => [
-               'confirm' => 'Are you sure you want to send MY Appraisal Back to Appraisee ?',
-               'method' => 'post',]
-           ]) ;
-       ?>
+                    <!-- Agreement actions -->
 
-<?php elseif($model->Approval_Status == 'Agreement_Level'): ?>
 
-   
-   <?= Html::a('<i class="fas fa-times"></i> Reject EY',['rejectey','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-               'class' => 'btn btn-app bg-warning rejectey',
-               'title' => 'Reject End-Year Appraisal',
-               'rel' =>  $_GET['Appraisal_No'],
-               'rev' => $_GET['Employee_No'],
-               /*'data' => [
+                    <?php if ($model->Approval_Status == 'Agreement_Level') : ?>
+
+                        <?= Html::a('<i class="fas fa-play"></i>MY To Appraisee ', ['my-to-appraisee', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No], [
+                            'class' => 'btn btn-app bg-warning  mx-1',
+                            'title' => 'Mid-Year Agreement Back to Appraisee.',
+                            'data' => [
+                                'confirm' => 'Are you sure you want to send MY Appraisal Back to Appraisee ?',
+                                'method' => 'post',
+                            ]
+                        ]);
+                        ?>
+
+                    <?php elseif ($model->Approval_Status == 'Agreement_Level') : ?>
+
+
+                        <?= Html::a('<i class="fas fa-times"></i> Reject EY', ['rejectey', 'appraisalNo' => $_GET['Appraisal_No'], 'employeeNo' => $_GET['Employee_No']], [
+                            'class' => 'btn btn-app bg-warning rejectey',
+                            'title' => 'Reject End-Year Appraisal',
+                            'rel' =>  $_GET['Appraisal_No'],
+                            'rev' => $_GET['Employee_No'],
+                            /*'data' => [
                'confirm' => 'Are you sure you want to Reject this End-Year Appraisal?',
                'method' => 'post',]*/
-           ]) 
-   ?>
+                        ])
+                        ?>
 
-<?php endif; ?>
+                    <?php endif; ?>
 
-<!-- End Agreement actions -->
+                    <!-- End Agreement actions -->
 
-<?php if($model->Approval_Status == 'Closed' && $model->Approval_Status == 'Agreement_Level'): ?>
+                    <?php if ($model->Approval_Status == 'Closed' && $model->Approval_Status == 'Agreement_Level') : ?>
 
-<div class="col-md-4">
-    <?= Html::a('<i class="fas fa-check"></i> To Ln Mgr.',['agreementtolinemgr','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-        'class' => 'btn btn-app bg-success',
-        'title' => 'Submit End Year Appraisal for Approval',
-        'data' => [
-            'confirm' => 'Are you sure you want to submit End Year Appraisal?',
-            'method' => 'post',
-        ]
-    ]) ?>
-</div>
+                        <div class="col-md-4">
+                            <?= Html::a('<i class="fas fa-check"></i> To Ln Mgr.', ['agreementtolinemgr', 'appraisalNo' => $_GET['Appraisal_No'], 'employeeNo' => $_GET['Employee_No']], [
+                                'class' => 'btn btn-app bg-success',
+                                'title' => 'Submit End Year Appraisal for Approval',
+                                'data' => [
+                                    'confirm' => 'Are you sure you want to submit End Year Appraisal?',
+                                    'method' => 'post',
+                                ]
+                            ]) ?>
+                        </div>
 
-<?php endif; ?>
-
-
-<?=($model->Approval_Status == 'Peer_1_Level' || $model->Approval_Status == 'Peer_2_Level')?Html::a('<i class="fas fa-play"></i> Send Back to Supervisor',['sendbacktosupervisor','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-            'class' => 'btn btn-success ',
-            'title' => 'Send Peer Appraisal to Supervisor',
-            'data' => [
-                'confirm' => 'Are you sure you want to send Appraisal to Supervisor?',
-                'method' => 'post',]
-        ]) :'';
-?>
+                    <?php endif; ?>
 
 
- <!-- Overview Manager Actions -->
+                    <?= ($model->Approval_Status == 'Peer_1_Level' || $model->Approval_Status == 'Peer_2_Level') ? Html::a('<i class="fas fa-play"></i> Send Back to Supervisor', ['sendbacktosupervisor', 'appraisalNo' => $_GET['Appraisal_No'], 'employeeNo' => $_GET['Employee_No']], [
+                        'class' => 'btn btn-success ',
+                        'title' => 'Send Peer Appraisal to Supervisor',
+                        'data' => [
+                            'confirm' => 'Are you sure you want to send Appraisal to Supervisor?',
+                            'method' => 'post',
+                        ]
+                    ]) : '';
+                    ?>
 
- <?php if($model->Approval_Status == 'Overview_Manager' && $model->isOverview()): ?>
 
-<?= Html::a('<i class="fas fa-check"></i> Approve EY',['approveey','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-            'class' => 'mx-1 btn btn-app bg-success submitforapproval',
-            'title' => 'Approve End Year Appraisal',
-            'data' => [
-            'confirm' => 'Are you sure you want to Approve this End Year Appraisal ?',
-            'method' => 'post',
-        ]
-    ])
-?>
+                    <!-- Overview Manager Actions -->
 
-<?= Html::a('<i class="fas fa-times"></i> To Ln Manager',['rejectey','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-            'class' => 'btn btn-app bg-danger ovrejectey',
-            'title' => 'Reject Goals Set by Appraisee',
-            'rel' => $_GET['Appraisal_No'],
-            'rev' => $_GET['Employee_No'],
-            /*'data' => [
+                    <?php if ($model->Approval_Status == 'Overview_Manager' && $model->isOverview()) : ?>
+
+                        <?= Html::a('<i class="fas fa-check"></i> Approve EY', ['approveey', 'appraisalNo' => $_GET['Appraisal_No'], 'employeeNo' => $_GET['Employee_No']], [
+                            'class' => 'mx-1 btn btn-app bg-success submitforapproval',
+                            'title' => 'Approve End Year Appraisal',
+                            'data' => [
+                                'confirm' => 'Are you sure you want to Approve this End Year Appraisal ?',
+                                'method' => 'post',
+                            ]
+                        ])
+                        ?>
+
+                        <?= Html::a('<i class="fas fa-times"></i> To Ln Manager', ['rejectey', 'appraisalNo' => $_GET['Appraisal_No'], 'employeeNo' => $_GET['Employee_No']], [
+                            'class' => 'btn btn-app bg-danger ovrejectey',
+                            'title' => 'Reject Goals Set by Appraisee',
+                            'rel' => $_GET['Appraisal_No'],
+                            'rev' => $_GET['Employee_No'],
+                            /*'data' => [
             'confirm' => 'Are you sure you want to Reject this Mid Year Appraisal?',
             'method' => 'post',]*/
-        ]) 
-    ?>
+                        ])
+                        ?>
 
-<?php endif; ?>
+                    <?php endif; ?>
 
-<?php if($model->Approval_Status == 'Supervisor_Level' ): ?>
+                    <?php if ($model->Approval_Status == 'Supervisor_Level') : ?>
 
-<?= Html::a('<i class="fas fa-check"></i> Agreement..',['sendtoagreementlevel','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-            'class' => 'btn btn-app bg-success submitforapproval',
-            'title' => 'Move Appraisal to  Agreement Level',
-            'data' => [
-            'confirm' => 'Are you sure you want to send this End-Year Appraisal to Agreement Level ?',
-            'method' => 'post',
-            ]
-    ])
-?>
+                        <?= Html::a('<i class="fas fa-check"></i> Agreement..', ['sendtoagreementlevel', 'appraisalNo' => $_GET['Appraisal_No'], 'employeeNo' => $_GET['Employee_No']], [
+                            'class' => 'btn btn-app bg-success submitforapproval',
+                            'title' => 'Move Appraisal to  Agreement Level',
+                            'data' => [
+                                'confirm' => 'Are you sure you want to send this End-Year Appraisal to Agreement Level ?',
+                                'method' => 'post',
+                            ]
+                        ])
+                        ?>
 
-<!-- Back to Appraisee -->
+                        <!-- Back to Appraisee -->
 
-<?= Html::a('<i class="fas fa-times"></i> To Appraisee',['rejectey','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-                'class' => 'btn btn-app bg-danger rejectey',
-                'title' => 'Reject Goals Set by Appraisee',
-                'rel' => $_GET['Appraisal_No'],
-                'rev' => $_GET['Employee_No'],
-                /*'data' => [
+                        <?= Html::a('<i class="fas fa-times"></i> To Appraisee', ['rejectey', 'appraisalNo' => $_GET['Appraisal_No'], 'employeeNo' => $_GET['Employee_No']], [
+                            'class' => 'btn btn-app bg-danger rejectey',
+                            'title' => 'Reject Goals Set by Appraisee',
+                            'rel' => $_GET['Appraisal_No'],
+                            'rev' => $_GET['Employee_No'],
+                            /*'data' => [
                 'confirm' => 'Are you sure you want to Reject this Mid Year Appraisal?',
                 'method' => 'post',]*/
-            ]) 
-        ?>
+                        ])
+                        ?>
 
 
- <?= Html::a('<i class="fas fa-forward"></i> Overview',['sendeytooverview','appraisalNo'=> $_GET['Appraisal_No'],'employeeNo' => $_GET['Employee_No']],[
-            'class' => 'mx-1 btn btn-app bg-success submitforapproval',
-            'title' => 'Move Appraisal to  Agreement Level',
-            'data' => [
-            'confirm' => 'Are you sure you want to send this End-Year Appraisal to Agreement Level ?',
-            'method' => 'post',
-            ]
-    ])
-?>
+                        <?= Html::a('<i class="fas fa-forward"></i> Overview', ['sendeytooverview', 'appraisalNo' => $_GET['Appraisal_No'], 'employeeNo' => $_GET['Employee_No']], [
+                            'class' => 'mx-1 btn btn-app bg-success submitforapproval',
+                            'title' => 'Move Appraisal to  Agreement Level',
+                            'data' => [
+                                'confirm' => 'Are you sure you want to send this End-Year Appraisal to Agreement Level ?',
+                                'method' => 'post',
+                            ]
+                        ])
+                        ?>
 
-<?php endif; ?>
+                    <?php endif; ?>
 
-
-                    </div>
 
                 </div>
 
             </div>
+
         </div>
     </div>
+</div>
 
-    <!--Appraisal Indicator Steps-->
+<!--Appraisal Indicator Steps-->
 
-    <div class="row">
-        <div class="col-md-12">
-            <?= $this->render('_steps',['model' => $model]); ?>
-        </div>
+<div class="row">
+    <div class="col-md-12">
+        <?= $this->render('_steps', ['model' => $model]); ?>
     </div>
+</div>
 
-    <!--/End Steps-->
+<!--/End Steps-->
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-
-
-
-
-                    <h3 class="card-title">Appraisal : <?= $model->Appraisal_No?></h3>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
 
 
 
-                    <?php
-                    if(Yii::$app->session->hasFlash('success')){
-                        print ' <div class="alert alert-success alert-dismissable">
+
+                <h3 class="card-title">Appraisal : <?= $model->Appraisal_No ?></h3>
+
+
+
+                <?php
+                if (Yii::$app->session->hasFlash('success')) {
+                    print ' <div class="alert alert-success alert-dismissable">
                                  ';
-                        echo Yii::$app->session->getFlash('success');
-                        print '</div>';
-                    }else if(Yii::$app->session->hasFlash('error')){
-                        print ' <div class="alert alert-danger alert-dismissable">
+                    echo Yii::$app->session->getFlash('success');
+                    print '</div>';
+                } else if (Yii::$app->session->hasFlash('error')) {
+                    print ' <div class="alert alert-danger alert-dismissable">
                                  ';
-                        echo Yii::$app->session->getFlash('error');
-                        print '</div>';
-                    }
-                    ?>
+                    echo Yii::$app->session->getFlash('error');
+                    print '</div>';
+                }
+                ?>
+            </div>
+            <div class="card-body">
+
+
+                <?php $form = ActiveForm::begin(); ?>
+
+
+                <div class="row">
+                    <div class=" row col-md-12">
+                        <div class="col-md-6">
+
+                            <?= $form->field($model, 'Appraisal_No')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Employee_No')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Employee_Name')->textInput(['readonly' => true, 'disabled' => true]) ?>
+
+                            <p class="parent"><span>+</span>
+                                <?= $form->field($model, 'Overview_Rejection_Comments')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                                <?= $form->field($model, 'Level_Grade')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                                <?= $form->field($model, 'Job_Title')->textInput(['readonly' => true, 'disabled' => true]) ?>
+
+                                <?php $form->field($model, 'Appraisal_Start_Date')->textInput(['readonly' => true, 'disabled' => true]) ?>
+
+
+
+
+                            </p>
+
+
+                        </div>
+                        <div class="col-md-6">
+
+
+                            <?= $form->field($model, 'Review_Period')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Overall_Score')->textInput(['readonly' => true, 'disabled' => true]) ?>
+
+
+                            <p class="parent"><span>+</span>
+
+                                <?= $form->field($model, 'Supervisor_Rejection_Comments')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                                <?= $form->field($model, 'Approval_Status')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                                <?= $form->field($model, 'Approval_Status')->textInput(['readonly' => true, 'disabled' => true]) ?>
+
+                                <?= $form->field($model, 'Supervisor_Name')->textInput(['readonly' => true, 'disabled' => true]) ?>
+
+                                <?= $form->field($model, 'Overview_Manager_Name')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                                <?php $form->field($model, 'Overview_Manager_UserID')->textInput(['readonly' => true, 'disabled' => true]) ?>
+
+
+                                <?= $form->field($model, 'Recomended_Action')->textInput(['readonly' => true, 'disabled' => true]) ?>
+
+
+
+                            </p>
+
+
+
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Mid Year Overview comment shit -->
+
+
+
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+
+
+                        <div class="card">
+
+                            <div class="card-header">
+                                <div class="card-title">
+                                    Line Manager Comments
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <?= ($model->Approval_Status == 'Supervisor_Level') ? $form->field($model, 'Supervisor_Overall_Comments')->textArea(['rows' => 2, 'maxlength' => '140']) : '' ?>
+                                <span class="text-success" id="confirmation-super">Comment Saved Successfully.</span>
+
+                                <?= ($model->Approval_Status !== 'Supervisor_Level') ? $form->field($model, 'Supervisor_Overall_Comments')->textArea(['rows' => 2, 'readonly' => true, 'disabled' =>  true]) : '' ?>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                    <div class="col-md-6">
+
+
+
+                        <div class="card">
+
+                            <div class="card-header">
+                                <div class="card-title">
+                                    Overview Manager Comments
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <?= ($model->Approval_Status == 'Overview_Manager') ? $form->field($model, 'Over_View_Manager_Comments')->textArea(['rows' => 2, 'maxlength' => '140']) : '' ?>
+                                <span class="text-success" id="confirmation">Comment Saved Successfully.</span>
+
+                                <?= ($model->Approval_Status !== 'Overview_Manager') ? $form->field($model, 'Over_View_Manager_Comments')->textArea(['rows' => 2, 'readonly' => true, 'disabled' =>  true]) : '' ?>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <?php ActiveForm::end(); ?>
+
+
+
+            </div>
+        </div>
+        <!--end details card-->
+
+
+        <?php if (1 == 1) { //$model->Approval_Status !== 'Agreement_Level' 
+        ?>
+            <!--KRA CARD -->
+            <div class="card-ushurusecondary">
+                <div class="card-header">
+                    <h4 class="card-title">Employee Appraisal Key Result Areas (KRAs)</h4>
+                    <div class="card-tools">
+                        <?= ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level') ? Html::a('<i class="fa fa-plus mr-2"></i> Add', ['appraisal/add-line'], [
+                            'class' => 'add btn btn-sm btn-outline-light',
+                            'data-Appraisal_No' => $model->Appraisal_No,
+                            'data-service' => 'EmployeeAppraisalKRA',
+                            'data-Line_No' => time(),
+                            'data-Employee_No' => $model->Employee_No
+                        ]) : '' ?>
+                    </div>
+                </div>
+
                 <div class="card-body">
 
-
-                    <?php $form = ActiveForm::begin(); ?>
-
-
-                    <div class="row">
-                        <div class=" row col-md-12">
-                            <div class="col-md-6">
-
-                                <?= $form->field($model, 'Appraisal_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Employee_No')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Employee_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                               
-                                <p class="parent"><span>+</span>
-                                    <?= $form->field($model, 'Overview_Rejection_Comments')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'Level_Grade')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'Job_Title')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    
-                                    <?php $form->field($model, 'Appraisal_Start_Date')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    
-                                   
-                                   
-
-                                </p>
-
-
-                            </div>
-                            <div class="col-md-6">
-                                
-                                
-                                <?= $form->field($model, 'Review_Period')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                <?= $form->field($model, 'Overall_Score')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-
-
-                                <p class="parent"><span>+</span>
-
-                                    <?= $form->field($model, 'Supervisor_Rejection_Comments')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'Approval_Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?= $form->field($model, 'Approval_Status')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                   
-                                    <?= $form->field($model, 'Supervisor_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    
-                                    <?= $form->field($model, 'Overview_Manager_Name')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-                                    <?php $form->field($model, 'Overview_Manager_UserID')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-
-
-                                    <?= $form->field($model, 'Recomended_Action')->textInput(['readonly'=> true, 'disabled'=>true]) ?>
-
-
-
-                                </p>
-
-
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Mid Year Overview comment shit -->
-
-                   
-
-
-                      <div class="row">
-
-                                 <div class="col-md-6">
-
-
-
-                                    <div class="card">
-
-                                                        <div class="card-header">
-                                                                <div class="card-title">
-                                                                    Line Manager Comments
-                                                                </div>
-                                                            </div>
-                                                            <div class="card-body">
-                                                                 <?= ($model->Approval_Status == 'Supervisor_Level') ?$form->field($model, 'Supervisor_Overall_Comments')->textArea(['rows' => 2, 'maxlength'=> '140']): '' ?>
-                                                                    <span class="text-success" id="confirmation-super">Comment Saved Successfully.</span>
-
-                                                                    <?= ($model->Approval_Status !== 'Supervisor_Level') ?$form->field($model, 'Supervisor_Overall_Comments')->textArea(['rows' => 2, 'readonly' => true, 'disabled' =>  true]): '' ?>
-                                                            </div>
-                                    </div>
-
-
-
-                                 </div>
-                                  <div class="col-md-6">
-
-
-
-                                                <div class="card">
-
-                                                            <div class="card-header">
-                                                                <div class="card-title">
-                                                                    Overview Manager Comments
-                                                                </div>
-                                                            </div>
-                                                            <div class="card-body">
-                                                                 <?= ($model->Approval_Status == 'Overview_Manager') ?$form->field($model, 'Over_View_Manager_Comments')->textArea(['rows' => 2, 'maxlength'=> '140']): '' ?>
-                                                                    <span class="text-success" id="confirmation">Comment Saved Successfully.</span>
-
-                                                                    <?= ($model->Approval_Status !== 'Overview_Manager') ?$form->field($model, 'Over_View_Manager_Comments')->textArea(['rows' => 2, 'readonly' => true, 'disabled' =>  true]): '' ?>
-                                                            </div>
-                                                </div>
-
-                                 </div>
-
-                      </div>
-
-
-
-                    <?php ActiveForm::end(); ?>
-
-
-
-                </div>
-            </div><!--end details card-->
-
-
-            <?php if(1 == 1){ //$model->Approval_Status !== 'Agreement_Level' ?>
-                <!--KRA CARD -->
-                <div class="card-ushurusecondary">
-                    <div class="card-header">
-                        <h4 class="card-title">Employee Appraisal Key Result Areas (KRAs)</h4>
-                        <div class="card-tools">
-                            <?= ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level')? Html::a('<i class="fa fa-plus mr-2"></i> Add',['appraisal/add-line'],[
-                                'class' => 'add btn btn-sm btn-outline-light',
-                                'data-Appraisal_No' => $model->Appraisal_No,
-                                'data-service' => 'EmployeeAppraisalKRA',
-                                'data-Line_No' => time(),
-                                'data-Employee_No' => $model->Employee_No
-                                ]): ''?>
-                        </div>
-                    </div>
-
-                    <div class="card-body">
-
-                        <?php if(property_exists($card->Appraisal_Objectives_KRAs,'Appraisal_Objectives_KRAs')){ ?>
-                            <table class="table table-bordered">
-                                <thead>
+                    <?php if (property_exists($card->Appraisal_Objectives_KRAs, 'Appraisal_Objectives_KRAs')) { ?>
+                        <table class="table table-bordered">
+                            <thead>
                                 <tr>
-                                     
+                                    <td>#</td>
                                     <td class="text text-bold text-center text-info">Perspective Pillar</td>
                                     <td class="text text-bold text-center text-info">KRA Objective</td>
                                     <td class="text text-bold text-center text-info">Maximum Weight</td>
@@ -588,94 +616,100 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                     <td class="text text-bold text-center">Agreed Rating</td>
                                     <td class="text text-bold text-center">Action</td>
                                 </tr>
-                                </thead>
-                                <tbody>
-                                <?php foreach($card->Appraisal_Objectives_KRAs->Appraisal_Objectives_KRAs as $k){
-                                
-                                    ?>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($card->Appraisal_Objectives_KRAs->Appraisal_Objectives_KRAs as $k) {
+
+                                ?>
                                     <tr class="parent">
-                                        <td><span>+</span></td> 
-                                        <td data-key="<?= $k->Key ?>" data-name="Perspective_Pillar" data-service="EmployeeAppraisalKRA" ondblclick="addDropDown(this,'perspective')"><?= !empty($k->Perspective_Pillar)?$k->Perspective_Pillar: '' ?></td>
-                                        <td data-key="<?= $k->Key ?>" data-name="KRA_Objective" data-service="EmployeeAppraisalKRA" ondblclick="addInput(this)"><?= !empty($k->KRA_Objective)?$k->KRA_Objective: '' ?></td>
+                                        <td><span>+</span></td>
+                                        <td data-key="<?= $k->Key ?>" data-name="Perspective_Pillar" data-service="EmployeeAppraisalKRA" ondblclick="addDropDown(this,'perspective')"><?= !empty($k->Perspective_Pillar) ? $k->Perspective_Pillar : '' ?></td>
+                                        <td data-key="<?= $k->Key ?>" data-name="KRA_Objective" data-service="EmployeeAppraisalKRA" ondblclick="addInput(this)"><?= !empty($k->KRA_Objective) ? $k->KRA_Objective : '' ?></td>
                                         <td data-key="<?= $k->Key ?>" data-name="Maximum_Weight" data-service="EmployeeAppraisalKRA" ondblclick="addInput(this,'number')"><?= $k->Maximum_Weight ?></td>
                                         <td><?= $k->Agreed_Rating ?? '' ?></td>
                                         <td><?= $k->Overall_Rating ?? '' ?></td>
                                         <td>
-                                           
-                                         <?= ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level')?  Html::a(
-                                '<i class="fa fa-trash"></i> ',
-                                ['delete-line'],
-                                [
-                                    'class' => 'delete btn btn-outline-danger',
-                                    'title' => 'Delete this record.',
-                                    'data-key' => $k->Key,
-                                    'data-service' => 'EmployeeAppraisalKRA',
 
-                                ]
-                            )
-                            : ''
-                                         ?>
+                                            <?= ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level') ?  Html::a(
+                                                '<i class="fa fa-trash"></i> ',
+                                                ['delete-line'],
+                                                [
+                                                    'class' => 'delete btn btn-outline-danger',
+                                                    'title' => 'Delete this record.',
+                                                    'data-key' => $k->Key,
+                                                    'data-service' => 'EmployeeAppraisalKRA',
+
+                                                ]
+                                            )
+                                                : ''
+                                            ?>
 
 
                                         </td>
                                     </tr>
                                     <tr class="child">
-                                        <td colspan="11" >
+                                        <td colspan="11">
                                             <table class="table table-hover table-borderless table-info">
                                                 <thead>
-                                                <tr >
-                                                   
-                                                     <td class="text text-bold text-center">KRA_Objective</td>
-                                                     <td class="text text-bold text-center text-info">Activity</td>
-                                                     <td class="text text-bold text-center text-info">Due_Date</td>
-                                                     <td class="text text-bold text-center text-info">Target_KPI</td>
-                                                     <td class="text text-bold text-center text-info">Weight</td>
-                                                     <td class="text text-bold text-center text-info">Target_KPI_Status</td>
-                                                     <td class="text text-bold text-center text-info">Target_Justification</td>
-                                                    
-                                    
-                                                    <th> <?= 
-                                                    Html::a('<i class="fas fa-plus"></i>',['appraisal/add-line'],
-                                                    [
-                                                        'class' => 'add btn btn-xs btn-success',
-                                                        'title' => 'Add Objective / KPI',
-                                                         'data-Appraisal_No' => $model->Appraisal_No,
-                                                        'data-service' => 'EmployeeAppraisalKPI',
-                                                        'data-Line_No' => time(),
-                                                        'data-Employee_No' => $model->Employee_No,
-                                                        'data-Kra_Line_No' =>  $k->Line_No
-                                                        ]) ?>
-                                                    </th>
-                                                </tr>
+                                                    <tr>
+
+                                                        <td class="text text-bold text-center">KRA_Objective</td>
+                                                        <td class="text text-bold text-center text-info">Activity</td>
+                                                        <td class="text text-bold text-center text-info">Due_Date</td>
+                                                        <td class="text text-bold text-center text-info">Target_KPI</td>
+                                                        <td class="text text-bold text-center text-info">Weight</td>
+                                                        <td class="text text-bold text-center text-info">Target_KPI_Status</td>
+                                                        <td class="text text-bold text-center text-info">Target_Justification</td>
+
+
+                                                        <th> <?=
+                                                                Html::a(
+                                                                    '<i class="fas fa-plus"></i>',
+                                                                    ['appraisal/add-line'],
+                                                                    [
+                                                                        'class' => 'add btn btn-xs btn-success',
+                                                                        'title' => 'Add Objective / KPI',
+                                                                        'data-Appraisal_No' => $model->Appraisal_No,
+                                                                        'data-service' => 'EmployeeAppraisalKPI',
+                                                                        'data-Line_No' => time(),
+                                                                        'data-Employee_No' => $model->Employee_No,
+                                                                        'data-Kra_Line_No' =>  $k->Line_No
+                                                                    ]
+                                                                ) ?>
+                                                        </th>
+                                                    </tr>
                                                 </thead>
                                                 <tbody>
-                                                <?php if(is_array($model->getKPI($k->Line_No))):
-                                                    foreach($model->getKPI($k->Line_No) as $kpi):
-                                                            
-                                                     ?>
-                                                        <tr>
-                                                             <td class="Kra_Objective" data-key="<?= $kpi->Key ?>" data-name="Kra_Objective" data-service="EmployeeAppraisalKPI"><?= $kpi->Kra_Objective ?></td>
-                                                             <td data-key="<?= $kpi->Key ?>" data-name="Activity" data-service="EmployeeAppraisalKPI" ondblclick="addInput(this)" data-validate="Kra_Objective"><?= $kpi->Activity ?? '' ?></td>
-                                                             <td data-key="<?= $kpi->Key ?>" data-name="Due_Date" data-service="EmployeeAppraisalKPI" ondblclick="addInput(this,'date')"><?= $kpi->Due_Date ?></td>
-                                                             <td data-key="<?= $kpi->Key ?>" data-name="Target_KPI" data-service="EmployeeAppraisalKPI" ondblclick="addInput(this)"><?= $kpi->Target_KPI ?? '' ?></td>
-                                                             <td data-key="<?= $kpi->Key ?>" data-name="Weight" data-service="EmployeeAppraisalKPI" ondblclick="addInput(this,'number')"><?= $kpi->Weight ?></td>
-                                                             <td data-key="<?= $kpi->Key ?>" data-name="Target_KPI_Status" data-service="EmployeeAppraisalKPI" ondblclick="addDropDown(this,'kpi-status')"><?= $kpi->Target_KPI_Status ?></td>
-                                                             <td data-key="<?= $kpi->Key ?>" data-name="Target_Justification" data-service="EmployeeAppraisalKPI" ondblclick="addInput(this)"><?= $kpi->Target_Justification ?? '' ?></td>                                               
-                                                            <td><?= ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level')?  Html::a(
-                                                                '<i class="fa fa-trash"></i> ',
-                                                                ['delete-line'],
-                                                                [
-                                                                    'class' => 'delete  btn-outline-danger',
-                                                                    'title' => 'Delete this record.',
-                                                                    'data-key' => $kpi->Key,
-                                                                    'data-service' => 'EmployeeAppraisalKPI',
+                                                    <?php if (is_array($model->getKPI($k->Line_No))) :
+                                                        foreach ($model->getKPI($k->Line_No) as $kpi) :
 
-                                                                ]
-                                                            )
-                                                            : '';?>
-                                                            
-                                                            <?= 
-                                                                        Html::a('<i class="fas fa-check"></i>',['./kpi-rating',
+                                                    ?>
+                                                            <tr>
+                                                                <td class="Kra_Objective" data-key="<?= $kpi->Key ?>" data-name="Kra_Objective" data-service="EmployeeAppraisalKPI"><?= $kpi->Kra_Objective ?></td>
+                                                                <td data-key="<?= $kpi->Key ?>" data-name="Activity" data-service="EmployeeAppraisalKPI" ondblclick="addInput(this)" data-validate="Kra_Objective"><?= $kpi->Activity ?? '' ?></td>
+                                                                <td data-key="<?= $kpi->Key ?>" data-name="Due_Date" data-service="EmployeeAppraisalKPI" ondblclick="addInput(this,'date')"><?= $kpi->Due_Date ?></td>
+                                                                <td data-key="<?= $kpi->Key ?>" data-name="Target_KPI" data-service="EmployeeAppraisalKPI" ondblclick="addInput(this)"><?= $kpi->Target_KPI ?? '' ?></td>
+                                                                <td data-key="<?= $kpi->Key ?>" data-name="Weight" data-service="EmployeeAppraisalKPI" ondblclick="addInput(this,'number')"><?= $kpi->Weight ?></td>
+                                                                <td data-key="<?= $kpi->Key ?>" data-name="Target_KPI_Status" data-service="EmployeeAppraisalKPI" ondblclick="addDropDown(this,'kpi-status')"><?= $kpi->Target_KPI_Status ?></td>
+                                                                <td data-key="<?= $kpi->Key ?>" data-name="Target_Justification" data-service="EmployeeAppraisalKPI" ondblclick="addInput(this)"><?= $kpi->Target_Justification ?? '' ?></td>
+                                                                <td><?= ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level') ?  Html::a(
+                                                                        '<i class="fa fa-trash"></i> ',
+                                                                        ['delete-line'],
+                                                                        [
+                                                                            'class' => 'delete  btn-outline-danger',
+                                                                            'title' => 'Delete this record.',
+                                                                            'data-key' => $kpi->Key,
+                                                                            'data-service' => 'EmployeeAppraisalKPI',
+
+                                                                        ]
+                                                                    )
+                                                                        : ''; ?>
+
+                                                                    <?=
+                                                                    Html::a(
+                                                                        '<i class="fas fa-check"></i>',
+                                                                        [
+                                                                            './kpi-rating',
                                                                             'Kpi_Line_No' => $kpi->Line_No,
                                                                             'Kra_Line_No' => $k->Line_No,
                                                                             'Appraisal_No' => $model->Appraisal_No,
@@ -683,111 +717,120 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                                                         ],
                                                                         [
                                                                             'class' => 'rating btn btn-xs btn-success',
-                                                                            'title' => 'Behaviour Rating',                                                                           
-    
-                                                            ]) ?>
-                                                        
-                                                        
-                                                        </td>
-                                                        </tr>
-                                                        <?php
-                                                    endforeach;
-                                                endif;
-                                                ?>
+                                                                            'title' => 'Behaviour Rating',
+                                                                            'data-Kpi_Line_No' => $kpi->Line_No,
+                                                                            'data-Kra_Line_No' => $k->Line_No,
+                                                                            'data-Appraisal_No' => $model->Appraisal_No,
+                                                                            'data-Employee_No' => $model->Employee_No,
+                                                                            'data-service' => 'AppraisalKPIRating'
+
+                                                                        ]
+                                                                    ) ?>
+
+
+                                                                </td>
+                                                            </tr>
+                                                    <?php
+                                                        endforeach;
+                                                    endif;
+                                                    ?>
                                                 </tbody>
                                             </table>
                                         </td>
                                     </tr>
 
                                 <?php } ?>
-                                </tbody>
-                            </table>
+                            </tbody>
+                        </table>
 
 
-                        <?php } ?>
-                    </div>
+                    <?php } ?>
                 </div>
+            </div>
 
-                <!--END KRA CARD -->
+            <!--END KRA CARD -->
 
-                <!--Employee Appraisal  Competence --->
+            <!--Employee Appraisal  Competence --->
 
-                <div class="card-ushurusecondary">
-                    <div class="card-header">
-                        <h4 class="card-title">Employee Appraisal Competences</h4>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-bordered">
-                            <thead>
+            <div class="card-ushurusecondary">
+                <div class="card-header">
+                    <h4 class="card-title">Employee Appraisal Competences</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
                             <tr>
-                                <td>#</td>                     
+                                <td>#</td>
                                 <td class="text text-bold text-center text-info">Category</td>
-                                <td>Maximum Weight</td>                               
+                                <td>Maximum Weight</td>
                                 <td>Overall Rating</td>
                                 <td>Action</td>
                             </tr>
-                            </thead>
-                            <?php if(property_exists($card->Appraisal_Competence,'Appraisal_Competence')){ ?>
+                        </thead>
+                        <?php if (property_exists($card->Appraisal_Competence, 'Appraisal_Competence')) { ?>
 
                             <tbody>
-                            <?php foreach($card->Appraisal_Competence->Appraisal_Competence as $comp){ ?>
+                                <?php foreach ($card->Appraisal_Competence->Appraisal_Competence as $comp) { ?>
 
-                                <tr class="parent">
-                                    <td><span>+</span></td>                              
-                                    <td><?= isset($comp->Category)?$comp->Category:'Not Set' ?></td>
-                                    <td><?= isset($comp->Maximum_Weigth)?$comp->Maximum_Weigth:'Not Set' ?></td>                                    
-                                    <td><?= isset($comp->Overal_Rating)?$comp->Overal_Rating:'Not Set' ?></td>
-                                    <td> <?= 
-                                                    Html::a('<i class="fas fa-plus"></i>',['appraisal/add-line'],
+                                    <tr class="parent">
+                                        <td><span>+</span></td>
+                                        <td><?= isset($comp->Category) ? $comp->Category : 'Not Set' ?></td>
+                                        <td><?= isset($comp->Maximum_Weigth) ? $comp->Maximum_Weigth : 'Not Set' ?></td>
+                                        <td><?= isset($comp->Overal_Rating) ? $comp->Overal_Rating : 'Not Set' ?></td>
+                                        <td> <?=
+                                                Html::a(
+                                                    '<i class="fas fa-plus"></i>',
+                                                    ['appraisal/add-line'],
                                                     [
                                                         'class' => 'add btn btn-xs btn-success',
                                                         'title' => 'Add Competence',
-                                                         'data-Appraisal_No' => $model->Appraisal_No,
+                                                        'data-Appraisal_No' => $model->Appraisal_No,
                                                         'data-service' => 'EmployeeAppraisalBehaviours',
                                                         'data-Line_No' => time(),
                                                         'data-Employee_No' => $model->Employee_No,
                                                         'data-Competence_Line_No' =>  $comp->Line_No
-                                                        ]) ?>
-                                    </td>
+                                                    ]
+                                                ) ?>
+                                        </td>
 
-                                </tr>
-                                <tr class="child">
-                                    <td colspan="11">
-                                        <div class="table-responsive">
-                                            <table class="table table-hover table-borderless table-info">
-                                                <thead>
-                                                <tr>
-                                                    <th colspan="15" style="text-align: center;">Employee Appraisal Behaviours</th>
-                                                </tr>
-                                                <tr>
-                                                     <td class="text text-bold text-center">Appraisal Code</td>
-                                                     <td class="text text-bold text-center">Competence Category</td>
-                                                     <td class="text text-bold text-center">Behaviour Name</td>
-                                                     <td class="text text-bold text-center">Applicable</td>
-                                                     <!-- <td class="text text-bold text-center">Current_Proficiency_Level</td>
+                                    </tr>
+                                    <tr class="child">
+                                        <td colspan="11">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover table-borderless table-info">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="15" style="text-align: center;">Employee Appraisal Behaviours</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="text text-bold text-center">Appraisal Code</td>
+                                                            <td class="text text-bold text-center">Competence Category</td>
+                                                            <td class="text text-bold text-center">Behaviour Name</td>
+                                                            <td class="text text-bold text-center">Applicable</td>
+                                                            <!-- <td class="text text-bold text-center">Current_Proficiency_Level</td>
                                                      <td class="text text-bold text-center">Expected_Proficiency_Level</td> -->
-                                                     <td class="text text-bold text-center">Behaviour Description</td>
-                                                     <td class="text text-bold text-center">Weight</td>
-                                                     <td class="text text-bold text-center">Action</td>
-                                                    
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php if(is_array($model->getAppraisalbehaviours($comp->Line_No))){
-        
-                                                        foreach($model->getAppraisalbehaviours($comp->Line_No) as $be):  ?>
+                                                            <td class="text text-bold text-center">Behaviour Description</td>
+                                                            <td class="text text-bold text-center">Weight</td>
+                                                            <td class="text text-bold text-center">Action</td>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php if (is_array($model->getAppraisalbehaviours($comp->Line_No))) {
+
+                                                            foreach ($model->getAppraisalbehaviours($comp->Line_No) as $be) :  ?>
                                                                 <tr>
-                                                                        
-                                                                        <td data-key="<?= $be->Key ?>" data-name="Appraisal_Code" data-service="EmployeeAppraisalBehaviours"><?= $be->Appraisal_Code?></td>
-                                                                        <td class="Competence_Category" data-key="<?= $be->Key ?>" data-name="Competence_Category" data-service="EmployeeAppraisalBehaviours" ondblclick="addInput(this)" data-validate="Appraisal_Code"><?= $be->Competence_Category ?? '' ?></td>
-                                                                        <td data-key="<?= $be->Key ?>" data-name="Behaviour_Name" data-service="EmployeeAppraisalBehaviours" ondblclick="addInput(this)" data-validate="Competence_Category"><?= $be->Behaviour_Name ?? '' ?></td>
-                                                                        <td data-key="<?= $be->Key ?>" data-name="Applicable" data-service="EmployeeAppraisalBehaviours" ondblclick="addInput(this,'checkbox')" data-validate="Competence_Category"><?= $be->Applicable ? 'Yes':'No' ?></td>
-                                                                        <!-- <td data-key="<?= $be->Key ?>" data-name="Current_Proficiency_Level" data-service="EmployeeAppraisalBehaviours" ondblclick="addInput(this)"><?= $be->Current_Proficiency_Level ?? '' ?></td>
+
+                                                                    <td data-key="<?= $be->Key ?>" data-name="Appraisal_Code" data-service="EmployeeAppraisalBehaviours"><?= $be->Appraisal_Code ?></td>
+                                                                    <td class="Competence_Category" data-key="<?= $be->Key ?>" data-name="Competence_Category" data-service="EmployeeAppraisalBehaviours" ondblclick="addInput(this)" data-validate="Appraisal_Code"><?= $be->Competence_Category ?? '' ?></td>
+                                                                    <td data-key="<?= $be->Key ?>" data-name="Behaviour_Name" data-service="EmployeeAppraisalBehaviours" ondblclick="addInput(this)" data-validate="Competence_Category"><?= $be->Behaviour_Name ?? '' ?></td>
+                                                                    <td data-key="<?= $be->Key ?>" data-name="Applicable" data-service="EmployeeAppraisalBehaviours" ondblclick="addInput(this,'checkbox')" data-validate="Competence_Category"><?= $be->Applicable ? 'Yes' : 'No' ?></td>
+                                                                    <!-- <td data-key="<?= $be->Key ?>" data-name="Current_Proficiency_Level" data-service="EmployeeAppraisalBehaviours" ondblclick="addInput(this)"><?= $be->Current_Proficiency_Level ?? '' ?></td>
                                                                         <td data-key="<?= $be->Key ?>" data-name="Expected_Proficiency_Level" data-service="EmployeeAppraisalBehaviours" ondblclick="addInput(this)" data-validate="Competence_Category"><?= $be->Expected_Proficiency_Level ?? '' ?></td> -->
-                                                                        <td data-key="<?= $be->Key ?>" data-name="Behaviour_Description" data-service="EmployeeAppraisalBehaviours" ondblclick="addTextarea(this)" data-validate="Competence_Category"><?= $be->Behaviour_Description ?? '' ?></td>
-                                                                        <td data-key="<?= $be->Key ?>" data-name="Weight" data-service="EmployeeAppraisalBehaviours" ondblclick="addInput(this,'number')" data-validate="Competence_Category"><?= $be->Weight ?></td>
-                                                                        <td>
-                                                                            <?= ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level')?  Html::a(
+                                                                    <td data-key="<?= $be->Key ?>" data-name="Behaviour_Description" data-service="EmployeeAppraisalBehaviours" ondblclick="addTextarea(this)" data-validate="Competence_Category"><?= $be->Behaviour_Description ?? '' ?></td>
+                                                                    <td data-key="<?= $be->Key ?>" data-name="Weight" data-service="EmployeeAppraisalBehaviours" ondblclick="addInput(this,'number')" data-validate="Competence_Category"><?= $be->Weight ?></td>
+                                                                    <td>
+                                                                        <?= ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level') ?  Html::a(
                                                                             '<i class="fa fa-trash"></i> ',
                                                                             ['delete-line'],
                                                                             [
@@ -798,296 +841,328 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                                                                             ]
                                                                         )
-                                                                        : '';?>
+                                                                            : ''; ?>
 
-                                                                        <?= 
-                                                                        Html::a('<i class="fas fa-check"></i>',['./behaviour-rating',
-                                                                            'Appraisal_No' => $model->Appraisal_No,
-                                                                            'Behaviour_Line_No' => $be->Line_No,
-                                                                            'Competence_Line_No' => $comp->Line_No,
-                                                                            'Employee_No' => $model->Employee_No
-                                                                        ],
-                                                                        [
-                                                                            'class' => 'rating btn btn-xs btn-success',
-                                                                            'title' => 'Behaviour Rating',                                                                           
-    
-                                                                        ]) ?>
-                                                                        
+                                                                        <?=
+                                                                        Html::a(
+                                                                            '<i class="fas fa-check"></i>',
+                                                                            [
+                                                                                './behaviour-rating',
+                                                                                'Appraisal_No' => $model->Appraisal_No,
+                                                                                'Behaviour_Line_No' => $be->Line_No,
+                                                                                'Competence_Line_No' => $comp->Line_No,
+                                                                                'Employee_No' => $model->Employee_No
+                                                                            ],
+                                                                            [
+                                                                                'class' => 'rating btn btn-xs btn-success',
+                                                                                'title' => 'Behaviour Rating',
+                                                                                'data-Appraisal_No' => $model->Appraisal_No,
+                                                                                'data-Behaviour_Line_No' => $be->Line_No,
+                                                                                'data-Competence_Line_No' => $comp->Line_No,
+                                                                                'data-Employee_No' => $model->Employee_No,
+                                                                                'data-service' => 'AppraisalBehaviourRating'
+
+                                                                            ]
+                                                                        ) ?>
+
                                                                     </td>
-                                                                
+
                                                                 </tr>
-                                                                
-                                                            <?php
-                                                        endforeach;
-                                                    }
-                                                     ?>
-                                                </tbody>
-                                            </table>
-                                        </div>
+
+                                                        <?php
+                                                            endforeach;
+                                                        }
+                                                        ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                <?php } ?>
+                            </tbody>
+                    </table>
+
+
+                <?php } ?>
+                </div>
+            </div>
+
+
+
+        <?php } ?>
+
+
+
+
+
+
+
+        <!----Training Needs-->
+        <div class="card-ushurusecondary">
+
+
+            <div class="card-header">
+                <h4 class="card-title">Training Needs</h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="card-tools">
+                    <?= ($model->isAppraisee() && $model->Approval_Status == 'Appraisee_Level') ?
+                        Html::a(
+                            '<i class="fas fa-plus"></i> Add Training Need',
+                            ['appraisal/add-line'],
+                            [
+                                'class' => 'add btn btn-xs btn-success',
+                                'title' => 'Add Training Need',
+                                'data-Appraisal_No' => $model->Appraisal_No,
+                                'data-service' => 'AppraisalTrainingNeeds',
+                                'data-Line_No' => time(),
+                                'data-Employee_No' => $model->Employee_No,
+
+                            ]
+                        )
+                        : ''
+                    ?>
+                </div>
+
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+
+                                <td class="text text-bold text-center text-info">Training Category</td>
+                                <th>Training Category Name</th>
+                                <td class="text text-bold text-center text-info">Training Need Description</th>
+                                <th>Recommended</th>
+                                <th>Recommendation Justification</th>
+                                <th>Proposed Trainer</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (property_exists($card->Training_Needs, 'Appraisal_Training_Needs')) { ?>
+
+                                <?php foreach ($card->Training_Needs->Appraisal_Training_Needs as $wdp) :  ?>
+                                    <tr>
+
+                                        <td data-key="<?= $wdp->Key ?>" data-name="Category" data-service="AppraisalTrainingNeeds" ondblclick="addDropDown(this,'training-categories')" data-validate="Category_Name"><?= $wdp->Category ?? '' ?></td>
+                                        <td class="Category_Name" data-key="<?= $wdp->Key ?>" data-name="Category_Name" data-service="AppraisalTrainingNeeds" ondblclick="addInput(this)"><?= $wdp->Category_Name ?? '' ?></td>
+                                        <td data-key="<?= $wdp->Key ?>" data-name="Training_Need_Description" data-service="AppraisalTrainingNeeds" ondblclick="addInput(this)"><?= $wdp->Training_Need_Description ?? '' ?></td>
+
+                                        <td data-key="<?= $wdp->Key ?>" data-name="Recommended" data-service="AppraisalTrainingNeeds" ondblclick="addInput(this,'checkbox')"><?= $wdp->Recommended ? 'Yes' : 'No' ?></td>
+                                        <td data-key="<?= $wdp->Key ?>" data-name="Recommendation_Justification" data-service="AppraisalTrainingNeeds" ondblclick="addInput(this)"><?= $wdp->Recommendation_Justification ?? '' ?></td>
+                                        <td data-key="<?= $wdp->Key ?>" data-name="Proposed_Trainer" data-service="AppraisalTrainingNeeds" ondblclick="addInput(this)"><?= $wdp->Proposed_Trainer ?? '' ?></td>
+                                        <td><?= ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level') ?  Html::a(
+                                                '<i class="fa fa-trash"></i> ',
+                                                ['delete-line'],
+                                                [
+                                                    'class' => 'delete  btn-outline-danger',
+                                                    'title' => 'Delete this record.',
+                                                    'data-key' => $wdp->Key,
+                                                    'data-service' => 'AppraisalTrainingNeeds',
+
+                                                ]
+                                            )
+                                                : ''; ?>
+                                        </td>
+                                    </tr>
+                                <?php
+                                endforeach; ?>
+
+
+                            <?php } ?>
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+        <!--Training Needs-->
+
+        <!---Areas_of_Further_Development-->
+
+        <div class="card-ushurusecondary">
+            <div class="card-header">
+                <h4 class="card-title">Areas of Further Development</h4>
+
+                <div class="card-tools">
+                    <?= ($model->isAppraisee()) ?
+                        Html::a(
+                            '<i class="fas fa-plus"></i> Add Training Need',
+                            ['appraisal/add-line'],
+                            [
+                                'class' => 'add btn btn-xs btn-success',
+                                'title' => 'Add Training Need',
+                                'data-Appraisal_No' => $model->Appraisal_No,
+                                'data-service' => 'AppraisalTrainingNeeds',
+                                'data-Line_No' => time(),
+                                'data-Employee_No' => $model->Employee_No,
+
+                            ]
+                        )
+                        : '' ?>
+                </div>
+
+            </div>
+            <div class="card-body">
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <td>#</td>
+
+                            <th>Employee No</th>
+                            <th>Appraisal No</th>
+                            <th>Weakness</th>
+
+                            <th>Support Needed</th>
+                            <th>Support Status</th>
+                            <th>Action</th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <?php if (property_exists($card->Areas_of_Further_Development, 'Areas_of_Further_Development')) { ?>
+                            <?php foreach ($card->Areas_of_Further_Development->Areas_of_Further_Development as $fda) { ?>
+                                <tr class="parent">
+                                    <td><span>+</span></td>
+                                    <!--  <td><?php $fda->Line_No ?></td> -->
+                                    <td><?= $fda->Employee_No ?></td>
+                                    <td><?= $fda->Appraisal_No ?></td>
+                                    <td><?= !empty($fda->Weakness) ? $fda->Weakness : '' ?></td>
+
+                                    <td><?= !empty($fda->Support_Needed) ? $fda->Support_Needed : '' ?></td>
+                                    <td><?= !empty($fda->Status_Comment) ? $fda->Status_Comment : '' ?></td>
+
+                                    <td>
+                                        <?= (
+
+                                            ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level' ||  $model->Approval_Status == 'Appraisee_Level') && $model->Review_Period !== 'Overview_Manager'
+
+                                        ) ? Html::a('<i class="fas fa-edit"></i> ', ['furtherdevelopmentarea/update', 'Line_No' => $fda->Line_No, 'Appraisal_No' => $model->Appraisal_No, 'Employee_No' => $model->Employee_No], ['class' => 'btn btn-xs btn-outline-primary update-learning']) : '' ?>
+
+                                        <?= ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level' ||  $model->Approval_Status == 'Appraisee_Level') ? Html::a('<i class="fas fa-trash"></i> ', ['furtherdevelopmentarea/delete', 'Key' => $fda->Key], ['class' => 'btn btn-xs btn-outline-primary delete', 'title' => 'Delete Weakness Development Plan']) : '' ?>
+
+
+                                        <?php ($fda->Training_Needed  && $model->Approval_Status == 'Appraisee_Level') ? Html::a('<i class="fas fa-plus-square"></i> ', ['weeknessdevelopmentplan/create', 'Wekaness_Line_No' => $fda->Line_No, 'Appraisal_No' => $model->Appraisal_No, 'Employee_No' => $model->Employee_No], ['class' => 'btn btn-xs btn-outline-primary add', 'Add a Weakness Development Plan.']) : '' ?>
                                     </td>
                                 </tr>
 
                             <?php } ?>
-                            </tbody>
-                        </table>
-
-
-                        <?php } ?>
-                    </div>
-                </div>
-
-                
-
-            <?php } ?>
-
-           
-
-           
-
-
-
-                <!----Training Needs-->
-                <div class="card-ushurusecondary">
-
-
-                        <div class="card-header">
-                            <h4 class="card-title">Training Needs</h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <div class="card-tools">
-                            <?= ($model->isAppraisee() && $model->Approval_Status == 'Appraisee_Level')?
-                             Html::a('<i class="fas fa-plus"></i> Add Training Need',['appraisal/add-line'],
-                             [
-                                 'class' => 'add btn btn-xs btn-success',
-                                 'title' => 'Add Training Need',
-                                 'data-Appraisal_No' => $model->Appraisal_No,
-                                 'data-service' => 'AppraisalTrainingNeeds',
-                                 'data-Line_No' => time(),
-                                 'data-Employee_No' => $model->Employee_No,
-                                 
-                             ]) 
-                            :''
-                             ?>
-                            </div>
-
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered">
-                                     <thead>
-                                                <tr >
-                                                                                                      
-                                                    <td class="text text-bold text-center text-info">Training Category</td>
-                                                    <th>Training Category Name</th>
-                                                    <td class="text text-bold text-center text-info">Training Need Description</th>
-                                                    <th>Recommended</th>
-                                                    <th>Recommendation Justification</th>
-                                                    <th>Proposed  Trainer</th>
-                                                    <th>Actions</th>
-                                                </tr>
-                                    </thead>
-                                     <tbody>
-                                             <?php if(property_exists($card->Training_Needs,'Appraisal_Training_Needs')){ ?>
-
-                                                    <?php foreach($card->Training_Needs->Appraisal_Training_Needs as $wdp):  ?>
-                                                        <tr>
-                                                           
-                                                            <td data-key="<?= $wdp->Key ?>" data-name="Category" data-service="AppraisalTrainingNeeds" ondblclick="addDropDown(this,'training-categories')" data-validate="Category_Name"><?= $wdp->Category ?? ''?></td>
-                                                            <td class="Category_Name" data-key="<?= $wdp->Key ?>" data-name="Category_Name" data-service="AppraisalTrainingNeeds" ondblclick="addInput(this)" ><?= $wdp->Category_Name ?? '' ?></td>
-                                                            <td data-key="<?= $wdp->Key ?>" data-name="Training_Need_Description" data-service="AppraisalTrainingNeeds" ondblclick="addInput(this)" ><?= $wdp->Training_Need_Description ?? '' ?></td>
-                                                            
-                                                            <td data-key="<?= $wdp->Key ?>" data-name="Recommended" data-service="AppraisalTrainingNeeds" ondblclick="addInput(this,'checkbox')"><?= $wdp->Recommended ? 'Yes':'No' ?></td>
-                                                            <td data-key="<?= $wdp->Key ?>" data-name="Recommendation_Justification" data-service="AppraisalTrainingNeeds" ondblclick="addInput(this)" ><?= $wdp->Recommendation_Justification ?? '' ?></td>
-                                                            <td data-key="<?= $wdp->Key ?>" data-name="Proposed_Trainer" data-service="AppraisalTrainingNeeds" ondblclick="addInput(this)" ><?= $wdp->Proposed_Trainer ?? '' ?></td>
-                                                            <td><?= ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level')?  Html::a(
-                                                                '<i class="fa fa-trash"></i> ',
-                                                                ['delete-line'],
-                                                                [
-                                                                    'class' => 'delete  btn-outline-danger',
-                                                                    'title' => 'Delete this record.',
-                                                                    'data-key' => $wdp->Key,
-                                                                    'data-service' => 'AppraisalTrainingNeeds',
-
-                                                                ]
-                                                            )
-                                                            : '';?>
-                                                            </td>
-                                                        </tr>
-                                                        <?php
-                                                    endforeach; ?>
-
-
-                                             <?php } ?>
-
-
-                                     </tbody>
-                                </table>
-                            </div>
-                    </div>
-
-
-
-                </div>
-
-
-                <!--Training Needs-->
-
-                <!---Areas_of_Further_Development-->
-
-                <div class="card-ushurusecondary">
-                    <div class="card-header">
-                            <h4 class="card-title">Areas of Further Development</h4> 
-
-                            <div class="card-tools">
-                            <?= ($model->isAppraisee())?
-                             Html::a('<i class="fas fa-plus"></i> Add Training Need',['appraisal/add-line'],
-                             [
-                                 'class' => 'add btn btn-xs btn-success',
-                                 'title' => 'Add Training Need',
-                                 'data-Appraisal_No' => $model->Appraisal_No,
-                                 'data-service' => 'AppraisalTrainingNeeds',
-                                 'data-Line_No' => time(),
-                                 'data-Employee_No' => $model->Employee_No,
-                                 
-                             ]) 
-                            :'' ?>
-                           </div>
-
-                    </div>
-                    <div class="card-body">
-
-                        <table class="table table-bordered">
-                            <thead>
-                            <tr>
-                                <td>#</td>
-                               
-                                <th>Employee No</th>
-                                <th>Appraisal No</th>
-                                <th>Weakness</th>
-                                
-                                <th>Support Needed</th>
-                                <th>Support Status</th>
-                                <th>Action</th>
-
-
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            <?php if(property_exists($card->Areas_of_Further_Development,'Areas_of_Further_Development')){ ?>
-                                <?php foreach($card->Areas_of_Further_Development->Areas_of_Further_Development as $fda){ ?>
-                                    <tr class="parent">
-                                        <td><span>+</span></td>
-                                       <!--  <td><?php $fda->Line_No ?></td> -->
-                                        <td><?= $fda->Employee_No ?></td>
-                                        <td><?= $fda->Appraisal_No ?></td>
-                                        <td><?= !empty($fda->Weakness)?$fda->Weakness:'' ?></td>
-                                       
-                                        <td><?= !empty($fda->Support_Needed)?$fda->Support_Needed:'' ?></td>
-                                         <td><?= !empty($fda->Status_Comment)?$fda->Status_Comment:'' ?></td>
-
-                                        <td>
-                                            <?= (
-
-                                                ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level' ||  $model->Approval_Status == 'Appraisee_Level') && $model->Review_Period !== 'Overview_Manager'
-
-                                                 )?Html::a('<i class="fas fa-edit"></i> ',['furtherdevelopmentarea/update','Line_No'=> $fda->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary update-learning']):'' ?>
-
-                                                 <?= ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level' ||  $model->Approval_Status == 'Appraisee_Level')? Html::a('<i class="fas fa-trash"></i> ',['furtherdevelopmentarea/delete','Key'=> $fda->Key],['class' => 'btn btn-xs btn-outline-primary delete', 'title'=>'Delete Weakness Development Plan']):'' ?>
-
-
-                                            <?php ($fda->Training_Needed  && $model->Approval_Status == 'Appraisee_Level')?Html::a('<i class="fas fa-plus-square"></i> ',['weeknessdevelopmentplan/create','Wekaness_Line_No'=> $fda->Line_No,'Appraisal_No'=> $model->Appraisal_No,'Employee_No' => $model->Employee_No],['class' => 'btn btn-xs btn-outline-primary add','Add a Weakness Development Plan.']):'' ?>
-                                        </td>
-                                    </tr>
-                                   
-                                <?php } ?>
-                            <?php }  ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-
-                <!--/-Areas_of_Further_Development-->
-
-           
-           
-
-
-        </div>
-    </div>
-
-    <!--My Bs Modal template  --->
-
-    <div class="modal fade bs-example-modal-xl bs-modal-xl" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel" style="position: absolute">Performance Appraisal</h4>
-                </div>
-                <div class="modal-body">
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <!--<button type="button" class="btn btn-primary">Save changes</button>-->
-                </div>
-
+                        <?php }  ?>
+                    </tbody>
+                </table>
             </div>
         </div>
-    </div>
 
-    <!-- Goal setting rejection by overview -->
+
+        <!--/-Areas_of_Further_Development-->
+
+
+
+
+
+    </div>
+</div>
+
+<!--My Bs Modal template  --->
+
+<div class="modal fade bs-example-modal-xl bs-modal-xl" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel" style="position: absolute">Performance Appraisal</h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Goal setting rejection by overview -->
 
 
 <div id="backtolinemgr" style="display: none">
 
-        <?= Html::beginForm(['appraisal/backtolinemgr'],'post',['id'=>'backtolinemgr-form']) ?>
+    <?= Html::beginForm(['appraisal/backtolinemgr'], 'post', ['id' => 'backtolinemgr-form']) ?>
 
-        <?= Html::textarea('comment','',['placeholder'=>'Rejection Comment','row'=> 4,'class'=>'form-control','required'=>true])?>
+    <?= Html::textarea('comment', '', ['placeholder' => 'Rejection Comment', 'row' => 4, 'class' => 'form-control', 'required' => true]) ?>
 
-        <?= Html::input('hidden','Appraisal_No','',['class'=> 'form-control']); ?>
-        <?= Html::input('hidden','Employee_No','',['class'=> 'form-control']); ?>
-
-
-        <?= Html::submitButton('submit',['class' => 'btn btn-warning','style'=>'margin-top: 10px']) ?>
-
-        <?= Html::endForm() ?>
-    </div>
+    <?= Html::input('hidden', 'Appraisal_No', '', ['class' => 'form-control']); ?>
+    <?= Html::input('hidden', 'Employee_No', '', ['class' => 'form-control']); ?>
 
 
+    <?= Html::submitButton('submit', ['class' => 'btn btn-warning', 'style' => 'margin-top: 10px']) ?>
+
+    <?= Html::endForm() ?>
+</div>
 
 
-    <div id="rejectmyappraisal" style="display: none">
-
-        <?= Html::beginForm(['appraisal/mybacktolinemgr'],'post',['id'=>'mybacktolinemgr-form']) ?>
-
-        <?= Html::textarea('comment','',['placeholder'=>'Rejection Comment','row'=> 4,'class'=>'form-control','required'=>true])?>
-
-        <?= Html::input('hidden','Appraisal_No','',['class'=> 'form-control']); ?>
-        <?= Html::input('hidden','Employee_No','',['class'=> 'form-control']); ?>
 
 
-        <?= Html::submitButton('submit',['class' => 'btn btn-warning','style'=>'margin-top: 10px']) ?>
+<div id="rejectmyappraisal" style="display: none">
 
-        <?= Html::endForm() ?>
-    </div>
+    <?= Html::beginForm(['appraisal/mybacktolinemgr'], 'post', ['id' => 'mybacktolinemgr-form']) ?>
+
+    <?= Html::textarea('comment', '', ['placeholder' => 'Rejection Comment', 'row' => 4, 'class' => 'form-control', 'required' => true]) ?>
+
+    <?= Html::input('hidden', 'Appraisal_No', '', ['class' => 'form-control']); ?>
+    <?= Html::input('hidden', 'Employee_No', '', ['class' => 'form-control']); ?>
 
 
- <input type="hidden" name="url" value="<?= $absoluteUrl ?>">
+    <?= Html::submitButton('submit', ['class' => 'btn btn-warning', 'style' => 'margin-top: 10px']) ?>
+
+    <?= Html::endForm() ?>
+</div>
+
+
+<input type="hidden" name="url" value="<?= $absoluteUrl ?>">
 <?php
 
 $script = <<<JS
 
     $(function(){
       
-  
-      
-    
-   
-        $('.rating').on('click', function(e){
+    $('.rating').on('click', function(e){
         e.preventDefault();
+
+        // Ping concerned rating url and create de ranting line
+        let data = $(this).data();
+        payloadContent = Object.entries(data);
+         // convert object of arrays into a pure object
+        payload = Object.assign(...payloadContent.map(([key, val]) => ({ [key.replace(/(^\w{1})|(\_+\w{1})/g, letter => letter.toUpperCase())]: val })));
+            const res = fetch('./add-rating-line', {
+            method: 'POST',
+            headers: new Headers({
+            Origin: 'http://localhost:8061/',
+            "Content-Type": 'application/json',
+            //'Content-Type': 'application/x-www-form-urlencoded'
+            }),
+            body: JSON.stringify({ ...payload })
+        })
+        .then(data => data.json())
+        .then(result => {
+            console.log(result);
+        });
+
+        // Process modal opening...
         const url = $(this).attr('href');
         console.log(url);
         $('.modal-body').html('<div class="text text-info">Loading ...</div>');
@@ -1096,7 +1171,7 @@ $script = <<<JS
                         .find('.modal-body')
                         .load(url);
 
-        });
+    });
      
     
     /*Handle modal dismissal event  */
@@ -1387,4 +1462,3 @@ $script = <<<JS
 JS;
 
 $this->registerJs($script);
-
