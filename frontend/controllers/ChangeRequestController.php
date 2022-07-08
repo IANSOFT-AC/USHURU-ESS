@@ -350,15 +350,23 @@ class ChangeRequestController extends Controller
 
         //load nav result to model
         $model = $this->loadtomodel($result[0], $model);
+        $recordID = $this->getRecordID($service, $model->Key);
 
         //Yii::$app->recruitment->printrr($model);
 
         return $this->render('view', [
             'model' => $model,
+            'recordID' => $recordID
         ]);
     }
 
-    // Get Vehicle Requisition list
+
+    public function getRecordID($service, $Key)
+    {
+        return Yii::$app->navhelper->getRecordID($service, $Key);
+    }
+
+    // Get list
 
     public function actionList()
     {
@@ -372,11 +380,14 @@ class ChangeRequestController extends Controller
         foreach ($results as $item) {
 
             if (!empty($item->No)) {
+                $recordID = $this->getRecordID($service, $item->Key);
                 $link = $updateLink = $deleteLink =  '';
                 $Viewlink = Html::a('<i class="fas fa-eye"></i>', ['view', 'No' => $item->No], ['class' => 'btn btn-outline-primary btn-xs', 'title' => 'View Request.']);
                 if ($item->Approval_Status == 'New') {
-                    $link = Html::a('<i class="fas fa-paper-plane"></i>', ['send-for-approval', 'No' => $item->No], ['title' => 'Send Approval Request', 'class' => 'btn btn-primary btn-xs']);
+                    $link = Html::a('<i class="fas fa-paper-plane"></i>', ['send-for-approval', 'recordID' => $recordID], ['title' => 'Send Approval Request', 'class' => 'btn btn-primary btn-xs']);
                     $updateLink = Html::a('<i class="far fa-edit"></i>', ['update', 'No' => $item->No], ['class' => 'btn btn-info btn-xs', 'title' => 'Update Request']);
+                } else if ($item->Approval_Status == 'Pending_Approval') {
+                    $link = Html::a('<i class="fas fa-times"></i>', ['cancel-request', 'recordID' => $recordID], ['title' => 'Cancel Approval Request', 'class' => 'btn btn-warning btn-xs']);
                 }
 
                 $result['data'][] = [
@@ -518,44 +529,43 @@ class ChangeRequestController extends Controller
 
     /* Call Approval Workflow Methods */
 
-    public function actionSendForApproval()
+    public function actionSendForApproval($recordID)
     {
         $service = Yii::$app->params['ServiceName']['PortalFactory'];
-        $DocNo = Yii::$app->request->get('No');
+
         $data = [
-            'applicationNo' => $DocNo,
-            'sendMail' => true,
-            'approvalUrl' => '',
+            'recordID' => $recordID
         ];
 
 
-        $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'IanSendEmployeeChangeRequestForApproval');
+        $result = Yii::$app->navhelper->codeunit($service, $data, 'SendDocumentApproval');
 
         if (!is_string($result)) {
-            Yii::$app->session->setFlash('success', 'Request Sent to Supervisor Successfully.', true);
+            Yii::$app->session->setFlash('success', 'Document Sent for Approval Successfully.', true);
+            //return $this->redirect(['view','No' => $No]);
             return $this->redirect(['index']);
         } else {
 
-            Yii::$app->session->setFlash('error', 'Error Sending  Request for Approval  : ' . $result);
+            Yii::$app->session->setFlash('error', 'Error Sending Request for Approval  : ' . $result);
+            // return $this->redirect(['view','No' => $No]);
             return $this->redirect(['index']);
         }
     }
 
     /*Cancel Approval Request */
 
-    public function actionCancelRequest($No)
+    public function actionCancelRequest($recordID)
     {
         $service = Yii::$app->params['ServiceName']['PortalFactory'];
 
         $data = [
-            'applicationNo' => $No,
+            'recordID' => $recordID
         ];
 
-
-        $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'IanCancelChangeRequestApprovalRequest');
+        $result = Yii::$app->navhelper->codeunit($service, $data, 'CancelDocumentApproval');
 
         if (!is_string($result)) {
-            Yii::$app->session->setFlash('success', 'Request Cancelled Successfully.', true);
+            Yii::$app->session->setFlash('success', 'Approval Request Cancelled Successfully.', true);
             return $this->redirect(['index']);
         } else {
 
