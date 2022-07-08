@@ -27,8 +27,7 @@ Yii::$app->session->set('isSupervisor',false);*/
             'data' => [
                 'confirm' => 'Are you sure you want to send this document for approval?',
                 'params'=>[
-                    'No'=> $model->Recall_No,
-                    'employeeNo' => $model->Employee_No,
+                    'recordID' => $recordID,
                 ],
                 'method' => 'get',
         ],
@@ -41,7 +40,7 @@ Yii::$app->session->set('isSupervisor',false);*/
             'data' => [
             'confirm' => 'Are you sure you want to cancel imprest approval request?',
             'params'=>[
-                'No'=> $model->Recall_No,
+                'recordID' => $recordID,
             ],
             'method' => 'get',
         ],
