@@ -14,7 +14,7 @@ $this->title = 'HRMIS - Payslip Report';
 $this->params['breadcrumbs'][] = ['label' => 'Payroll Reports', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => 'Payslip', 'url' => ['index']];
 ?>
-
+   
     <div class="row">
         <div class="col-md-12">
             <div class="card">

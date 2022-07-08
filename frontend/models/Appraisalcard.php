@@ -71,7 +71,7 @@ public $Recomended_Action;
         $service = Yii::$app->params['ServiceName']['EmployeeAppraisalKPI'];
         $filter = [
             'Appraisal_No' => $this->Appraisal_No,
-            'KRA_Line_No' => $KRA_Line_No
+            'Kra_Line_No' => $KRA_Line_No
         ];
 
         $kpas = Yii::$app->navhelper->getData($service, $filter);
@@ -84,6 +84,20 @@ public $Recomended_Action;
         $filter = [
             'Appraisal_Code' => $this->Appraisal_No,
             'Competence_Line_No' => $Category_Line_No
+        ];
+
+        $behaviours = Yii::$app->navhelper->getData($service, $filter);
+        return $behaviours;
+    }
+
+     public function getBehaviourRating($Behaviour_Line_No, $Competence_Line_No, $Employee_No)
+    {
+        $service = Yii::$app->params['ServiceName']['AppraisalBehaviourRating'];
+        $filter = [
+            'Behaviour_Line_No' => $Behaviour_Line_No,
+            'Competence_Line_No' => $Competence_Line_No,
+            'Appraisal_No' => $this->Appraisal_No,
+            'Employee_No' => $Employee_No
         ];
 
         $behaviours = Yii::$app->navhelper->getData($service, $filter);

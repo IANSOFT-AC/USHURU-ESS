@@ -88,7 +88,8 @@ class AppraisalController extends Controller
                     'long-term-status-super',
                     'add-line',
                     'perspective',
-                    'kpi-status'
+                    'kpi-status',
+                    'training-categories'
                 ],
                 'formatParam' => '_format',
                 'formats' => [
@@ -103,7 +104,7 @@ class AppraisalController extends Controller
     {
 
         $ExcemptedActions = [
-            'add-line','perspective','kpi-status'
+            'add-line','perspective','kpi-status','training-categories'
         ];
 
         if (in_array($action->id, $ExcemptedActions)) {
@@ -2364,6 +2365,12 @@ class AppraisalController extends Controller
         'Achieved' => 'Achieved',
         'Not_Achieved' => 'Not_Achieved'
        ];
+       return $data;
+    }
+
+    public function actionTrainingCategories()
+    {
+       $data = Yii::$app->navhelper->dropdown('TrainingCategories', 'Code', 'Description', [], ['Code']);
        return $data;
     }
 }

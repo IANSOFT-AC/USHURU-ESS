@@ -251,7 +251,8 @@ return [
         'CareerDevStrengths' => 'CareerDevStrengths', //60039 -->Not Taken to live server
         'FurtherDevAreas' => 'FurtherDevAreas', //60040 -->Not Taken to live server
         'WeeknessDevPlan' => 'WeeknessDevPlan', //60041 -->Not Taken to live server
-        'AppraisalTrainingNeed' => 'AppraisalTrainingNeed', //60086
+       // 'AppraisalTrainingNeed' => 'AppraisalTrainingNeed', //60086
+       'AppraisalTrainingNeeds' => 'AppraisalTrainingNeeds', //60041
 
         'SupervisorList' => 'SupervisorList', // 51005
 
@@ -314,7 +315,10 @@ return [
         'TrainingPlan' => 'TrainingPlan', //60036*************************** NOT AVAILABLE *********
         'EmployeeAppraisalCompetence' => 'EmployeeAppraisalCompetence', //60033
         'EmployeeAppraisalBehaviours' => 'EmployeeAppraisalBehaviours', //60034
+        'AppraisalBehaviourRating' => 'AppraisalBehaviourRating', // 60002
+        'AppraisalKPIRating' => 'AppraisalKPIRating',//60003
         'LearningAssessmentCompetence' => 'LearningAssessmentCompetence', //60035
+        'TrainingCategories' => 'TrainingCategories', //60049
 
 
 

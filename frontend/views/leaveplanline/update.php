@@ -25,7 +25,7 @@ $model->End_Date = (date('Y', strtotime($model->End_Date)) == '0001') ? $model->
 
     <?= $this->render('_form', [
         'model' => $model,
-        'recordID' => $recordID
+        //'recordID' => $recordID
     ]) ?>
 
 </div>

@@ -59,7 +59,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                             </div>
 
 
-                            <?= $form->field($model, 'Key')->textInput(['readonly' => true])->label(false) ?>
+                            <?php $form->field($model, 'Key')->textInput(['readonly' => true])->label(false) ?>
 
 
 

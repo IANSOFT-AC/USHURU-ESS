@@ -153,7 +153,8 @@ Yii::$app->session->set('isSupervisor',false);*/
 
                 <?php if (is_array($model->lines)) { //show Lines 
                 ?>
-                    <table class="table table-bordered">
+                <div class="table-responsive">
+                      <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <td><b>Plan No</b></td>
@@ -165,7 +166,7 @@ Yii::$app->session->set('isSupervisor',false);*/
                                 <td><b>End Date</b></td>
                                 <td><b>Days Planned</b></td>
                                 <td><b>Holidays</b></td>
-                                <td><b>Weekend_Days</b></td>
+                                <td><b>Weekend Days</b></td>
                                 <td><b>Total No Of Days</b></td>
                                 <?php if ($model->Status == 'Open') { ?>
                                     <td><b>Action</b></td>
@@ -185,17 +186,17 @@ Yii::$app->session->set('isSupervisor',false);*/
                             ?>
                                 <tr>
 
-                                    <td><?= !empty($obj->Plan_No) ? $obj->Plan_No : 'Not Set' ?></td>
-                                    <td><?= !empty($obj->Employee_Code) ? $obj->Employee_Code : 'Not Set' ?></td>
-                                    <td><?= !empty($obj->Leave_Code) ? $obj->Leave_Code : 'Not Set' ?></td>
-                                    <td><?= !empty($obj->Leave_Type_Description) ? $obj->Leave_Type_Description : 'Not Set' ?></td>
-                                    <td><?= !empty($obj->Leave_Balance) ? $obj->Leave_Balance : 'Not Set' ?></td>
-                                    <td><?= !empty($obj->Start_Date) ? $obj->Start_Date : 'Not Set' ?></td>
-                                    <td><?= !empty($obj->End_Date) ? $obj->End_Date : 'Not Set' ?></td>
-                                    <td><?= !empty($obj->Days_Planned) ? $obj->Days_Planned : 'Not Set' ?></td>
-                                    <td><?= !empty($obj->Holidays) ? $obj->Holidays : 'Not Set' ?></td>
-                                    <td><?= !empty($obj->Weekend_Days) ? $obj->Weekend_Days : 'Not Set' ?></td>
-                                    <td><?= !empty($obj->Total_No_Of_Days) ? $obj->Total_No_Of_Days : 'Not Set' ?></td>
+                                    <td><?= !empty($obj->Plan_No) ? $obj->Plan_No : '' ?></td>
+                                    <td><?= !empty($obj->Employee_Code) ? $obj->Employee_Code : '' ?></td>
+                                    <td><?= !empty($obj->Leave_Code) ? $obj->Leave_Code : '' ?></td>
+                                    <td><?= !empty($obj->Leave_Type_Description) ? $obj->Leave_Type_Description : '' ?></td>
+                                    <td><?= !empty($obj->Leave_Balance) ? $obj->Leave_Balance : '' ?></td>
+                                    <td><?= !empty($obj->Start_Date) ? $obj->Start_Date : '' ?></td>
+                                    <td><?= !empty($obj->End_Date) ? $obj->End_Date : '' ?></td>
+                                    <td><?= !empty($obj->Days_Planned) ? $obj->Days_Planned : '' ?></td>
+                                    <td><?= !empty($obj->Holidays) ? $obj->Holidays : '' ?></td>
+                                    <td><?= !empty($obj->Weekend_Days) ? $obj->Weekend_Days : '' ?></td>
+                                    <td><?= !empty($obj->Total_No_Of_Days) ? $obj->Total_No_Of_Days : '' ?></td>
                                     <?php if ($model->Status == 'Open') { ?>
                                         <td><?= $updateLink . '|' . $deleteLink ?></td>
                                 </tr>
@@ -203,6 +204,8 @@ Yii::$app->session->set('isSupervisor',false);*/
                         <?php endforeach; ?>
                         </tbody>
                     </table>
+                </div>
+                  
                 <?php } ?>
             </div>
         </div>
@@ -278,6 +281,7 @@ Yii::$app->session->set('isSupervisor',false);*/
         e.preventDefault();
         var url = $(this).attr('href');
         console.log('clicking...');
+        $('.modal-body').html('<div class="text-info">Processing ...</div>');
         $('.modal').modal('show')
                         .find('.modal-body')
                         .load(url); 
@@ -489,4 +493,4 @@ JS;
     }
 CSS;
 
-    $this->registerCss($style);
+    //$this->registerCss($style);

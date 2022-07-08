@@ -655,8 +655,8 @@ $('.add').on('click', function (e) {
   console.log(`Formatted payload`);
   console.log(payload);
 
-  $('a.add').text('Inserting...');
-  $('a.add').attr('disabled', true);
+  $(this).text('Inserting...');
+  $(this).attr('disabled', true);
   const res = fetch(url, {
     method: 'POST',
     headers: new Headers({
