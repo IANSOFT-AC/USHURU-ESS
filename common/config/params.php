@@ -322,7 +322,7 @@ return [
 
 
 
-        /*********************KEMRI CHANGE REQUEST************************************************/
+        /*********************CHANGE REQUEST************************************************/
 
         'ChangeRequestList' => 'ChangeRequestList', // 55014 -Page Emp Change Request List
         'ChangeRequestCard' => 'ChangeRequestCard', // 55015 -Page

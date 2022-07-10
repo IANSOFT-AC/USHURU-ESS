@@ -777,20 +777,35 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                         <td><?= isset($comp->Category) ? $comp->Category : 'Not Set' ?></td>
                                         <td><?= isset($comp->Maximum_Weigth) ? $comp->Maximum_Weigth : 'Not Set' ?></td>
                                         <td><?= isset($comp->Overal_Rating) ? $comp->Overal_Rating : 'Not Set' ?></td>
-                                        <td> <?=
-                                                Html::a(
-                                                    '<i class="fas fa-plus"></i>',
-                                                    ['appraisal/add-line'],
-                                                    [
-                                                        'class' => 'add btn btn-xs btn-success',
-                                                        'title' => 'Add Competence',
-                                                        'data-Appraisal_No' => $model->Appraisal_No,
-                                                        'data-service' => 'EmployeeAppraisalBehaviours',
-                                                        'data-Line_No' => time(),
-                                                        'data-Employee_No' => $model->Employee_No,
-                                                        'data-Competence_Line_No' =>  $comp->Line_No
-                                                    ]
-                                                ) ?>
+                                        <td>
+
+                                            <?= ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level') ?  Html::a(
+                                                '<i class="fa fa-trash"></i> ',
+                                                ['delete-line'],
+                                                [
+                                                    'class' => 'delete  btn-outline-danger mx-1',
+                                                    'title' => 'Delete this record.',
+                                                    'data-key' => $comp->Key,
+                                                    'data-service' => 'StEmployeeAppraisalCompetence',
+
+                                                ]
+                                            )
+                                                : ''; ?>
+
+                                            <?=
+                                            Html::a(
+                                                '<i class="fas fa-plus"></i>',
+                                                ['appraisal/add-line'],
+                                                [
+                                                    'class' => 'add btn btn-xs btn-success',
+                                                    'title' => 'Add Competence Behaviours',
+                                                    'data-Appraisal_Code' => $model->Appraisal_No,
+                                                    'data-service' => 'EmployeeAppraisalBehaviours',
+                                                    'data-Line_No' => time(),
+                                                    'data-Employee_No' => $model->Employee_No,
+                                                    'data-Competence_Line_No' =>  $comp->Line_No
+                                                ]
+                                            ) ?>
                                         </td>
 
                                     </tr>
@@ -896,6 +911,89 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
 
+        <!---Areas_of_Further_Development-->
+
+        <div class="card-ushurusecondary">
+            <div class="card-header">
+                <h4 class="card-title">Areas of Further Development</h4>
+
+                <div class="card-tools">
+                    <?= ($model->isAppraisee()) ?
+                        Html::a(
+                            '<i class="fas fa-plus"></i> Add Area of Further Development',
+                            ['appraisal/add-line'],
+                            [
+                                'class' => 'add btn btn-xs btn-success',
+                                'title' => 'Add Training Need',
+                                'data-Appraisal_No' => $model->Appraisal_No,
+                                'data-service' => 'FurtherDevAreas',
+                                'data-Line_No' => time(),
+                                'data-Employee_No' => $model->Employee_No,
+
+                            ]
+                        )
+                        : '' ?>
+                </div>
+
+            </div>
+            <div class="card-body">
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <!-- <td>#</td> -->
+
+                            <td class="text text-bold text-center">Employee No</td>
+                            <td class="text text-bold text-center">Appraisal No</td>
+                            <td class="text text-bold text-center text-info">Weakness</td>
+                            <td class="text text-bold text-center text-info">Training Needed</td>
+                            <td class="text text-bold text-center text-info">Support Needed</td>
+                            <td class="text text-bold text-center text-info">Status Comment</td>
+                            <td class="text text-bold text-center">Action</td>
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <?php if (property_exists($card->Areas_of_Further_Development, 'Areas_of_Further_Development')) { ?>
+                            <?php foreach ($card->Areas_of_Further_Development->Areas_of_Further_Development as $fda) { ?>
+                                <tr>
+                                    <!-- <td><span>+</span></td> -->
+                                    <!--  <td><?php $fda->Line_No ?></td> -->
+                                    <td><?= $fda->Employee_No ?></td>
+                                    <td><?= $fda->Appraisal_No ?></td>
+                                    <td data-key="<?= $fda->Key ?>" data-name="Weakness" data-service="FurtherDevAreas" ondblclick="addInput(this)"><?= !empty($fda->Weakness) ? $fda->Weakness : '' ?></td>
+                                    <td data-key="<?= $fda->Key ?>" data-name="Training_Needed" data-service="FurtherDevAreas" ondblclick="addInput(this,'checkbox')"><?= $fda->Training_Needed ? 'Yes' : 'No' ?></td>
+                                    <td data-key="<?= $fda->Key ?>" data-name="Support_Needed" data-service="FurtherDevAreas" ondblclick="addInput(this)"><?= !empty($fda->Support_Needed) ? $fda->Support_Needed : '' ?></td>
+                                    <td data-key="<?= $fda->Key ?>" data-name="Status_Comment" data-service="FurtherDevAreas" ondblclick="addInput(this)"><?= !empty($fda->Status_Comment) ? $fda->Status_Comment : '' ?></td>
+
+                                    <td>
+
+                                        <?= ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level') ?  Html::a(
+                                            '<i class="fa fa-trash"></i> ',
+                                            ['delete-line'],
+                                            [
+                                                'class' => 'delete  btn-outline-danger',
+                                                'title' => 'Delete this record.',
+                                                'data-key' => $fda->Key,
+                                                'data-service' => 'FurtherDevAreas',
+
+                                            ]
+                                        )
+                                            : ''; ?>
+
+                                    </td>
+                                </tr>
+
+                            <?php } ?>
+                        <?php }  ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!--/-Areas_of_Further_Development-->
 
 
         <!----Training Needs-->
@@ -946,8 +1044,8 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                                     <tr>
 
                                         <td data-key="<?= $wdp->Key ?>" data-name="Category" data-service="AppraisalTrainingNeeds" ondblclick="addDropDown(this,'training-categories')" data-validate="Category_Name"><?= $wdp->Category ?? '' ?></td>
-                                        <td class="Category_Name" data-key="<?= $wdp->Key ?>" data-name="Category_Name" data-service="AppraisalTrainingNeeds" ondblclick="addInput(this)"><?= $wdp->Category_Name ?? '' ?></td>
-                                        <td data-key="<?= $wdp->Key ?>" data-name="Training_Need_Description" data-service="AppraisalTrainingNeeds" ondblclick="addInput(this)"><?= $wdp->Training_Need_Description ?? '' ?></td>
+                                        <td class="Category_Name" data-key="<?= $wdp->Key ?>" data-name="Category_Name" data-service="AppraisalTrainingNeeds"><?= $wdp->Category_Name ?? '' ?></td>
+                                        <td data-key="<?= $wdp->Key ?>" data-name="Training_Need_Description" data-service="AppraisalTrainingNeeds" ondblclick="addInput(this)" data-validate="Category_Name"><?= $wdp->Training_Need_Description ?? '' ?></td>
 
                                         <td data-key="<?= $wdp->Key ?>" data-name="Recommended" data-service="AppraisalTrainingNeeds" ondblclick="addInput(this,'checkbox')"><?= $wdp->Recommended ? 'Yes' : 'No' ?></td>
                                         <td data-key="<?= $wdp->Key ?>" data-name="Recommendation_Justification" data-service="AppraisalTrainingNeeds" ondblclick="addInput(this)"><?= $wdp->Recommendation_Justification ?? '' ?></td>
@@ -985,86 +1083,6 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
         <!--Training Needs-->
 
-        <!---Areas_of_Further_Development-->
-
-        <div class="card-ushurusecondary">
-            <div class="card-header">
-                <h4 class="card-title">Areas of Further Development</h4>
-
-                <div class="card-tools">
-                    <?= ($model->isAppraisee()) ?
-                        Html::a(
-                            '<i class="fas fa-plus"></i> Add Training Need',
-                            ['appraisal/add-line'],
-                            [
-                                'class' => 'add btn btn-xs btn-success',
-                                'title' => 'Add Training Need',
-                                'data-Appraisal_No' => $model->Appraisal_No,
-                                'data-service' => 'AppraisalTrainingNeeds',
-                                'data-Line_No' => time(),
-                                'data-Employee_No' => $model->Employee_No,
-
-                            ]
-                        )
-                        : '' ?>
-                </div>
-
-            </div>
-            <div class="card-body">
-
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <td>#</td>
-
-                            <th>Employee No</th>
-                            <th>Appraisal No</th>
-                            <th>Weakness</th>
-
-                            <th>Support Needed</th>
-                            <th>Support Status</th>
-                            <th>Action</th>
-
-
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        <?php if (property_exists($card->Areas_of_Further_Development, 'Areas_of_Further_Development')) { ?>
-                            <?php foreach ($card->Areas_of_Further_Development->Areas_of_Further_Development as $fda) { ?>
-                                <tr class="parent">
-                                    <td><span>+</span></td>
-                                    <!--  <td><?php $fda->Line_No ?></td> -->
-                                    <td><?= $fda->Employee_No ?></td>
-                                    <td><?= $fda->Appraisal_No ?></td>
-                                    <td><?= !empty($fda->Weakness) ? $fda->Weakness : '' ?></td>
-
-                                    <td><?= !empty($fda->Support_Needed) ? $fda->Support_Needed : '' ?></td>
-                                    <td><?= !empty($fda->Status_Comment) ? $fda->Status_Comment : '' ?></td>
-
-                                    <td>
-                                        <?= (
-
-                                            ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level' ||  $model->Approval_Status == 'Appraisee_Level') && $model->Review_Period !== 'Overview_Manager'
-
-                                        ) ? Html::a('<i class="fas fa-edit"></i> ', ['furtherdevelopmentarea/update', 'Line_No' => $fda->Line_No, 'Appraisal_No' => $model->Appraisal_No, 'Employee_No' => $model->Employee_No], ['class' => 'btn btn-xs btn-outline-primary update-learning']) : '' ?>
-
-                                        <?= ($model->Review_Period == 'New' || $model->Approval_Status == 'Appraisee_Level' ||  $model->Approval_Status == 'Appraisee_Level') ? Html::a('<i class="fas fa-trash"></i> ', ['furtherdevelopmentarea/delete', 'Key' => $fda->Key], ['class' => 'btn btn-xs btn-outline-primary delete', 'title' => 'Delete Weakness Development Plan']) : '' ?>
-
-
-                                        <?php ($fda->Training_Needed  && $model->Approval_Status == 'Appraisee_Level') ? Html::a('<i class="fas fa-plus-square"></i> ', ['weeknessdevelopmentplan/create', 'Wekaness_Line_No' => $fda->Line_No, 'Appraisal_No' => $model->Appraisal_No, 'Employee_No' => $model->Employee_No], ['class' => 'btn btn-xs btn-outline-primary add', 'Add a Weakness Development Plan.']) : '' ?>
-                                    </td>
-                                </tr>
-
-                            <?php } ?>
-                        <?php }  ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-
-        <!--/-Areas_of_Further_Development-->
 
 
 
