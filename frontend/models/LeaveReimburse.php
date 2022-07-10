@@ -25,6 +25,7 @@ class LeaveReimburse extends Model
     public $User_ID;
     public $Leave_Code;
     public $Leave_Type_Decription;
+    public $Days_Droped;
     public $Days_To_Reimburse;
     public $Leave_balance;
     public $Balance_After;

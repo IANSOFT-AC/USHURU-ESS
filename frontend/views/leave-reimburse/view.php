@@ -120,6 +120,7 @@ Yii::$app->session->set('isSupervisor',false);*/
                             <?= $form->field($model, 'User_ID')->textInput(['readonly' => true, 'disabled' => true]) ?>
                             <?= $form->field($model, 'Leave_Code')->textInput(['readonly' => true, 'disabled' => true]) ?>
                             <?= $form->field($model, 'Leave_Type_Decription')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Days_Droped')->textInput(['readonly' => true, 'disabled' => true]) ?>
 
 
                         </div>
