@@ -64,7 +64,7 @@ class ChangeRequestController extends Controller
             ],
             'contentNegotiator' => [
                 'class' => ContentNegotiator::class,
-                'only' => ['list'],
+                'only' => ['list', 'add-line'],
                 'formatParam' => '_format',
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
@@ -72,6 +72,20 @@ class ChangeRequestController extends Controller
                 ],
             ]
         ];
+    }
+
+    public function beforeAction($action)
+    {
+
+        $ExcemptedActions = [
+            'biostatus', 'add-line'
+        ];
+
+        if (in_array($action->id, $ExcemptedActions)) {
+            $this->enableCsrfValidation = false;
+        }
+
+        return parent::beforeAction($action);
     }
 
     public function actionIndex()
@@ -571,6 +585,56 @@ class ChangeRequestController extends Controller
 
             Yii::$app->session->setFlash('error', 'Error Cancelling Approval Request.  : ' . $result);
             return $this->redirect(['index']);
+        }
+    }
+
+
+    // A universal Line Addtion Method
+
+    public function actionAddLine()
+    {
+        // get arguments as a json payload and cort it into a php array -- @todo
+        $json = file_get_contents('php://input');
+
+        // Convert it into a PHP object
+        $data = json_decode($json);
+
+        $service = Yii::$app->params['ServiceName'][$data->Service];
+
+        // Remove unwanted attributes to payload attribute
+        unset($data->Service);
+        unset($data->Line_No);
+
+        // Insert Record
+
+        $result = Yii::$app->navhelper->postData($service, $data);
+
+        if (is_object($result)) {
+            return [
+                'note' => 'Record Created Successfully.',
+                'result' => $result
+            ];
+        } else {
+            return ['note' => $result];
+        }
+    }
+
+
+    // A universal line delete functionality
+
+    public function actionDeleteLine($Service, $Key)
+    {
+        $service = Yii::$app->params['ServiceName'][$Service];
+        $result = Yii::$app->navhelper->deleteData($service, Yii::$app->request->get('Key'));
+        Yii::$app->session->setFlash('success', 'Record Deleted Successfully.', true);
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        if (!is_string($result)) {
+            return [
+                'note' => 'Record Deleted Successfully.',
+                'result' => $result
+            ];
+        } else {
+            return ['note' => $result];
         }
     }
 }

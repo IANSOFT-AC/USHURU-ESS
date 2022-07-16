@@ -74,7 +74,8 @@ return [
         'EmployeeExitManagement',
         'HRAPPRAISALMGT',
         'TRAININGMGT',
-        'DocumentAttachment'
+        'DocumentAttachment',
+        'AppraisalManagement'
 
     ],
     'ServiceName' => [
@@ -309,6 +310,7 @@ return [
 
 
         'AppraisalWorkflow' => 'AppraisalWorkflow', // 50228 ---> Code Unit************************
+        'AppraisalManagement' => 'AppraisalManagement', // 50209
         'PerformanceLevel' => 'PerformanceLevel', //60037 page
 
         'EmployeeAppraisalKRA' => 'EmployeeAppraisalKRA', //60009

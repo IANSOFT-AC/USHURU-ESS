@@ -5,7 +5,7 @@
 /* @var $model \common\models\LoginForm */
 
 use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
+use yii\bootstrap4\ActiveForm;
 
 
 $this->params['breadcrumbs'][] = $this->title;
@@ -132,14 +132,7 @@ $style = <<<CSS
         border: 1px solid #f6c844;
     }
     
-   .card {
-    background-color: rgba(66, 179, 229,.6);
-   }
-   
-   .login-card-body {
-     background-color: rgba(66, 179, 229,.1);
-   }
-
+  
     
     
 CSS;

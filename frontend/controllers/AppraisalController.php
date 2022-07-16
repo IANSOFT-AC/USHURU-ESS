@@ -315,7 +315,7 @@ class AppraisalController extends Controller
     public function actionGetsubmittedappraisals()
     {
         $model = new Appraisalcard();
-        $service = Yii::$app->params['ServiceName']['SubmittedAppraisals'];
+        $service = Yii::$app->params['ServiceName']['AppraisalList'];
         $filter = [
             // 'Supervisor_User_Id' => Yii::$app->user->identity->employee[0]->User_ID,
             'Supervisor_No' => Yii::$app->user->identity->{'Employee No_'}
@@ -417,7 +417,7 @@ class AppraisalController extends Controller
     public function actionGetapprovedappraisals()
     {
         $model = new Appraisalcard();
-        $service = Yii::$app->params['ServiceName']['ApprovedAppraisals'];
+        $service = Yii::$app->params['ServiceName']['AppraisalList'];
         $filter = [
             'Overview_Manager' => Yii::$app->user->identity->{'Employee No_'},
         ];
@@ -1357,7 +1357,6 @@ class AppraisalController extends Controller
                 ];
             }
         }
-
         return $result;
     }
 
@@ -1546,23 +1545,22 @@ class AppraisalController extends Controller
 
     public function actionSubmit($appraisalNo, $employeeNo)
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $data = [
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
             'sendEmail' => 1,
-            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['appraisal/viewsubmitted', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo])
+            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['appraisal/view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo])
         ];
 
-        $result = Yii::$app->navhelper->IanSendGoalSettingForApproval($service, $data);
+        $result = Yii::$app->navhelper->codeunit($service, $data, 'SendGoalSettingForApproval');
 
         if (!is_string($result)) {
-            Yii::$app->session->setFlash('success', 'Perfomance Appraisal Submitted Successfully.', true);
+            Yii::$app->session->setFlash('success', 'Goal Setting Submitted Successfully.', true);
             return $this->redirect(['index']);
         } else {
-
-            Yii::$app->session->setFlash('error', 'Error Submitting Performance Appraisal : ' . $result);
-            return $this->redirect(['index']);
+            Yii::$app->session->setFlash('error', 'Error  : ' . $result);
+            return $this->redirect(['view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]);
         }
     }
 
@@ -1574,22 +1572,22 @@ class AppraisalController extends Controller
 
     public function actionSendgoalsettingtooverview($appraisalNo, $employeeNo)
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $data = [
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
             'sendEmail' => 1,
-            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['appraisal/viewsubmitted', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo])
+            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['appraisal/view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo])
         ];
 
-        $result = Yii::$app->navhelper->Codeunit($service, $data, 'IanSendGoalSettingToOverview');
+        $result = Yii::$app->navhelper->Codeunit($service, $data, 'SendGoalSettingToOverview');
 
         if (!is_string($result)) {
             Yii::$app->session->setFlash('success', 'Successfully sent to overview manager.', true);
             return $this->redirect(['submitted']);
         } else {
-            Yii::$app->session->setFlash('error', 'Error sending to overview manager : ' . $result);
-            return $this->redirect(['submitted']);
+            Yii::$app->session->setFlash('error', 'Error : ' . $result);
+            return $this->redirect(['view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]);
         }
     }
 
@@ -1600,7 +1598,7 @@ class AppraisalController extends Controller
 
     public function actionSendbacktolinemanager()
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $appraisalNo = Yii::$app->request->post('Appraisal_No');
         $employeeNo = Yii::$app->request->post('Employee_No');
         $data = [
@@ -1626,7 +1624,7 @@ class AppraisalController extends Controller
 
     public function actionApprove($appraisalNo, $employeeNo)
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $data = [
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
@@ -1652,7 +1650,7 @@ class AppraisalController extends Controller
 
     public function actionOvapprovemy($appraisalNo, $employeeNo)
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $data = [
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
@@ -1677,7 +1675,7 @@ class AppraisalController extends Controller
 
     public function actionReject()
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $appraisalNo = Yii::$app->request->post('Appraisal_No');
         $employeeNo = Yii::$app->request->post('Employee_No');
         $data = [
@@ -1706,7 +1704,7 @@ class AppraisalController extends Controller
 
     public function actionSubmitmy($appraisalNo, $employeeNo)
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $data = [
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
@@ -1733,7 +1731,7 @@ class AppraisalController extends Controller
 
     public function actionSendMyToAgreement($appraisalNo, $employeeNo)
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $data = [
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
@@ -1759,7 +1757,7 @@ class AppraisalController extends Controller
 
     public function actionMyToAppraisee()
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
 
         $appraisalNo = Yii::$app->request->post('Appraisal_No');
         $employeeNo = Yii::$app->request->post('Employee_No');
@@ -1792,7 +1790,7 @@ class AppraisalController extends Controller
 
     public function actionAgreementToSupervisor($appraisalNo, $employeeNo)
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $data = [
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
@@ -1819,7 +1817,7 @@ class AppraisalController extends Controller
 
     public function actionAgreementtolinemgr($appraisalNo, $employeeNo)
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $data = [
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
@@ -1843,7 +1841,7 @@ class AppraisalController extends Controller
     //Approve MY appraisal
     public function actionApprovemy($appraisalNo, $employeeNo)
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $data = [
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
@@ -1867,7 +1865,7 @@ class AppraisalController extends Controller
 
     public function actionRejectmy()
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $data = [
             'appraisalNo' => Yii::$app->request->post('Appraisal_No'),
             'employeeNo' => Yii::$app->request->post('Employee_No'),
@@ -1895,7 +1893,7 @@ class AppraisalController extends Controller
 
     public function actionMyToOverview($appraisalNo, $employeeNo)
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $data = [
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
@@ -1921,7 +1919,7 @@ class AppraisalController extends Controller
 
     public function actionSubmitey($appraisalNo, $employeeNo)
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $data = [
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
@@ -1942,10 +1940,10 @@ class AppraisalController extends Controller
     }
 
 
-    //Approve EY appraisal
-    public function actionApproveey($appraisalNo, $employeeNo)
+    //Overview Appraisal Approval
+    public function actionApprovegoalsetting($appraisalNo, $employeeNo)
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $data = [
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
@@ -1953,23 +1951,23 @@ class AppraisalController extends Controller
             'approvalURL' => 1
         ];
 
-        $result = Yii::$app->navhelper->IanApproveEYAppraisal($service, $data);
+        $result = Yii::$app->navhelper->codeunit($service, $data, 'ApproveGoalSetting');
 
         if (!is_string($result)) {
-            Yii::$app->session->setFlash('success', 'End Year Appraisal Approved Successfully.', true);
-            return $this->redirect(['eysupervisorclosedlist']);
+            Yii::$app->session->setFlash('success', 'Goal Setting Approved Successfully.', true);
+            return $this->redirect(['overviewgoalslist']);
         } else {
 
-            Yii::$app->session->setFlash('error', 'Error Approving End Year Appraisal : ' . $result);
-            return $this->redirect(['eysupervisorclosedlist']);
+            Yii::$app->session->setFlash('error', 'Error : ' . $result);
+            return $this->redirect(['overviewgoalslist']);
         }
     }
 
-    //Reject End-Year Appraisal
+    // Overview Appraisal  Rejection 
 
-    public function actionRejectey()
+    public function actionRejectgoalsetting()
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $data = [
             'appraisalNo' => Yii::$app->request->post('Appraisal_No'),
             'employeeNo' => Yii::$app->request->post('Employee_No'),
@@ -1978,12 +1976,12 @@ class AppraisalController extends Controller
             'rejectionComments' => Yii::$app->request->post('comment')
         ];
 
-        $result = Yii::$app->navhelper->IanSendEYAppraisaBackToAppraisee($service, $data);
+        $result = Yii::$app->navhelper->codeunit($service, $data, 'SendGoalSettingBackToLineManager');
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         if (!is_string($result)) {
             //Yii::$app->session->setFlash('success', 'End Year Appraisal Rejected and Sent Back to Appraisee Successfully.', true);
             //return $this->redirect(['viewsubmitted','Appraisal_No' => $appraisalNo,'Employee_No' => $employeeNo]);
-            return ['note' => '<div class="alert alert-success alert-dismissable">End Year Appraisal Rejected and Sent Back to Appraisee Successfully.</div>'];
+            return ['note' => '<div class="alert alert-success alert-dismissable"> Appraisal Goal Setting Rejected and Sent Back to Line Successfully.</div>'];
         } else {
 
             //Yii::$app->session->setFlash('error', 'Error Rejecting End Year Appraisal : '. $result);
@@ -1998,7 +1996,7 @@ class AppraisalController extends Controller
 
     public function actionOvrejectey()
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $data = [
             'appraisalNo' => Yii::$app->request->post('Appraisal_No'),
             'employeeNo' => Yii::$app->request->post('Employee_No'),
@@ -2023,7 +2021,7 @@ class AppraisalController extends Controller
 
     public function actionSendeytooverview($appraisalNo, $employeeNo)
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $data = [
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
@@ -2048,7 +2046,7 @@ class AppraisalController extends Controller
 
     public function actionSendpeer2($appraisalNo, $employeeNo)
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $data = [
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
@@ -2073,7 +2071,7 @@ class AppraisalController extends Controller
 
     public function actionSendbacktosupervisor($appraisalNo, $employeeNo)
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $data = [
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
@@ -2098,7 +2096,7 @@ class AppraisalController extends Controller
 
     public function actionSendtoagreementlevel($appraisalNo, $employeeNo)
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $data = [
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,
@@ -2181,7 +2179,7 @@ class AppraisalController extends Controller
 
     public function actionBacktoemp()
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $appraisalNo = Yii::$app->request->post('Appraisal_No');
         $employeeNo = Yii::$app->request->post('Employee_No');
         $data = [
@@ -2192,22 +2190,22 @@ class AppraisalController extends Controller
             'rejectionComments' => Yii::$app->request->post('comment'),
         ];
 
-        $result = Yii::$app->navhelper->CodeUnit($service, $data, 'IanSendGoalSettingBackToAppraisee');
+        $result = Yii::$app->navhelper->CodeUnit($service, $data, 'SendGoalSettingBackToAppraisee');
 
         if (!is_string($result)) {
             Yii::$app->session->setFlash('success', 'Appraisal Sent Back to Appraisee Successfully.', true);
             return $this->redirect(['submitted']);
         } else {
 
-            Yii::$app->session->setFlash('error', 'Error Sending Appraisal Back to Appraisee  : ' . $result);
-            return $this->redirect(['submitted']);
+            Yii::$app->session->setFlash('error', 'Error  : ' . $result);
+            return $this->redirect(['view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]);
         }
     }
 
 
     public function actionBacktolinemgr()
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $appraisalNo = Yii::$app->request->post('Appraisal_No');
         $employeeNo = Yii::$app->request->post('Employee_No');
         $data = [
@@ -2232,7 +2230,7 @@ class AppraisalController extends Controller
 
     public function actionMybacktolinemgr()
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $appraisalNo = Yii::$app->request->post('Appraisal_No');
         $employeeNo = Yii::$app->request->post('Employee_No');
         $data = [
@@ -2259,7 +2257,7 @@ class AppraisalController extends Controller
 
     public function actionApprovegoals($appraisalNo, $employeeNo)
     {
-        $service = Yii::$app->params['ServiceName']['AppraisalWorkflow'];
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
         $data = [
             'appraisalNo' => $appraisalNo,
             'employeeNo' => $employeeNo,

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -20,11 +21,12 @@ AdminlteAsset::register($this);
 
 $webroot = Yii::getAlias(@$webroot);
 $absoluteUrl = \yii\helpers\Url::home(true);
-$employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[];
+$employee = (!Yii::$app->user->isGuest) ? Yii::$app->user->identity->employee[0] : [];
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
+
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -46,24 +48,24 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
                 </li>
-                <?php if(Yii::$app->session->has('ProfileID') || Yii::$app->recruitment->hasProfile(Yii::$app->session->get('ProfileID'))): ?>
+                <?php if (Yii::$app->session->has('ProfileID') || Yii::$app->recruitment->hasProfile(Yii::$app->session->get('ProfileID'))) : ?>
                     <li class="nav-item d-none d-sm-inline-block">
-                        <?= Html::a('My Profile',['applicantprofile/update','No' =>Yii::$app->session->get('ProfileID')],['class'=>"nav-link"])?>
+                        <?= Html::a('My Profile', ['applicantprofile/update', 'No' => Yii::$app->session->get('ProfileID')], ['class' => "nav-link"]) ?>
 
                     </li>
                 <?php endif; ?>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <?= Html::a('Vacancies',['recruitment/externalvacancies'],['class'=>"nav-link"])?>
+                    <?= Html::a('Vacancies', ['recruitment/externalvacancies'], ['class' => "nav-link"]) ?>
 
                 </li>
 
-                <?php if(Yii::$app->session->has('ProfileID') || Yii::$app->recruitment->hasProfile(Yii::$app->session->get('ProfileID'))): ?>
+                <?php if (Yii::$app->session->has('ProfileID') || Yii::$app->recruitment->hasProfile(Yii::$app->session->get('ProfileID'))) : ?>
 
 
-                        <li class="nav-item d-none d-sm-inline-block">
-                            <?= Html::a('My Applications',['recruitment/applications'],['class'=>"nav-link"])?>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <?= Html::a('My Applications', ['recruitment/applications'], ['class' => "nav-link"]) ?>
 
-                        </li>
+                    </li>
                 <?php endif; ?>
 
 
@@ -172,24 +174,24 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
 
                         <div class="dropdown-divider"></div>
 
-                        <?= (!Yii::$app->session->has('HRUSER'))? Html::a('<i class="fas fa-sign-in-alt "></i> Signup','/recruitment/signup/',['class'=> 'dropdown-item']): ''; ?>
+                        <?= (!Yii::$app->session->has('HRUSER')) ? Html::a('<i class="fas fa-sign-in-alt "></i> Signup', '/recruitment/signup/', ['class' => 'dropdown-item']) : ''; ?>
 
                         <div class="dropdown-divider"></div>
 
-                        <?= (!Yii::$app->session->has('HRUSER'))? Html::a('<i class="fas fa-lock-open"></i> Login','/recruitment/login/',['class'=> 'dropdown-item']): ''; ?>
+                        <?= (!Yii::$app->session->has('HRUSER')) ? Html::a('<i class="fas fa-lock-open"></i> Login', '/recruitment/login/', ['class' => 'dropdown-item']) : ''; ?>
 
                         <div class="dropdown-divider"></div>
 
                         <div class="dropdown-divider"></div>
 
-                        <?= (Yii::$app->session->has('HRUSER'))? Html::a('<i class="fas fa-sign-out-alt"></i> Logout','/recruitment/logout/',['class'=> 'dropdown-item']):''; ?>
+                        <?= (Yii::$app->session->has('HRUSER')) ? Html::a('<i class="fas fa-sign-out-alt"></i> Logout', '/recruitment/logout/', ['class' => 'dropdown-item']) : ''; ?>
 
 
 
 
                     </div>
                 </li>
-               <!-- <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" data-widget="control-sidebar" data-slide="false" href="#">
                         <i class="fas fa-th-large"></i>
                     </a>
@@ -199,11 +201,11 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        <aside class="main-sidebar sidebar-light-info elevation-4" >
+        <aside class="main-sidebar sidebar-light-info elevation-4">
             <a href="<?= $absoluteUrl ?>site" class="brand-link">
                 <!--<img src="<?= $webroot ?>/images/Logo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
                      style="opacity: .8">-->
-                <span class="brand-text font-weight-light"><?= Yii::$app->params['generalTitle']?></span>
+                <span class="brand-text font-weight-light"><?= Yii::$app->params['generalTitle'] ?></span>
             </a>
         </aside>
 
@@ -223,12 +225,12 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
                                 <li class="breadcrumb-item active">Dashboard v1</li>-->
                                 <?=
                                 Breadcrumbs::widget([
-                                'itemTemplate' => "<li class=\"breadcrumb-item\"><i>{link}</i></li>\n", // template for all links
-                                'homeLink' => [
-                                'label' => Yii::t('yii', 'Home'),
-                                'url' => Yii::$app->homeUrl,
-                                ],
-                                'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                                    'itemTemplate' => "<li class=\"breadcrumb-item\"><i>{link}</i></li>\n", // template for all links
+                                    'homeLink' => [
+                                        'label' => Yii::t('yii', 'Home'),
+                                        'url' => Yii::$app->homeUrl,
+                                    ],
+                                    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
                                 ])
                                 ?>
                             </ol>
@@ -256,7 +258,7 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
 
         <!-- /.content-wrapper -->
         <footer class="main-footer">
-            <strong>Copyright &copy; AAS -  <?= Html::encode(Yii::$app->name) ?> 2014 - <?= date('Y') ?>   <a href="#"> KEMRI</a>.</strong>
+            <strong>Copyright &copy; AAS - <?= Html::encode(Yii::$app->name) ?> 2014 - <?= date('Y') ?> <a href="#"> KEMRI</a>.</strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
                 <b></b>
@@ -274,36 +276,39 @@ $employee = (!Yii::$app->user->isGuest)?Yii::$app->user->identity->employee[0]:[
 
 
     </div>
-
+    <input class="baseUrl" type="hidden" value="<?= $absoluteUrl ?>">
 </body>
 
 
 <?php $this->endBody() ?>
 </body>
+
 </html>
 <?php $this->endPage();
 
-function currentCtrl($ctrl){
+function currentCtrl($ctrl)
+{
     $controller = Yii::$app->controller->id;
 
-    if(is_array($ctrl)){
-        if(in_array($controller,$ctrl)){
+    if (is_array($ctrl)) {
+        if (in_array($controller, $ctrl)) {
             return true;
         }
     }
-    if($controller == $ctrl ){
+    if ($controller == $ctrl) {
         return true;
-    }else{
+    } else {
         return false;
     }
 }
 
-function currentaction($ctrl,$actn){//modify it to accept an array of controllers as an argument--> later please
+function currentaction($ctrl, $actn)
+{ //modify it to accept an array of controllers as an argument--> later please
     $controller = Yii::$app->controller->id;
     $action = Yii::$app->controller->action->id;
-    if($controller == $ctrl && $action == $actn){
+    if ($controller == $ctrl && $action == $actn) {
         return true;
-    }else{
+    } else {
         return false;
     }
 }

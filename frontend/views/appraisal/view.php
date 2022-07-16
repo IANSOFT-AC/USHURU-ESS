@@ -7,6 +7,9 @@
  * Time: 6:09 PM
  */
 
+use Mpdf\Writer\BookmarkWriter;
+use yii\bootstrap4\Html as Bootstrap4Html;
+use yii\bootstrap\Html as BootstrapHtml;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -17,14 +20,32 @@ $this->params['breadcrumbs'][] = ['label' => 'Appraisal View', 'url' => ['view',
 
 Yii::$app->session->set('Review_Period', $model->Review_Period);
 Yii::$app->session->set('Approval_Status', $model->Approval_Status);
-Yii::$app->session->set('Approval_Status', $model->Approval_Status);
-Yii::$app->session->set('isSupervisor', false);
+Yii::$app->session->set('isSupervisor', $model->isSupervisor());
 Yii::$app->session->set('isOverview', $model->isOverView());
 Yii::$app->session->set('isAppraisee', $model->isAppraisee());
 
 $absoluteUrl = \yii\helpers\Url::home(true);
 
 //Yii::$app->recruitment->printrr($card);
+?>
+
+<?php
+if (Yii::$app->session->hasFlash('success')) {
+    print ' <div class="alert alert-success alert-dismissable">
+                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                    <h5><i class="icon fas fa-check"></i> Success!</h5>
+ ';
+    echo Yii::$app->session->getFlash('success');
+    print '</div>';
+} else if (Yii::$app->session->hasFlash('error')) {
+    print ' <div class="alert alert-danger alert-dismissable">
+ 
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                    <h5><i class="icon fas fa-times"></i> Error!</h5>
+                                ';
+    echo Yii::$app->session->getFlash('error');
+    print '</div>';
+}
 ?>
 
 <div class="row">
@@ -36,40 +57,43 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
             <div class="card-body info-box">
 
-                <div class="row">
-                    <?php if ($model->Review_Period == 'New') : ?>
+                <div class="d-flex justify-content-center">
 
-                        <div class="col-md-4">
 
-                            <?= Html::a('<i class="fas fa-forward"></i> submit', ['submit', 'appraisalNo' => $_GET['Appraisal_No'], 'employeeNo' => $_GET['Employee_No']], [
-                                'class' => 'btn btn-app submitforapproval mx-1', 'data' => [
-                                    'confirm' => 'Are you sure you want to submit this appraisal?',
-                                    'method' => 'post',
-                                ],
-                                'title' => 'Submit Goals for Approval'
+                    <!-- APPRAISAL REPORT -->
+                    <?= Html::a('<i class="fas fa-book-open"></i> P.A Report', ['report', 'appraisalNo' => $_GET['Appraisal_No'], 'employeeNo' => $_GET['Employee_No']], [
+                        'class' => 'btn btn-app bg-success  pull-right mx-1',
+                        'title' => 'Generate Performance Appraisal Report',
+                        'target' => '_blank',
+                        'data' => [
+                            // 'confirm' => 'Are you sure you want to send appraisal to peer 2?',
+                            'params' => [
+                                'appraisalNo' => $model->Appraisal_No,
+                                'employeeNo' => $model->Employee_No,
+                            ],
+                            'method' => 'post',
+                        ]
+                    ]);
+                    ?>
 
-                            ]) ?>
-                        </div>
+                    <!-- OBJ SETTING APPRAISEE -->
+                    <?php if ($model->Review_Period == 'OBJ SETTING' && $model->Approval_Status == 'Approval_Status') : ?>
+                        <?= Html::a('<i class="fas fa-forward"></i> submit', ['submit', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No], [
+                            'class' => 'btn btn-app submitforapproval mx-1', 'data' => [
+                                'confirm' => 'Are you sure you want to submit this Appraisal Goals for Appraisal?',
+                                'method' => 'post',
+                            ],
+                            'title' => 'Submit Objectives for Approval'
+
+                        ]) ?>
+
 
                     <?php endif; ?>
 
-                    <div class="col-md-4">
-                        <?= Html::a('<i class="fas fa-book-open"></i> P.A Report', ['report', 'appraisalNo' => $_GET['Appraisal_No'], 'employeeNo' => $_GET['Employee_No']], [
-                            'class' => 'btn btn-app bg-success  pull-right mx-1',
-                            'title' => 'Generate Performance Appraisal Report',
-                            'target' => '_blank',
-                            'data' => [
-                                // 'confirm' => 'Are you sure you want to send appraisal to peer 2?',
-                                'params' => [
-                                    'appraisalNo' => $_GET['Appraisal_No'],
-                                    'employeeNo' => $_GET['Employee_No'],
-                                ],
-                                'method' => 'post',
-                            ]
-                        ]);
-                        ?>
 
-                    </div>
+
+
+
 
 
                     <?php if ($model->Approval_Status == 'Closed' && $model->Approval_Status == 'Appraisee_Level') : ?>
@@ -211,16 +235,16 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                     <!-- Line Mgr Actions on complete goals -->
 
-                    <?php if ($model->Review_Period == 'Supervisor_Level'  && $model->isSupervisor()) : ?>
+                    <?php if ($model->Review_Period == 'OBJ SETTING'  && $model->Approval_Status == 'Appraiser_Level') : ?>
 
 
-                        <?= Html::a(
+                        <?= Bootstrap4Html::a(
                             '<i class="fas fa-backward"></i> To Appraisee.',
                             ['backtoemp', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No],
                             [
                                 'class' => 'btn btn-app bg-danger rejectappraiseesubmition',
-                                'rel' => $_GET['Appraisal_No'],
-                                'rev' => $_GET['Employee_No'],
+                                'rel' => $model->Appraisal_No,
+                                'rev' => $model->Employee_No,
                                 'title' => 'Submit Probation  Back to Appraisee'
 
                             ]
@@ -229,7 +253,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                         <!-- Send Probation to Overview -->
 
-                        <?= Html::a(
+                        <?= BootstrapHtml::a(
                             '<i class="fas fa-forward"></i> Overview ',
                             ['sendgoalsettingtooverview', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No],
                             [
@@ -317,8 +341,8 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                             'rel' =>  $_GET['Appraisal_No'],
                             'rev' => $_GET['Employee_No'],
                             /*'data' => [
-               'confirm' => 'Are you sure you want to Reject this End-Year Appraisal?',
-               'method' => 'post',]*/
+                            'confirm' => 'Are you sure you want to Reject this End-Year Appraisal?',
+                            'method' => 'post',]*/
                         ])
                         ?>
 
@@ -355,30 +379,58 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                     <!-- Overview Manager Actions -->
 
-                    <?php if ($model->Approval_Status == 'Overview_Manager' && $model->isOverview()) : ?>
+                    <?php if ($model->Review_Period == 'Q1'  && $model->Approval_Status == 'Overview_Manager_Level') : ?>
 
-                        <?= Html::a('<i class="fas fa-check"></i> Approve EY', ['approveey', 'appraisalNo' => $_GET['Appraisal_No'], 'employeeNo' => $_GET['Employee_No']], [
+                        <?= Html::a('<i class="fas fa-check"></i> Approve Goals', ['approveey', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No], [
                             'class' => 'mx-1 btn btn-app bg-success submitforapproval',
-                            'title' => 'Approve End Year Appraisal',
+                            'title' => 'Approve Appraisal Goals',
                             'data' => [
-                                'confirm' => 'Are you sure you want to Approve this End Year Appraisal ?',
+                                'confirm' => 'Are you sure you want to Approve this Goals ?',
                                 'method' => 'post',
                             ]
                         ])
                         ?>
 
-                        <?= Html::a('<i class="fas fa-times"></i> To Ln Manager', ['rejectey', 'appraisalNo' => $_GET['Appraisal_No'], 'employeeNo' => $_GET['Employee_No']], [
+                        <?= Html::a('<i class="fas fa-times"></i> To Ln Manager', ['rejectey', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No], [
                             'class' => 'btn btn-app bg-danger ovrejectey',
-                            'title' => 'Reject Goals Set by Appraisee',
-                            'rel' => $_GET['Appraisal_No'],
-                            'rev' => $_GET['Employee_No'],
+                            'title' => 'Reject Goals and Send Back to Line Manager',
+                            'rel' => $model->Appraisal_No,
+                            'rev' => $model->Employee_No,
                             /*'data' => [
-            'confirm' => 'Are you sure you want to Reject this Mid Year Appraisal?',
-            'method' => 'post',]*/
+                            'confirm' => 'Are you sure you want to Reject this Mid Year Appraisal?',
+                            'method' => 'post',]*/
                         ])
                         ?>
 
                     <?php endif; ?>
+
+
+                    <?php if ($model->Review_Period == 'OBJ SETTING'  && $model->Approval_Status == 'Overview_Manager_Level') : ?>
+
+                        <?= Bootstrap4Html::a('<i class="fas fa-check"></i> Approve Goals', ['approvegoalsetting', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No], [
+                            'class' => 'mx-1 btn btn-app bg-success submitforapproval',
+                            'title' => 'Approve Appraisal Goals',
+                            'data' => [
+                                'confirm' => 'Are you sure you want to Approve this Goals ?',
+                                'method' => 'post',
+                            ]
+                        ])
+                        ?>
+
+                        <?= Bootstrap4Html::a('<i class="fas fa-times"></i> To Ln Manager', ['rejectgoalsetting', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No], [
+                            'class' => 'btn btn-app bg-danger ovrejectey',
+                            'title' => 'Reject Goals and Send Back to Line Manager',
+                            'rel' => $model->Appraisal_No,
+                            'rev' => $model->Employee_No,
+                            /*'data' => [
+                            'confirm' => 'Are you sure you want to Reject this Mid Year Appraisal?',
+                            'method' => 'post',]*/
+                        ])
+                        ?>
+
+                    <?php endif; ?>
+
+                    <!-- End Overview Actions -->
 
                     <?php if ($model->Approval_Status == 'Supervisor_Level') : ?>
 
@@ -399,9 +451,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                             'title' => 'Reject Goals Set by Appraisee',
                             'rel' => $_GET['Appraisal_No'],
                             'rev' => $_GET['Employee_No'],
-                            /*'data' => [
-                'confirm' => 'Are you sure you want to Reject this Mid Year Appraisal?',
-                'method' => 'post',]*/
+
                         ])
                         ?>
 
@@ -420,8 +470,11 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
 
                 </div>
+                <!--End Actions row-->
 
             </div>
+            <!--End card body-->
+
 
         </div>
     </div>
@@ -441,27 +494,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-
-
-
-
                 <h3 class="card-title">Appraisal : <?= $model->Appraisal_No ?></h3>
-
-
-
-                <?php
-                if (Yii::$app->session->hasFlash('success')) {
-                    print ' <div class="alert alert-success alert-dismissable">
-                                 ';
-                    echo Yii::$app->session->getFlash('success');
-                    print '</div>';
-                } else if (Yii::$app->session->hasFlash('error')) {
-                    print ' <div class="alert alert-danger alert-dismissable">
-                                 ';
-                    echo Yii::$app->session->getFlash('error');
-                    print '</div>';
-                }
-                ?>
             </div>
             <div class="card-body">
 
@@ -476,13 +509,18 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                             <?= $form->field($model, 'Appraisal_No')->textInput(['readonly' => true, 'disabled' => true]) ?>
                             <?= $form->field($model, 'Employee_No')->textInput(['readonly' => true, 'disabled' => true]) ?>
                             <?= $form->field($model, 'Employee_Name')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Global_Dimension_1_Code')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Level_Grade')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Job_Title')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Appraisal_Calendar')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Appraisal_Start_Date')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Supervisor_No')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Supervisor_Name')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Supervisor_User_Id')->textInput(['readonly' => true, 'disabled' => true]) ?>
 
                             <p class="parent"><span>+</span>
-                                <?= $form->field($model, 'Overview_Rejection_Comments')->textInput(['readonly' => true, 'disabled' => true]) ?>
-                                <?= $form->field($model, 'Level_Grade')->textInput(['readonly' => true, 'disabled' => true]) ?>
-                                <?= $form->field($model, 'Job_Title')->textInput(['readonly' => true, 'disabled' => true]) ?>
 
-                                <?php $form->field($model, 'Appraisal_Start_Date')->textInput(['readonly' => true, 'disabled' => true]) ?>
 
 
 
@@ -494,23 +532,21 @@ $absoluteUrl = \yii\helpers\Url::home(true);
                         <div class="col-md-6">
 
 
+                            <?= $form->field($model, 'Supervisor_Overall_Comments')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Supervisor_Rejection_Comments')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Overview_Manager')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Overview_Manager_Name')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Overview_Manager_UserID')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Over_View_Manager_Comments')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Overview_Rejection_Comments')->textInput(['readonly' => true, 'disabled' => true]) ?>
                             <?= $form->field($model, 'Review_Period')->textInput(['readonly' => true, 'disabled' => true]) ?>
-                            <?= $form->field($model, 'Overall_Score')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Quarter')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Approval_Status')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Recomended_Action')->textInput(['readonly' => true, 'disabled' => true]) ?>
 
 
                             <p class="parent"><span>+</span>
 
-                                <?= $form->field($model, 'Supervisor_Rejection_Comments')->textInput(['readonly' => true, 'disabled' => true]) ?>
-                                <?= $form->field($model, 'Approval_Status')->textInput(['readonly' => true, 'disabled' => true]) ?>
-                                <?= $form->field($model, 'Approval_Status')->textInput(['readonly' => true, 'disabled' => true]) ?>
-
-                                <?= $form->field($model, 'Supervisor_Name')->textInput(['readonly' => true, 'disabled' => true]) ?>
-
-                                <?= $form->field($model, 'Overview_Manager_Name')->textInput(['readonly' => true, 'disabled' => true]) ?>
-                                <?php $form->field($model, 'Overview_Manager_UserID')->textInput(['readonly' => true, 'disabled' => true]) ?>
-
-
-                                <?= $form->field($model, 'Recomended_Action')->textInput(['readonly' => true, 'disabled' => true]) ?>
 
 
 

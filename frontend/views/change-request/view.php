@@ -583,7 +583,17 @@ Yii::$app->session->set('isSupervisor',false);*/
                     </div>
 
                     <div class="card-tools">
-                        <?= ($model->Approval_Status == 'New') ? Html::a('Add', ['biodata/create', 'Change_No' => $model->No], ['class' => 'add-line btn btn-sm btn-info']) : '' ?>
+                        <?= ($model->Approval_Status == 'New') ?
+
+                            Html::a('<i class="fa fa-plus mr-2"></i> Add', ['change-request/add-line'], [
+                                'class' => 'add btn btn-sm btn-outline-light',
+                                'data-service' => 'EmployeeBioDataChange',
+                                'data-Line_No' => time(),
+                                'data-Employee_No' => $model->Employee_No,
+                                'data-Change_No' => $model->No
+                            ])
+
+                            : '' ?>
                     </div>
                 </div>
 
@@ -601,6 +611,7 @@ Yii::$app->session->set('isSupervisor',false);*/
                                         <td><b>Personal E-mail Address</b></td>
                                         <td><b>Passport No.</b></td>
                                         <td><b>Status</b></td>
+                                        <?= ($model->Approval_Status == 'New') ? '<td>Action</td>' : '' ?>
 
                                     </tr>
                                 </thead>
@@ -616,9 +627,8 @@ Yii::$app->session->set('isSupervisor',false);*/
                                             <td data-key="<?= $biobj->Key ?>" data-name="Phone_Number" data-no="<?= $biobj->Line_No ?>" data-filter-field="Line_No" data-service="EmployeeBioDataChange" ondblclick="addInput(this)"><?= !empty($biobj->Phone_Number) ? $biobj->Phone_Number : 'Not Set' ?></td>
                                             <td data-key="<?= $biobj->Key ?>" data-name="Personal_E_mail" data-no="<?= $biobj->Line_No ?>" data-filter-field="Line_No" data-service="EmployeeBioDataChange" ondblclick="addInput(this)"><?= !empty($biobj->Personal_E_mail) ? $biobj->Personal_E_mail : 'Not Set' ?></td>
                                             <td data-key="<?= $biobj->Key ?>" data-name="Passport_No" data-no="<?= $biobj->Line_No ?>" data-filter-field="Line_No" data-service="EmployeeBioDataChange" ondblclick="addInput(this)"><?= !empty($biobj->Passport_No) ? $biobj->Passport_No : 'Not Set' ?></td>
-
                                             <td data-key="<?= $biobj->Key ?>" data-name="Status" data-no="<?= $biobj->Line_No ?>" data-filter-field="Line_No" data-service="EmployeeBioDataChange" ondblclick="addDropDown(this,'biostatus')"><?= !empty($biobj->Status) ? $biobj->Status : 'Not Set' ?></td>
-
+                                            <?= ($model->Approval_Status == 'New') ? '<td>' . $deleteLink . '</td>' : '' ?>
 
                                         </tr>
                                     <?php endforeach; ?>

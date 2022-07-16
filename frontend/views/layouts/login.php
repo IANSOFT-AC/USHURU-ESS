@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: HP ELITEBOOK 840 G5
@@ -15,10 +16,12 @@ use common\widgets\Alert;
 
 AdminlteAsset::register($this);
 $this->title = Yii::$app->params['welcomeText'];
+$absoluteUrl = \yii\helpers\Url::home(true);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
+
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -27,39 +30,36 @@ $this->title = Yii::$app->params['welcomeText'];
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
+
 <body class="hold-transition login-page">
-<?php $this->beginBody() ?>
+    <?php $this->beginBody() ?>
 
-<div class="top-logo">
-   <!--  <img src="<?= \yii\helpers\Url::to('/images/Logo.jpg')?>" /> -->
-</div>
 
-<div class="login-logo text-center row-no-gutters">
-    <a href="#"><b><?= $this->title ?></a>
-</div>
-<!-- /.login-logo -->
-<div class="card card-ushuruprimary">
-    <div class="card-body login-card-body">
-        <!--<p class="login-box-msg">Sign in to start your session</p>-->
 
-        <?= $content?>
+    <div class="container mt-5 pt-5 ">
+        <div class="row">
+            <div class="col-12 col-sm-8 col-md-6 m-auto">
+                <div class="card shadow-sm ">
 
-        <!--<div class="social-auth-links text-center mb-3">
-            <p>- OR -</p>
-            <a href="#" class="btn btn-block btn-primary">
-                <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
-            </a>
-            <a href="#" class="btn btn-block btn-danger">
-                <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
-            </a>
-        </div>-->
+                    <div class="card-body">
+                        <div class="my-5 row justify-content-around ">
+                            <img src="<?= \yii\helpers\Url::to('/images/SaccoLogo.png') ?>" class="img-fluid w-auto h-auto" loading="lazy" alt="Ushuru Sacco Logo" />
+                        </div>
+                        <p class=" login-box-msg">Sign in to start your session</p>
 
+                        <?= $content ?>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- /.login-card-body -->
-</div>
-</div>
 
 
+
+
+    <input class="baseUrl" type="hidden" value="<?= $absoluteUrl ?>">
 </body>
 <footer class="footer" style="color: #42B3E5">
     <strong>Copyright &copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?>.</strong>
@@ -72,6 +72,7 @@ $this->title = Yii::$app->params['welcomeText'];
 
 <?php $this->endBody() ?>
 </body>
+
 </html>
 <?php $this->endPage();
 
@@ -79,6 +80,4 @@ $this->title = Yii::$app->params['welcomeText'];
 
 
 
- ?>
-
-
+?>

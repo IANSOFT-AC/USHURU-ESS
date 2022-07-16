@@ -75,7 +75,7 @@ $absoluteUrl = \yii\helpers\Url::home(true);
 
                         <div class="col-md-6">
 
-                            <?php $form->field($model, 'Key')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Key')->hiddenInput(['readonly' => true, 'disabled' => true])->label(false) ?>
                             <?= $form->field($model, 'No')->textInput(['readonly' => true, 'disabled' => true]) ?>
                             <?= $form->field($model, 'Employee_No')->textInput(['readonly' => true, 'disabled' => true]) ?>
                             <?= $form->field($model, 'Employee_Name')->textInput(['readonly' => true, 'disabled' => true]) ?>

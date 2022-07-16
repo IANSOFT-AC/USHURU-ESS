@@ -60,8 +60,9 @@ public $Recomended_Action;
             'EY_End_Date' => 'End Year Appraisal End Date',
             'EY_Start_Date' =>  'End Year Start Date',
             'EY_Appraisal_Status' => 'End Year Appraisal Status',
-            'MY_Appraisal_Status' => 'Mid Year Appraisal Status'
-
+            'MY_Appraisal_Status' => 'Mid Year Appraisal Status',
+            'Global_Dimension_1_Code' => 'Department Code',
+            'Global_Dimension_2_Code' => 'Branch Code'
 
         ];
     }
@@ -146,7 +147,6 @@ public $Recomended_Action;
 
     public function isAppraisee()
     {
-
         return (Yii::$app->user->identity->{'Employee No_'} == $this->Employee_No);
     }
 }

@@ -75,7 +75,7 @@ use yii\bootstrap4\ActiveForm;
 $script = <<<JS
  //Submit Rejection form and get results in json    
         $('form').on('submit', function(e){
-            e.preventDefault()
+            e.preventDefault();
             const data = $(this).serialize();
             const url = $(this).attr('action');
             $.post(url,data).done(function(msg){

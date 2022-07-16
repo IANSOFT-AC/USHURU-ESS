@@ -405,13 +405,13 @@ class ExitController extends Controller
             if (!empty($item->Exit_No)) {
                 $link = $updateLink = $deleteLink =  '';
                 $Viewlink = Html::a('<i class="fas fa-eye"></i>', ['view', 'No' => $item->Exit_No], ['class' => 'btn btn-outline-primary btn-xs', 'title' => 'View Request.']);
+                $recordID = $this->getRecordID($service, $item->Key);
                 if ($item->Status == 'New') {
-                    $link = Html::a('<i class="fas fa-paper-plane"></i>', ['send-for-approval', 'No' => $item->Exit_No, 'employeeNo' => $item->Employee_No], ['title' => 'Send Approval Request', 'class' => 'btn btn-primary btn-xs']);
+                    $link = Html::a('<i class="fas fa-paper-plane"></i>', ['send-for-approval', 'recordID' => $recordID], ['title' => 'Send Approval Request', 'class' => 'btn btn-primary btn-xs']);
                     $updateLink = Html::a('<i class="far fa-edit"></i>', ['update', 'No' => $item->Exit_No], ['class' => 'btn btn-info btn-xs', 'title' => 'Update Request']);
                 }/*else if($item->Status == 'Pending_Approval'){
                      $link = Html::a('<i class="fas fa-times"></i>',['cancel-request','No'=> $item->Exit_No ],['title'=>'Cancel Approval Request','class'=>'btn btn-warning btn-xs']);
                 }*/
-
                 $result['data'][] = [
                     'Key' => $item->Key,
                     'No' => $item->Exit_No,
@@ -574,46 +574,50 @@ class ExitController extends Controller
         return $model;
     }
 
+    public function getRecordID($service, $Key)
+    {
+        return Yii::$app->navhelper->getRecordID($service, $Key);
+    }
+
     /* Call Approval Workflow Methods */
 
-    public function actionSendForApproval($No)
+    public function actionSendForApproval($recordID)
     {
         $service = Yii::$app->params['ServiceName']['PortalFactory'];
 
         $data = [
-            'applicationNo' => $No,
-            'sendMail' => true,
-            'approvalUrl' => Html::encode(Yii::$app->urlManager->createAbsoluteUrl(['exit/view', 'No' => $No])),
+            'recordID' => $recordID
         ];
 
 
-        $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'IanSendEmployeeExitForApproval');
+        $result = Yii::$app->navhelper->codeunit($service, $data, 'SendDocumentApproval');
 
         if (!is_string($result)) {
-            Yii::$app->session->setFlash('success', 'Request Sent  Successfully.', true);
+            Yii::$app->session->setFlash('success', 'Document Sent for Approval Successfully.', true);
+            //return $this->redirect(['view','No' => $No]);
             return $this->redirect(['index']);
         } else {
 
-            Yii::$app->session->setFlash('error', 'Error Sending  Request for Approval  : ' . $result);
+            Yii::$app->session->setFlash('error', 'Error Sending Request for Approval  : ' . $result);
+            // return $this->redirect(['view','No' => $No]);
             return $this->redirect(['index']);
         }
     }
 
     /*Cancel Approval Request */
 
-    public function actionCancelRequest($No)
+    public function actionCancelRequest($recordID)
     {
         $service = Yii::$app->params['ServiceName']['PortalFactory'];
 
         $data = [
-            'applicationNo' => $No,
+            'recordID' => $recordID
         ];
 
-
-        $result = Yii::$app->navhelper->PortalWorkFlows($service, $data, 'IanCancelEmployeeExitApprovalRequest');
+        $result = Yii::$app->navhelper->codeunit($service, $data, 'CancelDocumentApproval');
 
         if (!is_string($result)) {
-            Yii::$app->session->setFlash('success', 'Request Cancelled Successfully.', true);
+            Yii::$app->session->setFlash('success', 'Approval Request Cancelled Successfully.', true);
             return $this->redirect(['index']);
         } else {
 

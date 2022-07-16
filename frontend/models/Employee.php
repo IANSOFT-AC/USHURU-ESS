@@ -16,7 +16,7 @@ class Employee extends Model
 {
     public $Key;
     public $No;
-    public $Title;
+    public $_x002B_;
     public $First_Name;
     public $Middle_Name;
     public $Last_Name;
@@ -28,69 +28,67 @@ class Employee extends Model
     public $Location;
     public $Sub_Location;
     public $Village;
+    public $Ethnic_Origin;
     public $National_ID;
     public $Passport_Number;
     public $Marital_Status;
-    public $Ethnic_Origin;
     public $Religion;
     public $Driving_License;
+    public $User_ID;
     public $Health_Conditions;
     public $Phone_No;
     public $Alternative_Phone_No;
     public $E_Mail;
     public $Company_E_Mail;
-    public $City;
     public $Address;
     public $Post_Code;
+    public $City;
     public $Address_2;
     public $ShowMap;
     public $Alt_Address_Code;
     public $Birth_Date;
     public $Age;
     public $Employment_Date;
+    public $Probation_Period;
     public $Service_Period;
     public $Period_To_Retirement;
-    public $End_of_Probation_Period;
-    public $Probabtion_Extended_By;
-    public $New_Probation_Period_End_Date;
-    public $Reasons_For_Extension;
     public $Contract_Start_Date;
     public $Contract_End_Date;
     public $Date_of_joining_Medical_Scheme;
-    public $Grade;
+    public $Type_of_Employee;
+    public $Job_Grade;
     public $Pointer;
+    public $Payroll_Grade;
+    public $Job_Code;
     public $Job_Title;
-    public $Job_Description;
+    public $Nature_Of_Employment;
+    public $Global_Dimension_6_Code;
     public $Global_Dimension_1_Code;
     public $Global_Dimension_2_Code;
     public $Global_Dimension_3_Code;
     public $Global_Dimension_4_Code;
     public $Global_Dimension_5_Code;
-    public $Probation_Period_Extended;
-    public $Notice_Period;
     public $Probation_Status;
+    public $End_of_Probation_Period;
+    public $Probation_Period_Extended;
+    public $Probabtion_Extended_By;
+    public $Reasons_For_Extension;
+    public $New_Probation_Period_End_Date;
+    public $Notice_Period;
     public $Manager_No;
-    public $Overview_Manager;
-    public $User_ID;
+    public $Currency;
+    public $Grant_Approver;
     public $Long_Term;
-    public $Cause_of_Inactivity_Code;
-    public $Termination_Date;
-    public $Grounds_for_Term_Code;
     public $Suspend_Leave_Application;
-    public $Nature_Of_Employment;
+    public $ProfileID;
     public $Disabled;
-
     public $Line_Manager_Name;
     public $Overview_Manager_Name;
     public $Grant_Approver_Name;
-
-
-
     public $Disability_Id;
-    public $Status;
     public $Covered_Medically;
+    public $Status;
     public $Payment_Methods;
-    public $Currency;
     public $KRA_Number;
     public $NHIF_Number;
     public $NSSF_Number;
@@ -98,27 +96,15 @@ class Employee extends Model
     public $Bank_Code;
     public $Bank_Name;
     public $Bank_Branch_No;
-    public $Branch_Name;
-    public $Bank_Account_No;
-
-    public $Payroll_Grade;
-    public $Probation_Period;
-    public $Global_Dimension_6_Code;
-    public $Grant_Approver;
-
-    public $_x002B_;
-
-    public $Type_of_Employee;
-    public $Allien_Number;
-    public $Starting_Date;
-
-    public $Division_Name;
-    public $Department_Name;
-    public $Section_Name;
-    public $Unit_Name;
-
-    public $Job_Grade;
     public $Allocated_Leave_Days;
+    public $Bank_Account_No;
+    public $Cause_of_Inactivity_Code;
+    public $Termination_Date;
+    public $Grounds_for_Term_Code;
+
+
+    public $Initials;
+    
     
     public function rules()
     {

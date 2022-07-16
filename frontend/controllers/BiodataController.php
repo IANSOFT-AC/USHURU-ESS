@@ -63,6 +63,20 @@ class BiodataController extends Controller
         ];
     }
 
+    public function beforeAction($action)
+    {
+
+        $ExcemptedActions = [
+            'biostatus'
+        ];
+
+        if (in_array($action->id, $ExcemptedActions)) {
+            $this->enableCsrfValidation = false;
+        }
+
+        return parent::beforeAction($action);
+    }
+
     public function actionIndex()
     {
 
@@ -71,7 +85,6 @@ class BiodataController extends Controller
 
     public function actionCreate($Change_No)
     {
-
         $model = new Biodata();
         $service = Yii::$app->params['ServiceName']['EmployeeBioDataChange'];
         $model->Status = 'New';
@@ -171,10 +184,10 @@ class BiodataController extends Controller
 
     public function actionDelete()
     {
-        $service = Yii::$app->params['ServiceName']['EmployeeAppraisalKPI'];
+        $service = Yii::$app->params['ServiceName']['EmployeeBioDataChange'];
         $result = Yii::$app->navhelper->deleteData($service, Yii::$app->request->get('Key'));
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        if (!is_string($result)) {
+        if ($result) {
             return ['note' => '<div class="alert alert-success">Record Purged Successfully</div>'];
         } else {
             return ['note' => '<div class="alert alert-danger">Error Purging Record: ' . $result . '</div>'];
