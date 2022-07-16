@@ -44,6 +44,8 @@ public $HOD_Comments;
 public $ED_Comments;
 public $HR_Comments;
 
+    public $Dues;
+
 
 
 

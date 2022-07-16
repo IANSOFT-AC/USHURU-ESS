@@ -126,7 +126,7 @@ if (Yii::$app->session->hasFlash('success')) {
                             <?= $form->field($model, 'Phone_No_2')->textInput(['readonly' => true, 'disabled' => true]) ?>
                             <?= $form->field($model, 'Mobile_Phone_No')->textInput(['readonly' => true, 'disabled' => true]) ?>
                             <?= $form->field($model, 'Address_2')->textInput(['readonly' => true, 'disabled' => true]) ?>
-                            <?= $form->field($model, '')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'City')->textInput(['readonly' => true, 'disabled' => true]) ?>
                             <?= $form->field($model, 'Alt_Address_Code')->textInput(['readonly' => true, 'disabled' => true]) ?>
 
                         </div>
@@ -190,7 +190,7 @@ if (Yii::$app->session->hasFlash('success')) {
 
         <div class="card collapsed-card">
             <div class="card-header">
-                <h3 class="card-title">Job Details</h3>
+                <h3 class="card-title">Administration</h3>
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
                     </button>
@@ -201,28 +201,45 @@ if (Yii::$app->session->hasFlash('success')) {
                 <div class="row">
                     <div class=" row col-md-12">
                         <div class="col-md-6">
-                            <?= $form->field($model, 'Grade')->textInput(['readonly' => true, 'disabled' => true]) ?>
-                            <?= $form->field($model, 'Pointer')->textInput(['readonly' => true, 'disabled' => true]) ?>
-                            <?php $form->field($model, 'Job_Title')->textInput(['readonly' => true, 'disabled' => true]) ?>
-                            <?= $form->field($model, 'Job_Description')->textInput(['readonly' => true, 'disabled' => true]) ?>
-                            <?= $form->field($model, 'Division_Name')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Employee_Type')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Job_Grade')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?php $form->field($model, 'Steps')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Payroll_Grade')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Job_Code')->textInput(['readonly' => true, 'disabled' => true]) ?>
 
-                            <?= $form->field($model, 'Department_Name')->textInput(['readonly' => true, 'disabled' => true]) ?>
-                            <?= $form->field($model, 'Section_Name')->textInput(['readonly' => true, 'disabled' => true]) ?>
-                            <?= $form->field($model, 'Unit_Name')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Maximum_Applicable_Trainings')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Customer_Account_No')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Global_Dimension_1_Code')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Global_Dimension_2_Code')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Global_Dimension_3_Code')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Global_Dimension_4_Code')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Type_of_Employee')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Probation_Status')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'End_of_Probation_Period')->textInput(['readonly' => true, 'disabled' => true]) ?>
+
 
 
 
                         </div>
                         <div class="col-md-6">
-                            <?= $form->field($model, 'Probation_Period_Extended')->checkbox(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Probation_Period_Extended')->checkbox([$model->Probation_Period_Extended, 'readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Probabtion_Extended_By')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Reasons_For_Extension')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'New_Probation_Period_End_Date')->textInput(['readonly' => true, 'disabled' => true]) ?>
                             <?= $form->field($model, 'Notice_Period')->textInput(['readonly' => true, 'disabled' => true]) ?>
-                            <?= $form->field($model, 'Probation_Status')->textInput(['readonly' => true, 'disabled' => true]) ?>
+
+                            <?= $form->field($model, 'Manager_No')->textInput(['readonly' => true, 'disabled' => true]) ?>
                             <?= $form->field($model, 'Line_Manager_Name')->textInput(['readonly' => true, 'disabled' => true]) ?>
                             <?= $form->field($model, 'Overview_Manager_Name')->textInput(['readonly' => true, 'disabled' => true]) ?>
-                            <?= $form->field($model, 'Grant_Approver_Name')->textInput(['readonly' => true, 'disabled' => true]) ?>
-                            <?= $form->field($model, 'Long_Term')->checkbox(['readonly' => true, 'disabled' => true]) ?>
 
+                            <?= $form->field($model, 'Long_Term')->checkbox([$model->Long_Term, 'readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Suspend_Leave_Application')->checkbox([$model->Suspend_Leave_Application, 'readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Disabled')->checkbox([$model->Disabled, 'readonly' => true, 'disabled' => true]) ?>
+
+                            <?= $form->field($model, 'Employee_Status')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Inactive_Date')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Emplymt_Contract_Code')->textInput(['readonly' => true, 'disabled' => true]) ?>
+                            <?= $form->field($model, 'Statistics_Group_Code')->textInput(['readonly' => true, 'disabled' => true]) ?>
                         </div>
                     </div>
                 </div>

@@ -81,7 +81,7 @@ class PayslipController extends Controller
                 'empNo' => Yii::$app->user->identity->{'Employee No_'}
             ];
             $path = Yii::$app->navhelper->PortalReports($service, $data, 'GeneratePayslip');
-            Yii::$app->recruitment->printrr($path);
+            //Yii::$app->recruitment->printrr($path);
             if (is_array($path) && !empty($path['return_value'])) {
                                 
                 return $this->render('index', [

@@ -103,13 +103,66 @@ class Employee extends Model
     public $Grounds_for_Term_Code;
 
 
+
+    public $Title;
+    
     public $Initials;
+    public $Search_Name;
+
+    public $Phone_No_2;
+
+    public $Last_Date_Modified;
+    public $Privacy_Blocked;
+
+    public $County;
+
+    public $Mobile_Phone_No;
+    public $Pager;
+    public $Extension;
+
+    public $Alt_Address_Start_Date;
+    public $Alt_Address_End_Date;
+
+    public $RetirementDate;
+    public $Employee_Type;
+
+    public $Steps;
+
+    public $Maximum_Applicable_Trainings;
+    public $Customer_Account_No;
+
+    public $Overview_Manager;
+
+    public $Describe_Disability;
+
+    public $Employee_Status;
+    public $Inactive_Date;
+
+    public $Emplymt_Contract_Code;
+    public $Statistics_Group_Code;
+    public $Resource_No;
+    public $Salespers_Purch_Code;
+    public $Social_Security_No;
+    public $Union_Code;
+    public $Union_Membership_No;
+
+    public $Application_Method;
+
+    public $IBAN;
+    public $SWIFT_Code;
+
+    public $Membership_No;
+    public $FOSA_Account;
+
+    public $Branch_Name;
+    public $Overtime_Calculation;
+    
     
     
     public function rules()
     {
         return [
-
+           
         ];
     }
 
@@ -125,7 +178,8 @@ class Employee extends Model
             'Global_Dimension_4_Code' => 'Unit',
             'Global_Dimension_5_Code' => 'Location',
             'Job_Description' => 'Job Title',
-            'Job_Title' => 'Job Code'
+            'Job_Title' => 'Job Code',
+            '_x002B_' => 'Title'
         ];
     }
 

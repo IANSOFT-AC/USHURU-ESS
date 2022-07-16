@@ -184,7 +184,7 @@ class ExitController extends Controller
             //load nav result to model
             $model = Yii::$app->navhelper->loadmodel($result[0], $model); //$this->loadtomodeEmployee_Plan_Nol($result[0],$Expmodel);
         } else {
-            Yii::$app->session->setFlash('error', $request);
+           // Yii::$app->session->setFlash('error', $request);
             return $this->redirect(['index']);
         }
 
@@ -375,10 +375,11 @@ class ExitController extends Controller
         ];
 
         $result = Yii::$app->navhelper->getData($service, $filter);
-
+        $recordID = null;
         //load nav result to model
         if (is_array($result)) {
             $model = $this->loadtomodel($result[0], $model);
+            $recordID = $this->getRecordID($service, $model->Key);
         }
 
 
@@ -386,6 +387,7 @@ class ExitController extends Controller
 
         return $this->render('view', [
             'model' => $model,
+            'recordID' => $recordID
         ]);
     }
 

@@ -29,8 +29,7 @@ Yii::$app->session->set('isSupervisor',false);*/
             'data' => [
                 'confirm' => 'Are you sure you want to send this document for approval?',
                 'params' => [
-                    'No' => $model->Exit_No,
-                    'employeeNo' => Yii::$app->user->identity->{'Employee No_'},
+                    'recordID' => $recordID,
                 ],
                 'method' => 'get',
             ],
@@ -44,7 +43,7 @@ Yii::$app->session->set('isSupervisor',false);*/
             'data' => [
                 'confirm' => 'Are you sure you want to cancel  approval request?',
                 'params' => [
-                    'No' => $model->Exit_No,
+                    'recordID' => $recordID,
                 ],
                 'method' => 'get',
             ],
