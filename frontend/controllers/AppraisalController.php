@@ -37,7 +37,11 @@ class AppraisalController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'vacancies', 'view', 'create', 'update', 'delete', 'myappraiseelist', 'eyagreementlist', 'eyappraiseelist', 'viewsubmitted'],
+                'only' => [
+                    'index', 'vacancies', 'view', 'create', 'update', 'delete',
+                    'myappraiseelist', 'eyagreementlist', 'eyappraiseelist', 'viewsubmitted',
+                    'appraisal-list'
+                ],
                 'rules' => [
                     [
                         'actions' => ['vacancies'],
@@ -45,7 +49,11 @@ class AppraisalController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['index', 'vacancies', 'view', 'create', 'update', 'delete', 'myappraiseelist', 'eyagreementlist', 'eyappraiseelist', 'viewsubmitted'],
+                        'actions' => [
+                            'index', 'vacancies', 'view', 'create', 'update', 'delete', 'myappraiseelist',
+                            'eyagreementlist', 'eyappraiseelist', 'viewsubmitted',
+                            'appraisal-list'
+                        ],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -91,7 +99,8 @@ class AppraisalController extends Controller
                     'kpi-status',
                     'training-categories',
                     'rating',
-                    'add-rating-line'
+                    'add-rating-line',
+                    'list'
                 ],
                 'formatParam' => '_format',
                 'formats' => [
@@ -272,17 +281,61 @@ class AppraisalController extends Controller
         return $this->render('longterm-status-super');
     }
 
+    public function actionAppraisalList($Review_Period = "", $Status)
+    {
+        return $this->render('list', [
+            'Review_Period' => $Review_Period,
+            'Status' => $Status
+        ]);
+    }
 
 
 
 
 
-    public function actionGetappraisals()
+
+    public function actionGetappraisals($Status = '', $Review_Period = '')
     {
 
         $service = Yii::$app->params['ServiceName']['AppraisalList'];
         $filter = [
             'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
+        ];
+        $appraisals = \Yii::$app->navhelper->getData($service, $filter);
+        //ksort($appraisals);
+        $result = [];
+
+        if (is_array($appraisals)) {
+            foreach ($appraisals as $req) {
+
+                $Viewlink = Html::a('View', ['view', 'Employee_No' => $req->Employee_No, 'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : ''], ['class' => 'btn btn-outline-primary btn-xs']);
+
+                $result['data'][] = [
+                    'Appraisal_No' => !empty($req->Appraisal_No) ? $req->Appraisal_No : 'Not Set',
+                    'Employee_No' => !empty($req->Employee_No) ? $req->Employee_No : '',
+                    'Employee_Name' => !empty($req->Employee_Name) ? $req->Employee_Name : 'Not Set',
+                    'Level_Grade' => !empty($req->Level_Grade) ? $req->Level_Grade : 'Not Set',
+                    'Job_Title' => !empty($req->Job_Title) ? $req->Job_Title : '',
+                    'Appraisal_Period' =>  !empty($req->Appraisal_Calendar) ? $req->Appraisal_Calendar : '',
+                    'Appraisal_Start_Date' =>  !empty($req->Appraisal_Start_Date) ? $req->Appraisal_Start_Date : '',
+                    'Appraisal_End_Date' =>  !empty($req->Appraisal_End_Date) ? $req->Appraisal_End_Date : '',
+                    'Action' => !empty($Viewlink) ? $Viewlink : '',
+
+                ];
+            }
+        }
+
+        return $result;
+    }
+
+    public function actionList($Review_Period = '', $Status = '')
+    {
+
+        $service = Yii::$app->params['ServiceName']['AppraisalList'];
+        $filter = [
+            'Employee_No' => Yii::$app->user->identity->{'Employee No_'},
+            'Status' => $Status,
+            'Review_Period' => $Review_Period
         ];
         $appraisals = \Yii::$app->navhelper->getData($service, $filter);
         //ksort($appraisals);
@@ -2399,4 +2452,98 @@ class AppraisalController extends Controller
         $data = Yii::$app->navhelper->dropdown('AppraisalRating', 'Code', 'Description');
         return $data;
     }
+
+
+    // Appraisal Actions
+
+    public function actionAppraisalSubmit($appraisalNo, $employeeNo)
+    {
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
+        $data = [
+            'appraisalNo' => $appraisalNo,
+            'employeeNo' => $employeeNo,
+            'sendEmail' => 1,
+            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['appraisal/view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo])
+        ];
+
+        $result = Yii::$app->navhelper->codeunit($service, $data, 'SendAppraisalForApproval');
+
+        if (!is_string($result)) {
+            Yii::$app->session->setFlash('success', 'Appraisal Submitted Successfully.', true);
+            return $this->redirect(['index']);
+        } else {
+            Yii::$app->session->setFlash('error', 'Error  : ' . $result);
+            return $this->redirect(['view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]);
+        }
+    }
+
+
+    public function actionAppraisalToEmp($appraisalNo, $employeeNo)
+    {
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
+        $appraisalNo = Yii::$app->request->post('Appraisal_No');
+        $employeeNo = Yii::$app->request->post('Employee_No');
+        $data = [
+            'appraisalNo' => $appraisalNo,
+            'employeeNo' => $employeeNo,
+            'sendEmail' => 1,
+            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['appraisal/view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]),
+            'rejectionComments' => Yii::$app->request->post('comment'),
+        ];
+
+        $result = Yii::$app->navhelper->CodeUnit($service, $data, 'SendAppraisaBackToAppraisee');
+
+        if (!is_string($result)) {
+            Yii::$app->session->setFlash('success', 'Appraisal Sent Back to Appraisee Successfully.', true);
+            return $this->redirect(['index']);
+        } else {
+
+            Yii::$app->session->setFlash('error', 'Error  : ' . $result);
+            return $this->redirect(['view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]);
+        }
+    }
+
+    public function actionAppraisalToOverview($appraisalNo, $employeeNo)
+    {
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
+        $data = [
+            'appraisalNo' => $appraisalNo,
+            'employeeNo' => $employeeNo,
+            'sendEmail' => 1,
+            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['appraisal/view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo])
+        ];
+
+        $result = Yii::$app->navhelper->codeunit($service, $data, 'SendAppraisalToOverViewManager');
+
+        if (!is_string($result)) {
+            Yii::$app->session->setFlash('success', 'Appraisal Submitted Successfully.', true);
+            return $this->redirect(['index']);
+        } else {
+            Yii::$app->session->setFlash('error', 'Error  : ' . $result);
+            return $this->redirect(['view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]);
+        }
+    }
+
+    public function actionAppraisalToAgreement($appraisalNo, $employeeNo)
+    {
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
+        $data = [
+            'appraisalNo' => $appraisalNo,
+            'employeeNo' => $employeeNo,
+            'sendEmail' => 1,
+            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['appraisal/view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo])
+        ];
+
+        $result = Yii::$app->navhelper->codeunit($service, $data, 'SendAppraisalToAgreementLevel');
+
+        if (!is_string($result)) {
+            Yii::$app->session->setFlash('success', 'Appraisal Submitted Successfully.', true);
+            return $this->redirect(['index']);
+        } else {
+            Yii::$app->session->setFlash('error', 'Error  : ' . $result);
+            return $this->redirect(['view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]);
+        }
+    }
+
+
 }

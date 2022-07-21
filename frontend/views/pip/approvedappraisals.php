@@ -70,10 +70,9 @@ $script = <<<JS
                 { title: 'Employee Name' ,data: 'Employee_Name'},
                 { title: 'Level Grade' ,data: 'Level_Grade'},
                 { title: 'Job Title' ,data: 'Job_Title'},
-                { title: 'Function Team' ,data: 'Function_Team'},
                 { title: 'Appraisal Period' ,data: 'Appraisal_Period'},
-                { title: 'Goal Setting Start Date' ,data: 'Goal_Setting_Start_Date'},
-               
+                { title: 'Appraisal Start Date' ,data: 'Appraisal_Start_Date'},
+                { title: 'Appraisal End Date' ,data: 'Appraisal_End_Date'},               
                 { title: 'Action', data: 'Action' },
                 
                
@@ -82,7 +81,7 @@ $script = <<<JS
                 "zeroRecords": "No Appraisals to display"
             },
             
-            order : [[ 6, "desc" ]]
+            order : [[ 0, "desc" ]]
             
            
        });

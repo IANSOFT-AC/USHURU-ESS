@@ -231,7 +231,7 @@ return [
         //Appraisal--------------------------------------------------------------------------------
         'AppraisalRating' => 'AppraisalRating', //60023
         'AppraisalProficiencyLevel' => 'AppraisalProficiencyLevel', //60025
-        'AppraisalList' => 'AppraisalList', //60007
+        'AppraisalList' => 'AppraisalList', //60048
         'AppraisalCard' => 'AppraisalCard', //60008
         'EmployeeAppraisalKPI' => 'EmployeeAppraisalKPI', //60010 --->Employee objectives
         'SubmittedAppraisals' => 'SubmittedAppraisals', //60012
