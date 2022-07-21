@@ -96,6 +96,32 @@ use yii\helpers\Html;
                 <!-- Overview Actions -->
 
 
+                <?= Bootstrap4Html::a(
+                        '<i class="fas fa-backward"></i> To Line Mgr.',
+                        ['appraisal-to-linemgr', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No],
+                        [
+                                'class' => 'btn btn-app bg-danger rejectappraiseesubmition',
+                                'rel' => $model->Appraisal_No,
+                                'rev' => $model->Employee_No,
+                                'title' => 'Submit Probation  Back to Line Manager'
+
+                        ]
+                ) ?>
+
+
+
+                <?= BootstrapHtml::a(
+                        '<i class="fas fa-check"></i> Approve',
+                        ['appraisal-approve', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No],
+                        [
+
+                                'class' => 'mx-1 btn btn-app ', 'data' => [
+                                        'confirm' => 'Are you sure you want to Approve this Appraisal ?',
+                                        'method' => 'post',
+                                ],
+                                'title' => 'Approve Appraisal for the Current  Review Period.'
+                        ]
+                ) ?>
 
 
         </div>

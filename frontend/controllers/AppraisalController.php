@@ -2546,4 +2546,57 @@ class AppraisalController extends Controller
     }
 
 
+    // Overview Back to Line Manager
+
+    public function actionAppraisalToLinemgr($appraisalNo, $employeeNo)
+    {
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
+        $appraisalNo = Yii::$app->request->post('Appraisal_No');
+        $employeeNo = Yii::$app->request->post('Employee_No');
+        $data = [
+            'appraisalNo' => $appraisalNo,
+            'employeeNo' => $employeeNo,
+            'sendEmail' => 1,
+            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['appraisal/view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]),
+            'rejectionComments' => Yii::$app->request->post('comment'),
+        ];
+
+        $result = Yii::$app->navhelper->CodeUnit($service, $data, 'SendAppraisaBackLineManager');
+
+        if (!is_string($result)) {
+            Yii::$app->session->setFlash('success', 'Appraisal Sent Back to Appraisee Successfully.', true);
+            return $this->redirect(['index']);
+        } else {
+
+            Yii::$app->session->setFlash(
+                'error',
+                'Error  : ' . $result
+            );
+            return $this->redirect(['view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]);
+        }
+    }
+
+
+    public function actionAppraisalApprove($appraisalNo, $employeeNo)
+    {
+        $service = Yii::$app->params['ServiceName']['AppraisalManagement'];
+        $data = [
+            'appraisalNo' => $appraisalNo,
+            'employeeNo' => $employeeNo,
+            'sendEmail' => 1,
+            'approvalURL' => Yii::$app->urlManager->createAbsoluteUrl(['appraisal/view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo])
+        ];
+
+        $result = Yii::$app->navhelper->codeunit($service, $data, 'ApproveAppraisal');
+
+        if (!is_string($result)) {
+            Yii::$app->session->setFlash('success', 'Appraisal Approved Successfully.', true);
+            return $this->redirect(['index']);
+        } else {
+            Yii::$app->session->setFlash('error', 'Error  : ' . $result);
+            return $this->redirect(['view', 'Appraisal_No' => $appraisalNo, 'Employee_No' => $employeeNo]);
+        }
+    }
+
+
 }
