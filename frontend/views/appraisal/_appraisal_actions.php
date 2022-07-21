@@ -43,85 +43,85 @@ use yii\helpers\Html;
 
 
                 <!-- APPRAISEER ACTIONS -->
+                <?php if ($model->Approval_Status == 'Appraiser_Level') : ?>
+
+
+                        <?= Bootstrap4Html::a(
+                                '<i class="fas fa-backward"></i> To Appraisee.',
+                                ['appraisal-to-emp', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No],
+                                [
+                                        'class' => 'btn btn-app bg-danger rejectappraiseesubmition',
+                                        'rel' => $model->Appraisal_No,
+                                        'rev' => $model->Employee_No,
+                                        'title' => 'Submit Probation  Back to Appraisee'
+
+                                ]
+                        ) ?>
 
 
 
-                <?= Bootstrap4Html::a(
-                        '<i class="fas fa-backward"></i> To Appraisee.',
-                        ['appraisal-to-emp', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No],
-                        [
-                                'class' => 'btn btn-app bg-danger rejectappraiseesubmition',
-                                'rel' => $model->Appraisal_No,
-                                'rev' => $model->Employee_No,
-                                'title' => 'Submit Probation  Back to Appraisee'
+                        <?= BootstrapHtml::a(
+                                '<i class="fas fa-play"></i> Overview ',
+                                ['appraisal-to-agreement', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No],
+                                [
 
-                        ]
-                ) ?>
-
-
-
-                <?= BootstrapHtml::a(
-                        '<i class="fas fa-play"></i> Overview ',
-                        ['appraisal-to-agreement', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No],
-                        [
-
-                                'class' => 'mx-1 btn btn-app', 'data' => [
-                                        'confirm' => 'Are you sure you want to Submit Appraisal for Agreement ?',
-                                        'method' => 'post',
-                                ],
-                                'title' => 'Submit Appraisal for Agreement.'
-                        ]
-                ) ?>
+                                        'class' => 'mx-1 btn btn-app', 'data' => [
+                                                'confirm' => 'Are you sure you want to Submit Appraisal for Agreement ?',
+                                                'method' => 'post',
+                                        ],
+                                        'title' => 'Submit Appraisal for Agreement.'
+                                ]
+                        ) ?>
 
 
 
-                <!-- Send to Overview -->
+                        <!-- Send to Overview -->
 
-                <?= BootstrapHtml::a(
-                        '<i class="fas fa-forward"></i> Overview ',
-                        ['appraisal-to-overview', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No],
-                        [
+                        <?= BootstrapHtml::a(
+                                '<i class="fas fa-forward"></i> Overview ',
+                                ['appraisal-to-overview', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No],
+                                [
 
-                                'class' => 'mx-1 btn btn-app submitforapproval', 'data' => [
-                                        'confirm' => 'Are you sure you want to Submit Goals to Overview Manager ?',
-                                        'method' => 'post',
-                                ],
-                                'title' => 'Submit Goals to Overview Manager.'
-                        ]
-                ) ?>
+                                        'class' => 'mx-1 btn btn-app submitforapproval', 'data' => [
+                                                'confirm' => 'Are you sure you want to Submit Goals to Overview Manager ?',
+                                                'method' => 'post',
+                                        ],
+                                        'title' => 'Submit Goals to Overview Manager.'
+                                ]
+                        ) ?>
 
 
-
+                <?php endif; ?>
 
                 <!-- Overview Actions -->
+                <?php if ($model->Approval_Status == 'Overview_Manager_Level') : ?>
+
+                        <?= Bootstrap4Html::a(
+                                '<i class="fas fa-backward"></i> To Line Mgr.',
+                                ['appraisal-to-linemgr', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No],
+                                [
+                                        'class' => 'btn btn-app bg-danger rejectappraiseesubmition',
+                                        'rel' => $model->Appraisal_No,
+                                        'rev' => $model->Employee_No,
+                                        'title' => 'Submit Probation  Back to Line Manager'
+
+                                ]
+                        ) ?>
 
 
-                <?= Bootstrap4Html::a(
-                        '<i class="fas fa-backward"></i> To Line Mgr.',
-                        ['appraisal-to-linemgr', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No],
-                        [
-                                'class' => 'btn btn-app bg-danger rejectappraiseesubmition',
-                                'rel' => $model->Appraisal_No,
-                                'rev' => $model->Employee_No,
-                                'title' => 'Submit Probation  Back to Line Manager'
 
-                        ]
-                ) ?>
+                        <?= BootstrapHtml::a(
+                                '<i class="fas fa-check"></i> Approve',
+                                ['appraisal-approve', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No],
+                                [
 
-
-
-                <?= BootstrapHtml::a(
-                        '<i class="fas fa-check"></i> Approve',
-                        ['appraisal-approve', 'appraisalNo' => $model->Appraisal_No, 'employeeNo' => $model->Employee_No],
-                        [
-
-                                'class' => 'mx-1 btn btn-app ', 'data' => [
-                                        'confirm' => 'Are you sure you want to Approve this Appraisal ?',
-                                        'method' => 'post',
-                                ],
-                                'title' => 'Approve Appraisal for the Current  Review Period.'
-                        ]
-                ) ?>
-
+                                        'class' => 'mx-1 btn btn-app ', 'data' => [
+                                                'confirm' => 'Are you sure you want to Approve this Appraisal ?',
+                                                'method' => 'post',
+                                        ],
+                                        'title' => 'Approve Appraisal for the Current  Review Period.'
+                                ]
+                        ) ?>
+                <?php endif; ?>
 
         </div>
